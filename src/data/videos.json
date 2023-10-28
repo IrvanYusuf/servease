@@ -1,0 +1,40 @@
+{
+    "videos":[
+        {
+            "id":1,
+            "image":"https://i.ibb.co/4PBmxCj/ac-tidak-dingin.jpg",
+            "title":"Memperbaiki AC yang tidak dingin",
+            "path":"https://youtu.be/8xUKF_0m8Vo?si=4UueI_QjX-091M4_"
+        },
+        {
+            "id":2,
+            "image":"https://i.ibb.co/VD8JyN3/lampu.jpg",
+            "title":"Memperbaiki instalasi listrik lampu",
+            "path":"https://youtu.be/QNCXv8FdSrc?si=LAxIerrLm-4CvazH"
+        },
+        {
+            "id":3,
+            "image":"https://i.ibb.co/pvYz6JG/laptop-mati.jpg",
+            "title":"Memperbaiki laptop mati",
+            "path":"https://youtu.be/tyKHL0Z842E?si=07nTqxHIeaLnQp-y"
+        },
+        {
+            "id":4,
+            "image":"https://i.ibb.co/MsZKMMV/laptop-mati2.jpg",
+            "title":"Memperbaiki laptop yang tidak mau menyala",
+            "path":"https://youtu.be/f0osoLlyvqg?si=gcocy4sBV3hREEag"
+        },
+        {
+            "id":5,
+            "image":"https://i.ibb.co/C7kFsX8/pagar.jpg",
+            "title":"Memperbaiki pagar macet",
+            "path":"https://youtu.be/Rn3lk0l_rWw?si=TZoNK81cOLuATsMF"
+        },
+        {
+            "id":6,
+            "image":"https://i.ibb.co/kgg4SJ4/pc-lemot.jpg",
+            "title":"Memperbaiki pc yang lemot",
+            "path":"https://youtu.be/cnq0NjKD-Fc?si=L0NxQoXROnjXKuta"
+        }
+    ]
+}

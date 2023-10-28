@@ -1,0 +1,12 @@
+{
+    "banners":[
+        {
+            "id":1,
+            "img":"https://i.ibb.co/xfnb1TW/banner1.png"
+        },
+        {
+            "id":2,
+            "img":"https://i.ibb.co/ch38cF0/banner2.png"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+.btn-main {
+  background-color: #ef3d01;
+  width: 100%;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+}

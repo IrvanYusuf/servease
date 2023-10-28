@@ -1,0 +1,9 @@
+.btn-link-outline {
+  width: 100%;
+  color: #ef3d01;
+  padding: 8px 16px;
+  border: 1px solid #ef3d01;
+  border-radius: 10px;
+  font-weight: bold;
+}
+

@@ -1,0 +1,18 @@
+## ubah file ke services.json
+
+## buat struktur json 
+{
+    "services":[
+        {
+            "id":1,
+            "category_id":1,
+            "name_store":"isi nama toko kang servicenya",
+            "title":"nama jasa kang servicenya",
+            "address":"alamat"
+            "image":"link image",
+            "album":["link image1","link image2","link image3"],
+            "description":"isi deskripsi",
+            "rating_star":5
+        }
+    ]
+}

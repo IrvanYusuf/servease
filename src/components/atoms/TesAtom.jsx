@@ -1,10 +1,8 @@
-import React from 'react'
+import React from "react";
 
 // Silahkan ganti atau hapus file ini
 const TesAtom = () => {
-  return (
-    <div>tes</div>
-  )
-}
+  return <div></div>;
+};
 
-export default TesAtom
+export default TesAtom;
