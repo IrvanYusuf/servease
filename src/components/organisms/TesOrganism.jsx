@@ -1,10 +1,13 @@
-import React from 'react'
+import React from "react";
 
 // Silahkan ganti atau hapus file ini
 const TesOrganism = () => {
   return (
-    <div>TesOrganism</div>
-  )
-}
+    <div>
+      <div>TesOrganism ma makmakmakmak</div>
+      <p>makaka</p>
+    </div>
+  );
+};
 
-export default TesOrganism
+export default TesOrganism;
