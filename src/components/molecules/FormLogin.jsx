@@ -1,23 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import LabelInput from "../atoms/LabelInput";
 import ActionButton from "../atoms/ActionButton";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import "../../styles/molecules/formLogin.css";
 
-const FormLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-  };
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-  };
-  const navigate = useNavigate();
-  const handleLogin = (e) => {
-    e.preventDefault();
-    navigate("/");
-  };
+const FormLogin = ({ handleLogin, email, password,handleEmail,handlePassword }) => {
   return (
     <form onSubmit={handleLogin} method="post" style={{ width: "100%" }}>
       <div className="mb-3">

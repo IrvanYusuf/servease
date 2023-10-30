@@ -2,6 +2,11 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 
 const LayoutProfile = () => {
+  const handleLogout = () => {
+    localStorage.removeItem("id")
+    localStorage.removeItem("email")
+    localStorage.removeItem("password")
+  }
   return (
     <div className="container">
       <div className="d-flex">
@@ -18,7 +23,7 @@ const LayoutProfile = () => {
                 <Link to={"/profile/daftar-alamat"}>Daftar Alamat</Link>
               </li>
               <li>
-                <Link to={"/login"}>Logout</Link>
+                <Link to={"/login"} onClick={handleLogout}>Logout</Link>
               </li>
             </ul>
           </nav>
@@ -27,6 +32,7 @@ const LayoutProfile = () => {
           <Outlet />
         </div>
       </div>
+      <div style={{ height: "200px" }}></div>
     </div>
   );
 };

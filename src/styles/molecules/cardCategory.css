@@ -1,8 +1,8 @@
 .card-category {
-  margin-top: 28px;
+  margin-bottom: 28px;
   padding: 10px 14px;
-  height: 120px;
-  margin-right: 36px;
+  /* height: 120px; */
+  margin-right: 20px;
   border-radius: 10px;
 }
 .card-category-image {

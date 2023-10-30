@@ -10,7 +10,7 @@ const SectionCategoryService = ({ dataCategories }) => {
         {dataCategories.map((category) => (
           <CardCategory
             key={category.id}
-            path={`/detail/1`}
+            path={`/daftar-service/1`}
             image={category.image}
             text={category.category}
           />
