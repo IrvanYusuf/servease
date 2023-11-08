@@ -1,9 +1,8 @@
-import React from 'react'
-
+import ServiceCard from "../molecules/ServiceCard"
 const DaftarService = () => {
-  return (
-    <div>DaftarService</div>
+  return(
+    <ServiceCard/>
   )
 }
 
-export default DaftarService
+export default DaftarService;
