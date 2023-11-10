@@ -6,4 +6,9 @@
   border-radius: 10px;
   font-weight: bold;
   background-color: white;
+  opacity: 70%;
+}
+
+.btn-main-outline:hover{
+  opacity: 100%;
 }

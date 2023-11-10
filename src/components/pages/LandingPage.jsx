@@ -51,6 +51,7 @@ const LandingPage = () => {
     getAllCategory();
     getAllVideos();
   }, []);
+
   return (
     <div className="container">
       <Banner dataBanners={banners} />
