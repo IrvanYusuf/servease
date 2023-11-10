@@ -1,29 +1,31 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {Outlet, useLocation } from "react-router-dom";
+import "../../styles/molecules/cardProfile.css"
+import "../../styles/atoms/titleText.css"
+import Navigation from "../organisms/Navigation";
 
 const LayoutProfile = () => {
+  const [title, setTitle] = useState(0)
+  const location = useLocation()
+
+  if(location.pathname === "/profile"){
+    useEffect(()=>setTitle("Biodata Diri"))
+  }else if(location.pathname === "/profile/riwayat-pemesanan"){
+    useEffect(()=>setTitle("Riwayat Pemesanan"))
+  }else{
+    useEffect(()=>setTitle("Daftar Alamat"))
+  }
+
+  
   return (
     <div className="container">
       <div className="d-flex">
-        <div className="col-6">
-          <nav>
-            <ul>
-              <li>
-                <Link to={"/profile"}>Biodata Diri</Link>
-              </li>
-              <li>
-                <Link to={"/profile/riwayat-pemesanan"}>Riwayat Pemesanan</Link>
-              </li>
-              <li>
-                <Link to={"/profile/daftar-alamat"}>Daftar Alamat</Link>
-              </li>
-              <li>
-                <Link to={"/login"}>Logout</Link>
-              </li>
-            </ul>
-          </nav>
+        <div className="shadow-sm col-3 box">
+          <h3 className="title">User Profil</h3>
+          <Navigation/>
         </div>
-        <div className="col-6">
+        <div className="shadow-sm col-9 box">
+          <h3 className="title">{title}</h3>
           <Outlet />
         </div>
       </div>

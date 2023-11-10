@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/atoms/actionButtonOutline.css";
+import "../../styles/atoms/buttonOutline.css";
 const ActionButton = ({ type, text, val }) => {
   return (
     <button className={"btn-main-outline"} type={type} onClick={val}>

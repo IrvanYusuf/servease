@@ -5,16 +5,12 @@ import "../../styles/molecules/formLogin.css";
 import FormRegisterUserInfo from "../organisms/FormRegisterUserInfo";
 import FormRegisterPersonalInfo from "../organisms/FormRegisterPersonalInfo";
 import ActionButtonOutline from "../atoms/ActionButtonOutline"
-import { useEffect } from "react";
 
 
 const FormRegister = () => {
   //variabel halaman
   const [halaman, setHalaman] = useState(0);
 
-  useEffect(() =>{
-    
-  })
 
   console.log(halaman)
 
@@ -43,7 +39,7 @@ const FormRegister = () => {
 
 
   const nextPage = () =>{
-    setHalaman(halaman+1)
+   setHalaman(halaman+1)
   }
 
   const prevPage = () =>{
@@ -59,7 +55,7 @@ const FormRegister = () => {
          
         </div>
         <div className="col-sm-6">
-          <ActionButton  type={"button"} text={"Selanjutnya"} onClick={() => setHalaman(1)} />
+          <ActionButton  type={"button"} text={"Selanjutnya"} onClick={nextPage} />
         </div>
         </>
       )
