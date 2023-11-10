@@ -1,0 +1,39 @@
+{
+    "categories":[
+        {
+            "id":1,
+            "category":"Service Ac",
+            "image":"https://i.ibb.co/VMmW3HK/service-ac.png"
+        },
+        {
+            "id":2,
+            "category":"Service Pc",
+            "image":"https://i.ibb.co/QPFy8qP/service-pc.png"
+        },
+        {
+            "id":3,
+            "category":"Service Lampu",
+            "image":"https://i.ibb.co/xgfCj4T/service-lampu.png"
+        },
+        {
+            "id":4,
+            "category":"Service Mesin Cuci",
+            "image":"https://i.ibb.co/dWBHPRB/service-mesin-cuci.png"
+        },
+        {
+            "id":5,
+            "category":"Service Smartphone",
+            "image":"https://i.ibb.co/t8mBPN6/service-smartphone.png"
+        },
+        {
+            "id":6,
+            "category":"Service Tv",
+            "image":"https://i.ibb.co/PjGD2Yp/service-tv.png"
+        },
+        {
+            "id":7,
+            "category":"Renovasi Rumah",
+            "image":"https://i.ibb.co/7WJnJ9L/renovasi-rumah.png"
+        }
+    ]
+}

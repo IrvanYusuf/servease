@@ -1,0 +1,18 @@
+.navbar .container .header-search {
+  border-radius: 20px;
+  width: 328px;
+}
+.navbar .container .riwayat-icon-wrapper .icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgb(124, 79, 233, 20%);
+}
+.navbar .container .riwayat-icon-wrapper span {
+  font-size: 16px;
+}
+.navbar .container .user-img-wrapper{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

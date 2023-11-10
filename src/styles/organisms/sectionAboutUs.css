@@ -1,0 +1,9 @@
+.about-us-container {
+  margin-top: 69px;
+}
+.about-us-container .row {
+  margin-top: 28px;
+}
+.about-us-container .row .about-img{
+    border-top-right-radius: 90px;
+}

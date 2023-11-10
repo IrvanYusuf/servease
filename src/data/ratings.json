@@ -1,0 +1,20 @@
+{
+    "ratings":[
+        {
+            "id":1,
+            "service_id":1,
+            "user_id":1,
+            "rating_comment":"Kerjanya bagus dan cepat",
+            "rating_star":5,
+            "created_at":""
+        },
+        {
+            "id":2,
+            "service_id":1,
+            "user_id":1,
+            "rating_comment":"Teknisinya handal",
+            "rating_star":4,
+            "created_at":""
+        }
+    ]
+}

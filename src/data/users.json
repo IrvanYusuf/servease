@@ -1,0 +1,15 @@
+{
+    "users":[
+        {
+            "id":1,
+            "nama_depan":"Bambang",
+            "nama_belakang":"Sarep",
+            "jenis_kelamin":"Laki-laki",
+            "nomor_hp":"082232890789",
+            "user_img":"https://i.ibb.co/n0Y4b9h/user-img.png",
+            "email":"bambangsarep@gmail.com",
+            "password":"bambang00",
+            "alamat":["Jl. Letda Sujono 158, Tembung, Kec. Medan Tembung, Kota Medan, Sumatera Utara 20371"]
+        }
+    ]
+}
