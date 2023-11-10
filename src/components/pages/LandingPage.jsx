@@ -27,8 +27,8 @@ const LandingPage = () => {
       const response = await fetch("http://localhost:3001/categories", {
         method: "GET",
       });
-      const data = await response.json();
-      setCategory(data);
+      const dataCategories = await response.json();
+      setCategory(dataCategories);
     } catch (error) {
       console.log(error.message);
     }
@@ -39,8 +39,8 @@ const LandingPage = () => {
       const response = await fetch("http://localhost:3002/videos", {
         method: "GET",
       });
-      const data1 = await response.json();
-      setVideos(data1);
+      const dataAllVideos = await response.json();
+      setVideos(dataAllVideos);
     } catch (error) {
       console.log(error.message);
     }

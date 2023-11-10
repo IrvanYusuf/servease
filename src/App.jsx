@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/" element={<LayoutPage />}>
           <Route index element={<LandingPage />} />
           <Route path="daftar-service/:id" element={<DaftarService />} />
-          <Route path="detail/:id" element={<DetailService />} />
+          <Route path="detail/:idService" element={<DetailService />} />
           <Route path="/profile/" element={<LayoutProfile />}>
             <Route index element={<BiodataDiri />} />
             <Route path="riwayat-pemesanan" element={<RiwayatPemesanan />} />
