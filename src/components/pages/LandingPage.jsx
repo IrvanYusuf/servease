@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SectionCategoryService from "../organisms/SectionCategoryService";
-import SectionCardAtractiveOffering from "../organisms/SectionCardAtractiveOffering";
+// import SectionCardAtractiveOffering from "../organisms/SectionCardAtractiveOffering";
 import SectionOurPartner from "../organisms/SectionOurPartner";
 import SectionCardTutorial from "../organisms/SectionCardTutorial";
 import Banner from "../organisms/Banner";
@@ -56,7 +56,7 @@ const LandingPage = () => {
     <div className="container">
       <Banner dataBanners={banners} />
       <SectionCategoryService dataCategories={category} />
-      <SectionCardAtractiveOffering />
+      {/* <SectionCardAtractiveOffering /> */}
       <SectionOurPartner />
       <SectionCardTutorial videosData={videos} />
       <SectionAboutUs />

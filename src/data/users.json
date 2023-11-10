@@ -9,7 +9,9 @@
             "user_img":"https://i.ibb.co/n0Y4b9h/user-img.png",
             "email":"bambangsarep@gmail.com",
             "password":"bambang00",
-            "alamat":["Jl. Letda Sujono 158, Tembung, Kec. Medan Tembung, Kota Medan, Sumatera Utara 20371"]
+            "alamat":{
+                "rumah":"Jl. Letda Sujono 158, Tembung, Kec. Medan Tembung, Kota Medan, Sumatera Utara 20371"
+            }
         },
         {
             "id":2,

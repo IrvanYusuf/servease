@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CardUlasan from "../molecules/CardUlasan";
 import "../../styles/organisms/cardUlasan.css";
 
-const SectionCardUlasan = ({ user_id, service_id }) => {
+const SectionCardUlasan = ({ service_id }) => {
   const [serviceRatings, setServiceRatings] = useState([]);
   const [userRatings, setUserRatings] = useState([]);
   const getServiceRatings = async () => {
@@ -41,7 +41,6 @@ const SectionCardUlasan = ({ user_id, service_id }) => {
     user: userRatings.filter((user) => user.id === rating.user_id),
   }));
 
-  console.log(mergedData);
   useEffect(() => {
     getServiceRatings();
     getUserRatings();
@@ -50,16 +49,20 @@ const SectionCardUlasan = ({ user_id, service_id }) => {
     <div className="ulasan-container">
       <h2>Ulasan</h2>
       <div className="card-ulasan-container">
-        {mergedData.map((rating1) => (
-          <CardUlasan
-            key={rating1.id}
-            // {...console.log(rating1.rating)}
-            reviewText={rating1.rating_comment}
-            reviewImgUser={rating1.user[0].user_img}
-            nama_depan={rating1.user[0].nama_depan}
-            nama_belakang={rating1.user[0].nama_belakang}
-          />
-        ))}
+        {mergedData.length > 0 ? (
+          mergedData.map((rating1) => (
+            <CardUlasan
+              key={rating1.id}
+              // {...console.log(rating1.rating)}
+              reviewText={rating1.rating_comment}
+              reviewImgUser={rating1.user[0].user_img}
+              nama_depan={rating1.user[0].nama_depan}
+              nama_belakang={rating1.user[0].nama_belakang}
+            />
+          ))
+        ) : (
+          <h5>Belum Ada Review</h5>
+        )}
       </div>
     </div>
   );

@@ -9,15 +9,26 @@ import { limitAddress } from "../../utils/text";
 import ActionButton from "../atoms/ActionButton";
 import ModalForm from "../atoms/ModalForm";
 import ButtonLinkOutline from "../atoms/ButtonLinkOutline";
+import ModalAlbumImg from "../atoms/ModalAlbumImg";
 
 const DetailService = () => {
   const { idService } = useParams();
   const [idUser, setIdUser] = useState("");
   const [service, setServices] = useState([]);
   const [show, setShow] = useState(false);
+  const [showAlbumImg, setShowAlbumImg] = useState(false);
+  const [selectedAlbumUrl, setSelectedAlbumUrl] = useState("");
+  const { album } = service;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleCloseAlbumImg = () => setShowAlbumImg(false);
+  const handleShowAlbumImg = (img) => {
+    setSelectedAlbumUrl(img);
+    setShowAlbumImg(true);
+  };
+
   const getIdUserLocalStorage = () => {
     const id_user = localStorage.getItem("id");
     if (id_user) {
@@ -51,8 +62,12 @@ const DetailService = () => {
     <div className="container w-100 end-0">
       <div className="row justify-content-between z-3">
         <div className="col-md-12 col-lg-7">
-          <div style={{ height: "306px", borderRadius: "10px" }}>
-            <img src={service.thumbnail} className="h-100 w-100" alt="" />
+          <div style={{ height: "306px" }}>
+            <img
+              src={service.thumbnail}
+              className="h-100 w-100 rounded-2"
+              alt=""
+            />
           </div>
           <div className="mt-3">
             <Carousel
@@ -62,34 +77,27 @@ const DetailService = () => {
               renderCenterRightControls={false}
               renderBottomCenterControls={false}
             >
-              {Array.from({ length: 5 }, (value, i) => {
-                return (
-                  <div
-                    key={i}
-                    className="bg-body-secondary"
-                    style={{ height: "80px", borderRadius: "10px" }}
-                  ></div>
-                );
-              })}
+              {album &&
+                album.map((img, i) => (
+                  <div key={i} style={{ height: "80px" }}>
+                    <img
+                      src={img}
+                      alt=""
+                      className="w-100 rounded-2 h-100"
+                      onClick={() => handleShowAlbumImg(img)}
+                    />
+                  </div>
+                ))}
             </Carousel>
           </div>
           <div className="deskripsi-container">
             <h2>Deskripsi</h2>
             <div className="border rounded-1 p-2 deskripsi-inner-container">
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
-                eos laborum sapiente accusamus sequi, velit necessitatibus,
-                reiciendis laudantium illo consectetur vero repellendus
-                distinctio quae tenetur labore? Doloribus modi dolor nulla.
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Laboriosam porro earum beatae? Voluptatibus, possimus cumque
-                libero modi placeat amet sed, eaque itaque et, sunt recusandae
-                soluta alias sint earum ipsam.
-              </p>
+              <p>{service.description}</p>
             </div>
           </div>
           <div className="ulasan-container">
-            <SectionCardUlasan user_id={idUser} service_id={service.id} />
+            <SectionCardUlasan service_id={service.id} />
           </div>
         </div>
         <div className="col-md-12 col-lg-5">
@@ -116,7 +124,12 @@ const DetailService = () => {
                 type={"button"}
                 onClick={handleShow}
               />
-              <ModalForm show={show} onHide={handleClose} />
+              <ModalForm show={show} onHide={handleClose} user_id={idUser} />
+              <ModalAlbumImg
+                show={showAlbumImg}
+                onHide={handleCloseAlbumImg}
+                albumUrl={selectedAlbumUrl}
+              />
             </div>
           </div>
         </div>
