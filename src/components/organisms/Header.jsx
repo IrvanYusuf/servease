@@ -34,7 +34,7 @@ const Header = () => {
           name=""
           id=""
           value={""}
-          onChange={""}
+          onChange={() => {}}
         />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

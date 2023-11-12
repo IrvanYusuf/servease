@@ -1,0 +1,30 @@
+.section-our-partner-container {
+  margin-top: 69px;
+  background-color: #4f50e9;
+  border-radius: 20px;
+  height: 400px;
+}
+.section-our-partner-container h2 {
+  font-size: 48px;
+}
+.section-our-partner-container p {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+.section-our-partner-container img {
+  bottom: 0;
+}
+
+.btn-our-partner {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+}
+.btn-our-partner-orange {
+  background-color: #ef3d01;
+}
+.btn-our-partner-navy {
+  background-color: #1b1c4a;
+}

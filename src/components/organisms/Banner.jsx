@@ -2,6 +2,7 @@ import React from "react";
 import Carousel from "nuka-carousel";
 import prevIcon from "../../assets/icon/back.png";
 import nextIcon from "../../assets/icon/next.png";
+import "../../styles/organisms/banner.css";
 const Banner = ({ dataBanners }) => {
   return (
     <div>
@@ -14,13 +15,7 @@ const Banner = ({ dataBanners }) => {
         renderCenterLeftControls={({ previousSlide }) => (
           <button
             onClick={previousSlide}
-            style={{
-              marginTop: "50%",
-              border: "none",
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
-            }}
+            className="banner-carousel-render-center-left-controls"
           >
             <img src={prevIcon} alt="" className="w-100 h-100" />
           </button>
@@ -28,13 +23,7 @@ const Banner = ({ dataBanners }) => {
         renderCenterRightControls={({ nextSlide }) => (
           <button
             onClick={nextSlide}
-            style={{
-              marginTop: "50%",
-              border: "none",
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
-            }}
+            className="banner-carousel-render-center-right-controls"
           >
             <img src={nextIcon} alt="" />
           </button>

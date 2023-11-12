@@ -45,23 +45,24 @@ const SectionCardUlasan = ({ service_id }) => {
     getServiceRatings();
     getUserRatings();
   }, [service_id]);
+  console.log(mergedData);
   return (
     <div className="ulasan-container">
       <h2>Ulasan</h2>
       <div className="card-ulasan-container">
         {mergedData.length > 0 ? (
-          mergedData.map((rating1) => (
+          mergedData.map((dataRatingUlasan, i) => (
             <CardUlasan
-              key={rating1.id}
-              // {...console.log(rating1.rating)}
-              reviewText={rating1.rating_comment}
-              reviewImgUser={rating1.user[0].user_img}
-              nama_depan={rating1.user[0].nama_depan}
-              nama_belakang={rating1.user[0].nama_belakang}
+              key={i}
+              reviewText={dataRatingUlasan.rating_comment}
+              reviewImgUser={dataRatingUlasan.user[0].user_img}
+              nama_depan={dataRatingUlasan.user[0].nama_depan}
+              nama_belakang={dataRatingUlasan.user[0].nama_belakang}
+              star={dataRatingUlasan.rating_star}
             />
           ))
         ) : (
-          <h5>Belum Ada Review</h5>
+          <h6>Belum Ada Review</h6>
         )}
       </div>
     </div>

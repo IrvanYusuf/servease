@@ -1,16 +1,18 @@
+.login-container {
+  width: 100%;
+}
 .input-login {
   width: 100%;
   border-radius: 10px;
   color: red;
 }
 
-.input-group{
-  margin-top : 5px;
+.input-group {
+  margin-top: 5px;
 }
 
-.image{
+.image {
   margin-left: -40%;
   height: 500px;
-  width:780px;
-
+  width: 780px;
 }

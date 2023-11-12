@@ -3,6 +3,7 @@ import imgLogin from "../../assets/img/img-login.png";
 import FormLogin from "../molecules/FormLogin";
 import RegistrationLink from "../atoms/RegistrationLink";
 import { useNavigate } from "react-router-dom";
+import "../../styles/pages/loginPage.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -34,13 +35,8 @@ const LoginPage = () => {
           <img className="w-100" src={imgLogin} alt="img login page" />
         </div>
         <div className="col-md-6 col-lg-5 col-12">
-          <div
-            className="shadow-lg px-lg-5 px-4 py-3 py-lg-5 d-flex flex-column justify-content-center align-items-center"
-            style={{ borderRadius: "20px" }}
-          >
-            <h2 className="fw-bold" style={{ color: "#1B1C4A" }}>
-              Login
-            </h2>
+          <div className="shadow-lg px-lg-5 px-4 py-3 py-lg-5 d-flex flex-column justify-content-center align-items-center form-login-container">
+            <h2 className="fw-bold login-title">Login</h2>
             <FormLogin
               email={email}
               password={password}
@@ -48,7 +44,7 @@ const LoginPage = () => {
               handlePassword={handlePassword}
               handleLogin={handleLogin}
             />
-            <p className="fw-semibold mt-3" style={{ color: "#949494" }}>
+            <p className="fw-semibold mt-3 text-not-have-account">
               Belum Punya Akun?
               <RegistrationLink
                 path={"/register"}

@@ -9,6 +9,7 @@ import RiwayatPemesanan from "./components/pages/RiwayatPemesanan";
 import DaftarAlamat from "./components/pages/DaftarAlamat";
 import DaftarService from "./components/pages/DaftarService";
 import DetailService from "./components/pages/DetailService";
+import NotFound from "./components/pages/NotFound";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="riwayat-pemesanan" element={<RiwayatPemesanan />} />
             <Route path="daftar-alamat" element={<DaftarAlamat />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -4,9 +4,15 @@ import ActionButton from "../atoms/ActionButton";
 // import { useNavigate } from "react-router-dom";
 import "../../styles/molecules/formLogin.css";
 
-const FormLogin = ({ handleLogin, email, password,handleEmail,handlePassword }) => {
+const FormLogin = ({
+  handleLogin,
+  email,
+  password,
+  handleEmail,
+  handlePassword,
+}) => {
   return (
-    <form onSubmit={handleLogin} method="post" style={{ width: "100%" }}>
+    <form className="login-container" onSubmit={handleLogin} method="post">
       <div className="mb-3">
         <LabelInput target={"email"} labelText={"Email"} />
         <input

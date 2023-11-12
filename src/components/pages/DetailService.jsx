@@ -24,8 +24,8 @@ const DetailService = () => {
   const handleShow = () => setShow(true);
 
   const handleCloseAlbumImg = () => setShowAlbumImg(false);
-  const handleShowAlbumImg = (img) => {
-    setSelectedAlbumUrl(img);
+  const handleShowAlbumImg = (imgUrl) => {
+    setSelectedAlbumUrl(imgUrl);
     setShowAlbumImg(true);
   };
 
@@ -58,11 +58,46 @@ const DetailService = () => {
     getService();
     getIdUserLocalStorage();
   }, []);
+
+  const BookingContainer = () => {
+    return (
+      <div className="border border mt-0 p-4 rounded-2 booking-container">
+        <div>
+          <h4 className="fw-bold">{service.name_store}</h4>
+          <div className="d-flex align-items-center column-gap-2">
+            <FaStar className="text-warning" /> {service.rating_star}
+          </div>
+          <div className="d-flex align-items-center column-gap-2">
+            <FiMapPin /> {service.address && limitAddress(service.address)}
+          </div>
+        </div>
+        <div className="mt-5 d-flex flex-column row-gap-3">
+          <ButtonLinkOutline
+            text={"Hubungi Teknisi"}
+            path={`https://wa.me/${service.no_telp}`}
+            target={"_blank"}
+          />
+          <ActionButton
+            text={"Ajukan Pemesanan"}
+            type={"button"}
+            onClick={handleShow}
+          />
+          <ModalForm show={show} onHide={handleClose} user_id={idUser} />
+          <ModalAlbumImg
+            show={showAlbumImg}
+            onHide={handleCloseAlbumImg}
+            albumUrl={selectedAlbumUrl}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="container w-100 end-0">
       <div className="row justify-content-between z-3">
         <div className="col-md-12 col-lg-7">
-          <div style={{ height: "306px" }}>
+          <div className="detail-service-img-thumbnail-container">
             <img
               src={service.thumbnail}
               className="h-100 w-100 rounded-2"
@@ -79,7 +114,7 @@ const DetailService = () => {
             >
               {album &&
                 album.map((img, i) => (
-                  <div key={i} style={{ height: "80px" }}>
+                  <div key={i} className="detail-service-img-album">
                     <img
                       src={img}
                       alt=""
@@ -101,37 +136,7 @@ const DetailService = () => {
           </div>
         </div>
         <div className="col-md-12 col-lg-5">
-          <div
-            className="border border sticky-top mt-0 p-4 rounded-2"
-            style={{ top: "100px" }}
-          >
-            <div>
-              <h4 className="fw-bold">{service.name_store}</h4>
-              <div className="d-flex align-items-center column-gap-2">
-                <FaStar className="text-warning" /> {service.rating_star}
-              </div>
-              <div className="d-flex align-items-center column-gap-2">
-                <FiMapPin /> {service.address && limitAddress(service.address)}
-              </div>
-            </div>
-            <div className="mt-5 d-flex flex-column row-gap-3">
-              <ButtonLinkOutline
-                text={"Hubungi Teknisi"}
-                path={`https://wa.me/447471667872`}
-              />
-              <ActionButton
-                text={"Ajukan Pemesanan"}
-                type={"button"}
-                onClick={handleShow}
-              />
-              <ModalForm show={show} onHide={handleClose} user_id={idUser} />
-              <ModalAlbumImg
-                show={showAlbumImg}
-                onHide={handleCloseAlbumImg}
-                albumUrl={selectedAlbumUrl}
-              />
-            </div>
-          </div>
+          <BookingContainer />
         </div>
       </div>
     </div>

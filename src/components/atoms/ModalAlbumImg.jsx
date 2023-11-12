@@ -1,8 +1,8 @@
 import { Modal } from "react-bootstrap";
+import "../../styles/atoms/modalAlbumImg.css";
 
 const ModalAlbumImg = (props) => {
   const imgUrl = props.albumUrl;
-  console.log(props);
   return (
     <Modal
       size="lg"
@@ -12,7 +12,7 @@ const ModalAlbumImg = (props) => {
     >
       <Modal.Header closeButton className="border-0" />
       <Modal.Body>
-        <img src={imgUrl} alt="" className="w-100" />
+        <img src={imgUrl} alt="" className="w-100 modal-img" />
       </Modal.Body>
     </Modal>
   );
