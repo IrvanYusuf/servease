@@ -1,53 +1,30 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import "../../styles/pages/LayoutProfile.css";
-import ProfileIcon from "@mui/icons-material/AccountCircleOutlined";
-import HistoryIcon from "@mui/icons-material/HistoryToggleOff";
-import LocationIcon from "@mui/icons-material/FmdGoodOutlined";
-import LogoutIcon from "@mui/icons-material/LogoutOutlined";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import "../../styles/molecules/cardProfile.css";
+import "../../styles/atoms/titleText.css";
+import Navigation from "../organisms/Navigation";
 
 const LayoutProfile = () => {
-  const handleLogout = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
-  };
+  const [title, setTitle] = useState(0);
+  const location = useLocation();
+
+  if (location.pathname === "/profile") {
+    useEffect(() => setTitle("Biodata Diri"));
+  } else if (location.pathname === "/profile/riwayat-pemesanan") {
+    useEffect(() => setTitle("Riwayat Pemesanan"));
+  } else {
+    useEffect(() => setTitle("Daftar Alamat"));
+  }
+
   return (
     <div className="container">
       <div className="d-flex">
-        <div className="col">
-          <nav className="sidebar">
-            <ul className="mt-4">
-              <li className="list">
-                <ProfileIcon
-                  style={{ color: "rgba(121, 121, 121, 1)", fontSize: "30px" }}
-                />
-                <Link to={"/profile"}>Biodata Diri</Link>
-              </li>
-              <li className="list">
-                <HistoryIcon
-                  style={{ color: "rgba(121, 121, 121, 1)", fontSize: "30px" }}
-                />
-                <Link to={"/profile/riwayat-pemesanan"}>Riwayat Pemesanan</Link>
-              </li>
-              <li className="list">
-                <LocationIcon
-                  style={{ color: "rgba(121, 121, 121, 1)", fontSize: "30px" }}
-                />
-                <Link to={"/profile/daftar-alamat"}>Daftar Alamat</Link>
-              </li>
-              <li className="list">
-                <LogoutIcon
-                  style={{ color: "rgba(121, 121, 121, 1)", fontSize: "30px" }}
-                />
-                <Link to={"/login"} onClick={handleLogout}>
-                  Logout
-                </Link>
-              </li>
-            </ul>
-          </nav>
+        <div className="shadow-sm col-3 box">
+          <h3 className="title">User Profil</h3>
+          <Navigation />
         </div>
-        <div className="col-9">
+        <div className="shadow-sm col-9 box">
+          <h3 className="title">{title}</h3>
           <Outlet />
         </div>
       </div>

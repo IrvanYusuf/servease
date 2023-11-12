@@ -1,8 +1,8 @@
 import React from "react";
-import "../../styles/atoms/actionButton.css";
+import "../../styles/atoms/button.css";
 const ActionButton = ({ type, text, onClick }) => {
   return (
-    <button className={"btn-main"} type={type} onClick={onClick}>
+    <button className="btn-main" type={type} onClick={onClick}>
       {text}
     </button>
   );

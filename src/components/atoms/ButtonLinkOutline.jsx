@@ -1,14 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../styles/atoms/buttonLinkOutline.css";
+import "../../styles/atoms/buttonOutline.css";
 
 const ButtonLinkOutline = ({ text, path, target = null }) => {
   return (
-    <Link
-      to={path}
-      className="text-decoration-none fw-bold text-center btn-link-outline"
-      target={target}
-    >
+    <Link to={path} className="btn-main-outline" target={target}>
       {text}
     </Link>
   );

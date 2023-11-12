@@ -7,8 +7,10 @@
   font-weight: bold;
   background-color: white;
   opacity: 70%;
+  text-decoration: none;
+  text-align: center;
 }
 
-.btn-main-outline:hover{
+.btn-main-outline:hover {
   opacity: 100%;
 }
