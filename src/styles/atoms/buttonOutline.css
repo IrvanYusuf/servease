@@ -5,4 +5,12 @@
   border: 1px solid #ef3d01;
   border-radius: 10px;
   font-weight: bold;
+  background-color: white;
+  opacity: 70%;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-main-outline:hover {
+  opacity: 100%;
 }

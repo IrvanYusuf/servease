@@ -1,11 +1,11 @@
 import React from "react";
-import "../../styles/atoms/actionButtonOutline.css";
-const ActionButton = ({ type, text }) => {
+import "../../styles/atoms/buttonOutline.css";
+const ActionButtonOutline = ({ type, text, onClick }) => {
   return (
-    <button className={"btn-main-outline"} type={type}>
+    <button className="btn-main-outline" type={type} onClick={onClick}>
       {text}
     </button>
   );
 };
 
-export default ActionButton;
+export default ActionButtonOutline;

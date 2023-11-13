@@ -1,80 +1,78 @@
 .costum-container {
-    border: 1px solid rgb(231, 228, 228);
-    border-radius: 10px;
-    height: 440px;
-    box-shadow: 0 0 9px rgba(0, 0, 0, 0.2);
-    width: 155%;
-    margin-left: 30px;
+  border: 1px solid rgb(231, 228, 228);
+  border-radius: 10px;
+  height: 440px;
+  box-shadow: 0 0 9px rgba(0, 0, 0, 0.2);
+  width: 155%;
+  margin-left: 30px;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
 }
 
-.box-container{
-    margin-left: 25px;
+.box-container {
+  margin-left: 25px;
 }
 
 .costum-btn {
-    background-color: rgba(239, 61, 1, 1);
-    float: right;
-    color: white;
+  background-color: rgba(239, 61, 1, 1);
+  float: right;
+  color: white;
 }
 
 .costum-btn:hover {
-    background-color: rgb(199, 51, 2);
-    color: white;
+  background-color: rgb(199, 51, 2);
+  color: white;
 }
 
 .costum-img {
-    border-radius: 10px;
-    height: 200px;
+  border-radius: 10px;
+  height: 200px;
 }
 
 .costum-card {
-    height: 200px;
+  height: 200px;
 }
 
-.bagianFoto{
-    display: flex;
+.bagianFoto {
+  display: flex;
 }
 .button-container {
-    margin-top: 220px;
-    margin-left: -380px;
-
+  margin-top: 220px;
+  margin-left: -380px;
 }
 
-.pilihFoto {
-    width: 190px;
-    border: 1px solid rgb(171, 171, 171);
-    color: rgba(77, 76, 125, 1);
-    margin-top: 20px;
+.costum-card .pilihFoto {
+  width: 190px;
+  border: 1px solid rgb(171, 171, 171);
+  color: rgba(77, 76, 125, 1);
+  margin-top: 20px;
 }
 
-.pilihFoto:hover {
-    border: 1px solid rgb(171, 171, 171);
-    color: rgba(77, 76, 125, 1);
-    background-color: rgb(228, 228, 228);
+.costum-card .pilihFoto:hover {
+  border: 1px solid rgb(171, 171, 171);
+  color: rgba(77, 76, 125, 1);
+  background-color: rgb(228, 228, 228);
 }
-
 
 .BioData p {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    margin-left:50px ;
-    /* Sesuaikan jarak antar elemen jika diperlukan */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  /* Sesuaikan jarak antar elemen jika diperlukan */
 }
 
 .BioData p::after {
-    content: ':';
-    margin-left: 10px;
-    /* Sesuaikan jarak antara teks dan titik-dua jika diperlukan */
-    width: 20px;
-    /* Sesuaikan lebar titik-dua jika diperlukan */
-    display: inline-block;
-    text-align: right;
+  content: ":";
+  margin-left: 10px;
+  /* Sesuaikan jarak antara teks dan titik-dua jika diperlukan */
+  width: 20px;
+  /* Sesuaikan lebar titik-dua jika diperlukan */
+  display: inline-block;
+  text-align: right;
 }

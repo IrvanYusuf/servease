@@ -6,7 +6,10 @@ const Footer = () => {
   return (
     <div className="footer-container">
       <footer className="container footer">
-        <Link className="text-primary fs-2 fw-bold text-decoration-none">
+        <Link
+          className="text-primary fs-2 fw-bold text-decoration-none"
+          to={"/"}
+        >
           ServEase
         </Link>
       </footer>

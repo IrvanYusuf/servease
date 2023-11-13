@@ -1,0 +1,25 @@
+.detail-service-img-thumbnail-container {
+  height: 306px;
+}
+.detail-service-img-album {
+  height: 80px;
+}
+.booking-container {
+  position: sticky;
+  top: 100px;
+}
+.deskripsi-container {
+  margin-top: 73px;
+}
+.deskripsi-container h2 {
+  font-size: 24px;
+}
+.deskripsi-container p {
+  text-align: justify;
+}
+.deskripsi-inner-container {
+  margin-top: 28px;
+}
+.ulasan-container {
+  margin-top: 73px;
+}

@@ -15,6 +15,14 @@
             "rating_comment":"Teknisinya handal",
             "rating_star":4,
             "created_at":""
+        },
+        {
+            "id":2,
+            "service_id":1,
+            "user_id":2,
+            "rating_comment":"Teknisinya Keren",
+            "rating_star":4.5,
+            "created_at":""
         }
     ]
 }

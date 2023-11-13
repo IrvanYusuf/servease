@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SectionCategoryService from "../organisms/SectionCategoryService";
-import SectionCardAtractiveOffering from "../organisms/SectionCardAtractiveOffering";
+// import SectionCardAtractiveOffering from "../organisms/SectionCardAtractiveOffering";
 import SectionOurPartner from "../organisms/SectionOurPartner";
 import SectionCardTutorial from "../organisms/SectionCardTutorial";
 import Banner from "../organisms/Banner";
@@ -27,8 +27,8 @@ const LandingPage = () => {
       const response = await fetch("http://localhost:3001/categories", {
         method: "GET",
       });
-      const data = await response.json();
-      setCategory(data);
+      const dataCategories = await response.json();
+      setCategory(dataCategories);
     } catch (error) {
       console.log(error.message);
     }
@@ -39,8 +39,8 @@ const LandingPage = () => {
       const response = await fetch("http://localhost:3002/videos", {
         method: "GET",
       });
-      const data1 = await response.json();
-      setVideos(data1);
+      const dataAllVideos = await response.json();
+      setVideos(dataAllVideos);
     } catch (error) {
       console.log(error.message);
     }
@@ -51,11 +51,12 @@ const LandingPage = () => {
     getAllCategory();
     getAllVideos();
   }, []);
+
   return (
     <div className="container">
       <Banner dataBanners={banners} />
       <SectionCategoryService dataCategories={category} />
-      <SectionCardAtractiveOffering />
+      {/* <SectionCardAtractiveOffering /> */}
       <SectionOurPartner />
       <SectionCardTutorial videosData={videos} />
       <SectionAboutUs />

@@ -1,19 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import ReactPlayer from "react-player";
+import "../../styles/molecules/cardVideoTutorial.css";
 
-const CardVideoTutorial = ({ path, img, text }) => {
+const CardVideoTutorial = ({ text, videoUrl }) => {
   return (
-    <Link to={path} className="text-decoration-none" style={{ width: "223px" }}>
-      <img
-        className="w-100"
-        style={{ borderRadius: "10px" }}
-        src={img}
-        alt=""
-      />
-      <h5 style={{ fontSize: "18px", color: "#383838", marginTop: "10px" }}>
-        {text}
-      </h5>
-    </Link>
+    <div className="h-100">
+      <div className="rounded-4 overflow-hidden video-tutorial-img-container">
+        <ReactPlayer
+          url={videoUrl}
+          width={"100%"}
+          height={"100%"}
+          controls={true}
+        />
+      </div>
+      <h5 className="video-tutorial-title">{text}</h5>
+    </div>
   );
 };
 
