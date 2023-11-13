@@ -1,0 +1,15 @@
+.icon{
+    margin-right: 7px;
+}
+
+.nav-item{
+    margin-top:5px;
+}
+.nav-link{
+    text-decoration-color: #797979;
+}
+
+.nav-pills .nav-link.active {
+    color: #4F50E9;
+    background-color: rgba(79, 80, 233, 0.23);
+  }

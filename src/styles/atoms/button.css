@@ -6,4 +6,10 @@
   border: none;
   border-radius: 10px;
   font-weight: bold;
+  opacity: 80%;
+  text-decoration: none;
+}
+
+.btn-main:hover{
+  opacity: 100%;
 }

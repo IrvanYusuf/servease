@@ -1,30 +1,23 @@
 import React from "react";
 import CardVideoTutorial from "../molecules/CardVideoTutorial";
-import Carousel from "nuka-carousel";
+import "../../styles/organisms/sectionCardTutorial.css";
 
 const SectionCardTutorial = ({ videosData }) => {
   return (
-    <div style={{ marginTop: "69px" }}>
+    <div className="section-card-tutorial-container">
       <h2>Video Tutorial</h2>
-      <div style={{ marginTop: "28px" }}>
-        <Carousel
-          slidesToShow={2.3}
-          cellSpacing={20}
-          renderCenterLeftControls={false}
-          renderCenterRightControls={false}
-          renderBottomCenterControls={false}
-          wrapAround={true}
-          autoplay={true}
-        >
+      <div className="section-card-tutorial-inner-container">
+        <div className="row row-gap-4">
           {videosData.map((video) => (
-            <CardVideoTutorial
-              key={video.id}
-              path={video.path}
-              img={video.image}
-              text={video.title}
-            />
+            <div className="col-4" key={video.id}>
+              <CardVideoTutorial
+                key={video.id}
+                videoUrl={video.path}
+                text={video.title}
+              />
+            </div>
           ))}
-        </Carousel>
+        </div>
       </div>
     </div>
   );

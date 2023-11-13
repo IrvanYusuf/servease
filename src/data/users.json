@@ -6,9 +6,24 @@
             "nama_belakang":"Sarep",
             "jenis_kelamin":"Laki-laki",
             "nomor_hp":"082232890789",
+            "tanggal_lahir":"1998-05-17",
             "user_img":"https://i.ibb.co/n0Y4b9h/user-img.png",
             "email":"bambangsarep@gmail.com",
             "password":"bambang00",
+            "alamat":{
+                "rumah":"Jl. Letda Sujono 158, Tembung, Kec. Medan Tembung, Kota Medan, Sumatera Utara 20371"
+            }
+        },
+        {
+            "id":2,
+            "nama_depan":"Sabrina",
+            "nama_belakang":"Putri",
+            "jenis_kelamin":"Perempuan",
+            "nomor_hp":"082232892234",
+            "tanggal_lahir":"2000-02-08",
+            "user_img":"https://i.ibb.co/HdMgXpG/jake-nackos-IF9-TK5-Uy-KI-unsplash.jpg",
+            "email":"sabrina@gmail.com",
+            "password":"sabrina00",
             "alamat":["Jl. Letda Sujono 158, Tembung, Kec. Medan Tembung, Kota Medan, Sumatera Utara 20371"]
         }
     ]
