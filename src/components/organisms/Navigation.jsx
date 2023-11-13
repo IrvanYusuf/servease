@@ -8,7 +8,6 @@ import { FiMapPin } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
 
 const Navigation = () => {
-  const location = useLocation();
   const handleLogout = () => {
     localStorage.removeItem("id");
     localStorage.removeItem("email");
