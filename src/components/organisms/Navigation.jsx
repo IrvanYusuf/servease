@@ -1,6 +1,6 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../../styles/organisms/navigation.css";
 import { VscAccount } from "react-icons/vsc";
 import { BsClockHistory } from "react-icons/bs";

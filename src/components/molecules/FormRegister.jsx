@@ -10,7 +10,6 @@ const FormRegister = () => {
   //variabel halaman
   const [halaman, setHalaman] = useState(0);
 
-
   // save input
   const [formData, setFormData] = useState({
     username: "",
@@ -52,7 +51,7 @@ const FormRegister = () => {
       return (
         <>
           <div className="col-sm-6"></div>
-          <div className="col-sm-6">
+          <div className="w-100">
             <ActionButton
               type={"button"}
               text={"Selanjutnya"}
@@ -65,7 +64,11 @@ const FormRegister = () => {
       return (
         <>
           <div className="col-sm-6">
-            <ActionButtonOutline type={"button"} text={"Kembali"} />
+            <ActionButtonOutline
+              type={"button"}
+              text={"Kembali"}
+              onClick={prevPage}
+            />
           </div>
           <div className="col-sm-6">
             <ActionButton text={"Register"} />
