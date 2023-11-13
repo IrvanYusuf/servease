@@ -7,9 +7,9 @@ import { FaStar } from "react-icons/fa6";
 import { FiMapPin } from "react-icons/fi";
 import { limitAddress } from "../../utils/text";
 import ActionButton from "../atoms/ActionButton";
-import ModalForm from "../atoms/ModalForm";
+import ModalForm from "../molecules/ModalForm";
 import ButtonLinkOutline from "../atoms/ButtonLinkOutline";
-import ModalAlbumImg from "../atoms/ModalAlbumImg";
+import ModalAlbumImg from "../molecules/ModalAlbumImg";
 
 const DetailService = () => {
   const { idService } = useParams();
@@ -83,11 +83,6 @@ const DetailService = () => {
             onClick={handleShow}
           />
           <ModalForm show={show} onHide={handleClose} user_id={idUser} />
-          <ModalAlbumImg
-            show={showAlbumImg}
-            onHide={handleCloseAlbumImg}
-            albumUrl={selectedAlbumUrl}
-          />
         </div>
       </div>
     );
@@ -124,6 +119,11 @@ const DetailService = () => {
                   </div>
                 ))}
             </Carousel>
+            <ModalAlbumImg
+              show={showAlbumImg}
+              onHide={handleCloseAlbumImg}
+              albumUrl={selectedAlbumUrl}
+            />
           </div>
           <div className="deskripsi-container">
             <h2>Deskripsi</h2>

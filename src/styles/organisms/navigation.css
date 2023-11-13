@@ -1,0 +1,12 @@
+.sidebar-profile-navigation-container .nav-item .nav-link {
+  color: #797979;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  padding: 10px;
+}
+.sidebar-profile-navigation-container .nav-item .nav-link.active {
+  background-color: rgba(79, 80, 233, 0.23);
+  color: #4f50e9;
+  font-weight: bold;
+}

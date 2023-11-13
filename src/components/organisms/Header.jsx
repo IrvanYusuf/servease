@@ -50,7 +50,7 @@ const Header = () => {
                   </Link>
                   <span className="fw-semibold">Riwayat</span>
                 </div>
-                <Link to={"/profile"} className="user-img-wrapper">
+                <Link to={"/profile/"} className="user-img-wrapper">
                   <img
                     className="w-100 h-100 rounded-pill"
                     src={userImg}

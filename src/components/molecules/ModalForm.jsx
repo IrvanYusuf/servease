@@ -1,7 +1,7 @@
 import { Modal } from "react-bootstrap";
-import ActionButtonOutline from "./ActionButtonOutline";
-import ActionButton from "./ActionButton";
-import LabelInput from "./LabelInput";
+import ActionButtonOutline from "../atoms/ActionButtonOutline";
+import ActionButton from "../atoms/ActionButton";
+import LabelInput from "../atoms/LabelInput";
 import { useState } from "react";
 
 const ModalForm = (props) => {

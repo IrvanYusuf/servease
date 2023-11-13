@@ -3,6 +3,7 @@
 }
 .detail-service-img-album {
   height: 80px;
+  cursor: pointer;
 }
 .booking-container {
   position: sticky;
