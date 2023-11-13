@@ -9,7 +9,7 @@ const SectionCardTutorial = ({ videosData }) => {
       <div className="section-card-tutorial-inner-container">
         <div className="row row-gap-4">
           {videosData.map((video) => (
-            <div className="col-4">
+            <div className="col-4" key={video.id}>
               <CardVideoTutorial
                 key={video.id}
                 videoUrl={video.path}

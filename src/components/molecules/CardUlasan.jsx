@@ -10,7 +10,6 @@ const CardUlasan = ({
   nama_belakang,
   star,
 }) => {
-  console.log(star);
   return (
     <div className="w-75 border-bottom mb-5">
       <div className="vstack gap-3">

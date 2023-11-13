@@ -60,56 +60,6 @@ const RiwayatPemesanan = () => {
   ];
   const [activeTab, setActiveTab] = useState(datatabContent[0].targetId);
   return (
-    // <div className="w-100 h-100">
-    //   <div className="py-3">
-    //     <h4>Riwayat Pemesanan</h4>
-    //   </div>
-    //   <div className="w-100 mx-auto container-btn-filter-riwayat">
-    //     <ul
-    //       class="nav nav-pills mb-3 d-flex column-gap-3"
-    //       id="pills-tab"
-    //       role="tablist"
-    //     >
-    //       {dataButtonRiwayat.map((data) => (
-    //         <li class="nav-item" role="presentation" key={data.id}>
-    //           <button
-    //             class={`nav-link  ${
-    //               data.dataBsTarget === "#riwayat-semua" ? "active" : ""
-    //             }`}
-    //             // id="pills-home-tab"
-    //             data-bs-toggle="pill"
-    //             data-bs-target={data.dataBsTarget}
-    //             type="button"
-    //             role="tab"
-    //             aria-controls={data.ariaControl}
-    //             aria-selected="true"
-    //             onClick={() => {
-    //               setActive("active");
-    //             }}
-    //           >
-    //             {data.text}
-    //           </button>
-    //         </li>
-    //       ))}
-    //     </ul>
-    //     <div class="tab-content px-0" id="pills-tabContent">
-    //       {datatabContent.map((dataContent) => (
-    //         <div
-    //           key={dataContent.id}
-    //           class={`tab-pane fade border h-100 ${
-    //             dataContent.targetId === activeTab ? "show active" : ""
-    //           }`}
-    //           id={dataContent.targetId}
-    //           role="tabpanel"
-    //           // aria-labelledby="pills-home-tab"
-    //           tabindex="0"
-    //         >
-    //           {dataContent.component}
-    //         </div>
-    //       ))}
-    //     </div>
-    //   </div>
-    // </div>
     <div className="w-100 h-100 d-flex flex-column">
       <div className="d-flex justify-content-between py-3">
         <h4>Riwayat Pemesanan</h4>
@@ -159,9 +109,6 @@ const RiwayatPemesanan = () => {
           ))}
         </div>
       </div>
-      {/* <div className="d-flex flex-column justify-content-center align-items-center h-100 border border-success">
-        kkk
-      </div> */}
     </div>
   );
 };

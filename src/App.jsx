@@ -19,7 +19,7 @@ const App = () => {
         <Route path="register" element={<RegisterPage />} />
         <Route path="/" element={<LayoutPage />}>
           <Route index element={<LandingPage />} />
-          <Route path="daftar-service/:id" element={<DaftarService />} />
+          <Route path="daftar-service" element={<DaftarService />} />
           <Route path="detail/:idService" element={<DetailService />} />
           <Route path="/profile/" element={<LayoutProfile />}>
             <Route index element={<BiodataDiri />} />

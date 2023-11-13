@@ -5,7 +5,12 @@ import LabelInput from "../atoms/LabelInput";
 import { useState } from "react";
 
 const ModalForm = (props) => {
-  const [deskripsiMasalah, setDeskripsiMasalah] = useState("");
+  const [name, setName] = useState("");
+  const [noTelp, setNoTelp] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [address, setAddress] = useState("");
+  const [descriptionProblem, setDescriptionProblem] = useState("");
   const idUser = props.user_id;
   return (
     <Modal
@@ -24,7 +29,9 @@ const ModalForm = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Masukkan Nama...."
-                onChange={() => {}}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
                 required
               />
             </div>
@@ -35,7 +42,9 @@ const ModalForm = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Masukkan Nomor Telepon...."
-                onChange={() => {}}
+                onChange={(e) => {
+                  setNoTelp(e.target.value);
+                }}
                 required
               />
             </div>
@@ -47,7 +56,9 @@ const ModalForm = (props) => {
               <input
                 type="date"
                 className="form-control"
-                onChange={() => {}}
+                onChange={(e) => {
+                  setDate(e.target.value);
+                }}
                 required
               />
             </div>
@@ -57,7 +68,9 @@ const ModalForm = (props) => {
               <input
                 type="time"
                 className="form-control"
-                onChange={() => {}}
+                onChange={(e) => {
+                  setTime(e.target.value);
+                }}
                 required
               />
             </div>
@@ -72,12 +85,13 @@ const ModalForm = (props) => {
               cols="30"
               rows="4"
               placeholder="Masukkan Alamat Anda...."
-              onChange={() => {}}
+              onChange={(e) => {
+                setAddress(e.target.value);
+              }}
               required
             ></textarea>
           </div>
           <div className="ps-0">
-            <div>{deskripsiMasalah}</div>
             <LabelInput labelText={"Deskripsi Masalah"} />
             <span className="text-danger"> *</span>
             <textarea
@@ -89,7 +103,7 @@ const ModalForm = (props) => {
               placeholder="Masukkan Deskripsi Masalah...."
               required
               onChange={(e) => {
-                setDeskripsiMasalah(e.target.value);
+                setDescriptionProblem(e.target.value);
               }}
             ></textarea>
           </div>
@@ -98,7 +112,15 @@ const ModalForm = (props) => {
       <Modal.Footer className="border-0">
         <div className="d-flex column-gap-3">
           <ActionButtonOutline onClick={props.onHide} text={"Cancel"} />
-          <ActionButton onClick={() => {}} text={"Booking"} type={"submit"} />
+          <ActionButton
+            onClick={() => {
+              alert(
+                `Name: ${name}\nNo. Telp: ${noTelp}\nTanggal: ${date}\nWaktu: ${time}\nAlamat: ${address}\nDeskripsi Masalah: ${descriptionProblem}`
+              );
+            }}
+            text={"Booking"}
+            type={"submit"}
+          />
         </div>
       </Modal.Footer>
     </Modal>
