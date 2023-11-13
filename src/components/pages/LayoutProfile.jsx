@@ -1,12 +1,10 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Outlet} from "react-router-dom";
 import "../../styles/pages/LayoutProfile.css"
 import ProfileIcon from '@mui/icons-material/AccountCircleOutlined';
 import HistoryIcon from '@mui/icons-material/HistoryToggleOff';
 import LocationIcon from '@mui/icons-material/FmdGoodOutlined';
 import LogoutIcon from '@mui/icons-material/LogoutOutlined';
-
-
 
 const LayoutProfile = () => {
   const handleLogout = () => {
@@ -14,16 +12,18 @@ const LayoutProfile = () => {
     localStorage.removeItem("email")
     localStorage.removeItem("password")
   }
+
   return (
     <div className="container">
       <div className="d-flex">
         {/* <div className="col-6"> */}
         <div>
-          <nav className="sidebar">
+          <nav className="sidebar" >
             <ul>
-              <li className="list">
+              <li className="list" onClick={handleClick}>
                 <ProfileIcon style={{ color: "rgba(121, 121, 121, 1)",fontSize:"30px"}} />
                 <Link to={"/profile"}>Biodata Diri</Link>
+              
               </li>
               <li className="list">
                 <HistoryIcon style={{color: "rgba(121, 121, 121, 1)", fontSize:"30px"}}/>
