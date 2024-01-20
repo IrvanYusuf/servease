@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import SectionCategoryService from "../organisms/SectionCategoryService";
-// import SectionCardAtractiveOffering from "../organisms/SectionCardAtractiveOffering";
 import SectionOurPartner from "../organisms/SectionOurPartner";
 import SectionCardTutorial from "../organisms/SectionCardTutorial";
 import Banner from "../organisms/Banner";
 import SectionAboutUs from "../organisms/SectionAboutUs";
+import { apiBanner } from "../../api/apiBanner";
+import { apiCategories } from "../../api/apiCategories";
+import { apiVideos } from "../../api/apiVideos";
+import { useAuth } from "../../context/authContext";
 const LandingPage = () => {
   const [banners, setBanners] = useState([]);
   const [category, setCategory] = useState([]);
@@ -12,11 +15,13 @@ const LandingPage = () => {
 
   const getAllBanners = async () => {
     try {
-      const response = await fetch("http://localhost:3000/banners", {
+      const response = await fetch(apiBanner, {
         method: "GET",
       });
       const dataBanners = await response.json();
-      setBanners(dataBanners);
+      if (response.status === 200) {
+        setBanners(dataBanners.data);
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -24,11 +29,13 @@ const LandingPage = () => {
 
   const getAllCategory = async () => {
     try {
-      const response = await fetch("http://localhost:3001/categories", {
+      const response = await fetch(apiCategories, {
         method: "GET",
       });
       const dataCategories = await response.json();
-      setCategory(dataCategories);
+      if (response.status === 200) {
+        setCategory(dataCategories.data);
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -36,11 +43,13 @@ const LandingPage = () => {
 
   const getAllVideos = async () => {
     try {
-      const response = await fetch("http://localhost:3002/videos", {
+      const response = await fetch(apiVideos, {
         method: "GET",
       });
       const dataAllVideos = await response.json();
-      setVideos(dataAllVideos);
+      if (response.status === 200) {
+        setVideos(dataAllVideos.data);
+      }
     } catch (error) {
       console.log(error.message);
     }

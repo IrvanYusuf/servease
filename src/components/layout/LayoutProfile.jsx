@@ -13,7 +13,7 @@ const LayoutProfile = () => {
           <Navigation />
         </div>
         <div className="col-9 ps-3">
-          <div className="box shadow-sm ps-3 vh-100">
+          <div className="box shadow-sm ps-3" style={{ height: "100vh" }}>
             <Outlet />
           </div>
         </div>

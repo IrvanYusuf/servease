@@ -1,0 +1,10 @@
+.nav-active-border-bottom .nav-link.active {
+  color: #ef3d01;
+  border-bottom: 3px solid #ef3d01;
+}
+.nav-active-border-bottom .nav-link {
+  color: #797979;
+  font-weight: 700;
+  padding-left: 30px;
+  padding-right: 30px;
+}

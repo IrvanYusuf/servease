@@ -1,0 +1,22 @@
+.sidebar-mitra-navigation-container .nav-item a {
+  color: #797979;
+}
+.sidebar-mitra-navigation-container .nav-item {
+  color: #797979;
+  /* display: flex;
+  align-items: center;
+  column-gap: 10px;
+  padding: 10px; */
+}
+/*  */
+.sidebar-mitra-navigation-container .nav-item a.active {
+  background-color: white;
+  border: none;
+  color: #4f50e9;
+  font-weight: bold;
+}
+.sidebar-mitra-navigation-container .nav-item .active-container {
+  background-color: rgba(79, 80, 233, 0.23);
+  color: #4f50e9;
+  font-weight: bold;
+}

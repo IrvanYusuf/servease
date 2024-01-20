@@ -17,10 +17,10 @@ function ServiceCard({ dataServices }) {
                   height={213}
                   alt=""
                 />
-                <div
-                  to={`/detail/${data.id}`}
-                  className="my-2 d-flex align-items-center column-gap-3"
-                >
+              </Link>
+
+              <Link to={"/mitra-beranda/1"} className="text-decoration-none">
+                <div className="my-2 d-flex align-items-center column-gap-3">
                   <div style={{ width: "41px", height: "41px" }}>
                     <img
                       src={data.thumbnail}
@@ -32,8 +32,9 @@ function ServiceCard({ dataServices }) {
                     {data.name_store}
                   </h5>
                 </div>
-                <h5 className="text-secondary">{data.title}</h5>
               </Link>
+              <h5 className="text-secondary">{data.title}</h5>
+
               <div className="d-flex align-items-center column-gap-2">
                 <FiMapPin /> {data.address && limitAddress(data.address)}
               </div>

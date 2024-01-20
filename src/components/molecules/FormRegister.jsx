@@ -5,32 +5,55 @@ import "../../styles/molecules/formLogin.css";
 import FormRegisterUserInfo from "../organisms/FormRegisterUserInfo";
 import FormRegisterPersonalInfo from "../organisms/FormRegisterPersonalInfo";
 import ActionButtonOutline from "../atoms/ActionButtonOutline";
+import { apiAuth } from "../../api/apiAuth";
+import { swal } from "../../utils/sweetAlert";
 
 const FormRegister = () => {
   //variabel halaman
   const [halaman, setHalaman] = useState(0);
+  const [msgErrorPasswordNotSame, setMsgErrorPasswordNotSame] = useState("");
+  const [msgErrorEmail, setMsgErrorEmail] = useState("");
+  const [msgEmailSudahTerdaftar, setMsgEmailSudahTerdaftar] = useState("");
 
   // save input
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    nama_depan: "",
+    cpassword: "",
+    nama: "",
     no_telp: "",
-    alamat: "",
+    jenis_kelamin: "",
+    tanggal_lahir: "",
+    img: null,
+    id_role: 2,
   });
+
+  const handleFormData = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   //pagedisplay logic
   const PageDisplay = () => {
     if (halaman === 0) {
       return (
-        <FormRegisterUserInfo formData={formData} setFormData={setFormData} />
+        <FormRegisterUserInfo
+          formData={formData}
+          handleFormData={handleFormData}
+          msgErrorPasswordNotSame={msgErrorPasswordNotSame}
+          msgErrorEmail={msgErrorEmail}
+          setMsgErrorEmail={setMsgErrorEmail}
+        />
       );
     } else {
       return (
         <FormRegisterPersonalInfo
           formData={formData}
-          setFormData={setFormData}
+          handleFormData={handleFormData}
+          msgEmailSudahTerdaftar={msgEmailSudahTerdaftar}
         />
       );
     }
@@ -46,6 +69,40 @@ const FormRegister = () => {
     setHalaman(halaman - 1);
   };
 
+  const handleNextForm = () => {
+    if (msgErrorEmail !== "" && msgErrorEmail === "email tidak valid") {
+      return;
+    }
+    if (formData.password !== formData.cpassword) {
+      setMsgErrorPasswordNotSame("password dan konfirmasi password tidak sama");
+    } else {
+      setMsgErrorPasswordNotSame("");
+      nextPage();
+      console.log(formData);
+    }
+  };
+
+  const handleRegisterForm = async () => {
+    const response = await fetch(`${apiAuth}/register`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    if (data.message === "email sudah terdaftar") {
+      swal({
+        title: "Error",
+        text: "Email Sudah Terdaftar",
+        icon: "error",
+        iconColor: "#EF3D01",
+        confirmButtonText: "Tutup",
+      });
+    } else {
+      navigate("/login");
+    }
+  };
   const ButtonDisplay = () => {
     if (halaman === 0) {
       return (
@@ -55,7 +112,7 @@ const FormRegister = () => {
             <ActionButton
               type={"button"}
               text={"Selanjutnya"}
-              onClick={nextPage}
+              onClick={handleNextForm}
             />
           </div>
         </>
@@ -71,7 +128,7 @@ const FormRegister = () => {
             />
           </div>
           <div className="col-sm-6">
-            <ActionButton text={"Register"} />
+            <ActionButton text={"Register"} onClick={handleRegisterForm} />
           </div>
         </>
       );

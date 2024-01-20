@@ -4,6 +4,7 @@ import prevIcon from "../../assets/icon/back.png";
 import nextIcon from "../../assets/icon/next.png";
 import "../../styles/organisms/banner.css";
 const Banner = ({ dataBanners }) => {
+  // console.log(dataBanners);
   return (
     <div>
       <Carousel
@@ -29,9 +30,13 @@ const Banner = ({ dataBanners }) => {
           </button>
         )}
       >
-        {dataBanners.map((banner) => (
-          <div key={banner.id}>
-            <img src={banner.img} alt="" className="w-100" />
+        {dataBanners.map((banner, i) => (
+          <div key={i}>
+            <img
+              src={`../../../public/img/banners/${banner.image}`}
+              alt=""
+              className="w-100"
+            />
           </div>
         ))}
       </Carousel>

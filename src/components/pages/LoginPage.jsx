@@ -4,10 +4,16 @@ import FormLogin from "../molecules/FormLogin";
 import RegistrationLink from "../atoms/RegistrationLink";
 import { useNavigate } from "react-router-dom";
 import "../../styles/pages/loginPage.css";
+import { apiAuth } from "../../api/apiAuth";
+import { useAuth } from "../../context/authContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setAuthToken } = useAuth();
+  const { setAuthIdMitra } = useAuth();
+  const [msgErr, setMsgErr] = useState("");
+
   const handleEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -15,18 +21,28 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
   const navigate = useNavigate();
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (email === "bambangsarep@gmail.com" && password === "bambang00") {
-      localStorage.setItem("id", 1);
-      localStorage.setItem("email", "bambangsarep@gmail.com");
-      localStorage.setItem("password", "bambang00");
-      navigate("/");
+    const response = await fetch(`${apiAuth}/login`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        credentials: true,
+      },
+      body: JSON.stringify({ email: email, password: password }),
+    });
+    const data = await response.json();
+    if (response.status === 200) {
+      setAuthToken(data.token);
+      setAuthIdMitra(data.id_mitra);
+      if (data.id_role === 2) {
+        navigate("/mitra/");
+      } else {
+        navigate("/");
+      }
     } else {
-      alert("Email atau Password salah");
+      setMsgErr(data.message);
     }
-    // "bambangsarep@gmail.com"
-    // "bambang00"
   };
   return (
     <div className="container vh-100 d-flex align-items-center justify-content-center">
@@ -37,6 +53,9 @@ const LoginPage = () => {
         <div className="col-md-6 col-lg-5 col-12">
           <div className="shadow-lg px-lg-5 px-4 py-3 py-lg-5 d-flex flex-column justify-content-center align-items-center form-login-container">
             <h2 className="fw-bold login-title">Login</h2>
+            {msgErr && (
+              <div className="bg-danger-subtle w-100 p-2 my-2">{msgErr}</div>
+            )}
             <FormLogin
               email={email}
               password={password}

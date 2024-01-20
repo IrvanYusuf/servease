@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import LabelInput from "../atoms/LabelInput";
 
-function FormRegisterUserInfo(formData, setFormData) {
+function FormRegisterUserInfo({
+  formData,
+  handleFormData,
+  msgErrorPasswordNotSame,
+  setMsgErrorEmail,
+  msgErrorEmail,
+}) {
+  const [isvalid, setIsValid] = useState(false);
+
+  // console.log(handleFormData);
+  const handleChangeForm = (e) => {
+    // const { name, value } = e.target;
+    handleFormData(e);
+
+    if (e.target.name === "email" && e.target.value !== "") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValidEmail = emailRegex.test(e.target.value);
+      if (!isValidEmail) {
+        setMsgErrorEmail("email tidak valid");
+      } else {
+        setMsgErrorEmail("");
+      }
+    }
+  };
   return (
     <>
       <div className="mb-3">
@@ -10,9 +33,8 @@ function FormRegisterUserInfo(formData, setFormData) {
           className="input-login form-control"
           type="text"
           value={formData.username}
-          onChange={(e) => {
-            setFormData({ ...formData, username: e.target.value });
-          }}
+          name="username"
+          onChange={handleChangeForm}
         />
       </div>
       <div className="mb-3">
@@ -21,10 +43,13 @@ function FormRegisterUserInfo(formData, setFormData) {
           className="input-login form-control"
           type="email"
           value={formData.email}
-          onChange={(e) => {
-            setFormData({ ...formData, email: e.target.value });
-          }}
+          name="email"
+          onChange={handleChangeForm}
+          required
         />
+        <div className="text-danger">
+          {msgErrorEmail === "" ? "" : "email tidak valid"}
+        </div>
       </div>
       <div className="mb-3">
         <LabelInput target={"password"} labelText={"Password"} />
@@ -32,14 +57,22 @@ function FormRegisterUserInfo(formData, setFormData) {
           className="input-login form-control"
           type="password"
           value={formData.password}
-          onChange={(e) => {
-            setFormData({ ...formData, password: e.target.value });
-          }}
+          name="password"
+          onChange={handleChangeForm}
         />
       </div>
       <div className="mb-5">
         <LabelInput target={"password"} labelText={"Konfirmasi Password"} />
-        <input className="input-login form-control" type="password" />
+        <input
+          className="input-login form-control"
+          type="password"
+          name="cpassword"
+          value={formData.cpassword}
+          onChange={handleChangeForm}
+        />
+        <div className="text-danger">
+          {msgErrorPasswordNotSame && msgErrorPasswordNotSame}
+        </div>
       </div>
     </>
   );

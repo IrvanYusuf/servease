@@ -5,7 +5,7 @@ import { Link } from "react-router-dom/dist";
 
 const dataButtonOurPartner = [
   {
-    path: "/",
+    path: "/mitra/register",
     text: "Daftar Sekarang",
     className: "btn-our-partner-orange",
   },
@@ -38,7 +38,11 @@ const SectionOurPartner = () => {
         <div className="d-flex column-gap-3">
           {dataButtonOurPartner.map((data, i) => (
             <div key={i}>
-              <ButtonOurPartner text={data.text} classname={data.className} />
+              <ButtonOurPartner
+                text={data.text}
+                classname={data.className}
+                path={data.path}
+              />
             </div>
           ))}
         </div>

@@ -10,3 +10,8 @@
   color: #4f50e9;
   font-weight: bold;
 }
+.sidebar-profile-navigation-container .nav-item .nav-link.active3 {
+  background-color: rgba(84, 233, 79, 0.23);
+  color: #4f50e9;
+  font-weight: bold;
+}

@@ -3,6 +3,7 @@ import CardCategory from "../molecules/CardCategory";
 import "../../styles/organisms/sectionCategoryService.css";
 
 const SectionCategoryService = ({ dataCategories }) => {
+  console.log(dataCategories);
   return (
     <section className="category-container">
       <h2>Daftar Layanan Service</h2>
@@ -10,9 +11,9 @@ const SectionCategoryService = ({ dataCategories }) => {
         {dataCategories.map((category) => (
           <CardCategory
             key={category.id}
-            path={`/daftar-service?category_id=${category.id}`}
+            path={`/daftar-service?category_id=${category.id_kategori}`}
             image={category.image}
-            text={category.category}
+            text={category.nama_kategori}
           />
         ))}
       </div>

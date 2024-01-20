@@ -4,22 +4,39 @@ import ButtonLink from "../atoms/ButtonLink";
 import { Link } from "react-router-dom";
 import ButtonLinkOutline from "../atoms/ButtonLinkOutline";
 import riwayatIcon from "../../assets/icon/riwayat-icon.png";
-import userImg from "../../assets/img/user-img.png";
+import profileImg from "../../assets/icon/profile.png";
 import "../../styles/organisms/header.css";
+import { useAuth } from "../../context/authContext";
+import { apiUser } from "../../api/apiUser";
+import { jwtDecode } from "jwt-decode";
 
 const Header = () => {
-  const [idUser, setIdUser] = useState("");
+  const [imgUser, setImgUser] = useState(profileImg);
+  const { token } = useAuth();
+  const decoded = token ? jwtDecode(token) : null;
 
-  const getIdUserLocalStorage = () => {
-    const id = localStorage.getItem("id");
-    if (id) {
-      setIdUser(id);
-    }
+  const getSingleUser = async () => {
+    const response = await fetch(`${apiUser}/detail/${decoded.id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        authorization: token,
+        credentials: true,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+    const newImgUser =
+      data.data[0].img !== null
+        ? `http://localhost:3000/images/${data.data[0].img}`
+        : profileImg;
+    // console.log(data.data[0].img);
+    setImgUser(newImgUser);
   };
 
   useEffect(() => {
-    getIdUserLocalStorage();
-  }, []);
+    getSingleUser();
+  }, [imgUser]);
   return (
     <Navbar expand="lg" className="bg-white border-bottom fixed-top">
       <Container>
@@ -39,7 +56,7 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto column-gap-3 row-gap-2 row-gap-lg-0 align-items-center">
-            {idUser ? (
+            {token ? (
               <>
                 <div className="riwayat-icon-wrapper d-flex align-items-center column-gap-2">
                   <Link
@@ -53,7 +70,7 @@ const Header = () => {
                 <Link to={"/profile/"} className="user-img-wrapper">
                   <img
                     className="w-100 h-100 rounded-pill"
-                    src={userImg}
+                    src={imgUser}
                     alt=""
                   />
                 </Link>{" "}

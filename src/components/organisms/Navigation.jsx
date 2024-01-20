@@ -6,12 +6,14 @@ import { VscAccount } from "react-icons/vsc";
 import { BsClockHistory } from "react-icons/bs";
 import { FiMapPin } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
+import { FaRegStar } from "react-icons/fa6";
+import { useAuth } from "../../context/authContext";
 
 const Navigation = () => {
+  const { setAuthToken } = useAuth();
   const handleLogout = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
+    setAuthToken("");
+    localStorage.removeItem("token");
   };
 
   return (
@@ -24,7 +26,7 @@ const Navigation = () => {
           <Nav.Link
             as={NavLink}
             to="/profile/"
-            className={({ isActive }) => (isActive ? "active" : "none")}
+            className={({ isActive }) => (isActive ? "active3" : "none")}
           >
             <VscAccount size={24} />
             Biodata Diri
@@ -48,6 +50,16 @@ const Navigation = () => {
           >
             <FiMapPin size={24} />
             Daftar Alamat
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            as={NavLink}
+            to="/profile/ulasan"
+            className={({ isActive }) => (isActive ? "active" : "none")}
+          >
+            <FaRegStar size={24} />
+            Ulasan
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>

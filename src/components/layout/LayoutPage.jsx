@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../organisms/Header";
 import { Outlet } from "react-router-dom";
 import Footer from "../organisms/Footer";
-import "../../styles/pages/layoutPage.css";
+import "../../styles/layout/layoutPage.css";
 
 const LayoutPage = () => {
   return (

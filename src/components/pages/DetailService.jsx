@@ -7,9 +7,9 @@ import { FaStar } from "react-icons/fa6";
 import { FiMapPin } from "react-icons/fi";
 import { limitAddress } from "../../utils/text";
 import ActionButton from "../atoms/ActionButton";
-import ModalForm from "../molecules/ModalForm";
 import ButtonLinkOutline from "../atoms/ButtonLinkOutline";
 import ModalAlbumImg from "../molecules/ModalAlbumImg";
+import ModalFormBooking from "../organisms/ModalFormBooking";
 
 const DetailService = () => {
   const { idService } = useParams();
@@ -82,7 +82,7 @@ const DetailService = () => {
             type={"button"}
             onClick={handleShow}
           />
-          <ModalForm show={show} onHide={handleClose} user_id={idUser} />
+          <ModalFormBooking show={show} onHide={handleClose} user_id={idUser} />
         </div>
       </div>
     );

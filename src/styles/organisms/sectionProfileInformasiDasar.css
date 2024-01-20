@@ -1,0 +1,12 @@
+table tr td {
+  padding: 10px 10px 10px 10px;
+}
+.switch-layanan:checked {
+  background-color: #ef3d01;
+  border: none;
+  padding: 10px 20px;
+}
+.switch-layanan {
+  /* background-color: red; */
+  padding: 10px 20px;
+}

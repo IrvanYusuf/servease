@@ -1,10 +1,10 @@
-.container-btn-filter-riwayat .nav-item .nav-link {
+.container-btn-filter-riwayat.nav-item .nav-link {
   border: 1px solid #797979;
   background-color: white;
   color: #797979;
   font-weight: bold;
 }
-.container-btn-filter-riwayat .nav-item .nav-link.active {
+.container-btn-filter-riwayat.nav-item .nav-link.active {
   border: 1px solid #ef3d01;
   background-color: white;
   color: #ef3d01;

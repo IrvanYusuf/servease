@@ -1,0 +1,15 @@
+.btn-gray {
+  background-color: white;
+  /* width: 100%; */
+  color: #797979;
+  padding: 8px 16px;
+  border: 1px solid #797979;
+  border-radius: 10px;
+  font-weight: bold;
+  opacity: 80%;
+  text-decoration: none;
+}
+
+.btn-gray:hover {
+  opacity: 100%;
+}

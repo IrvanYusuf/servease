@@ -3,6 +3,7 @@ import CardVideoTutorial from "../molecules/CardVideoTutorial";
 import "../../styles/organisms/sectionCardTutorial.css";
 
 const SectionCardTutorial = ({ videosData }) => {
+  console.log(videosData);
   return (
     <div className="section-card-tutorial-container">
       <h2>Video Tutorial</h2>
@@ -11,9 +12,9 @@ const SectionCardTutorial = ({ videosData }) => {
           {videosData.map((video) => (
             <div className="col-4" key={video.id}>
               <CardVideoTutorial
-                key={video.id}
-                videoUrl={video.path}
-                text={video.title}
+                key={video.id_video}
+                videoUrl={video.video_url}
+                text={video.judul_video}
               />
             </div>
           ))}
