@@ -1,38 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/organisms/sectionPenilaianSemua.css";
 import { FaStar } from "react-icons/fa6";
+import { useAuth } from "../../context/authContext";
+import { apiRating } from "../../api/apiRating";
+import { limitOrderNumber } from "../../utils/text";
+import { format } from "date-fns";
+import StarRating from "../atoms/StarRating";
 
 const SectionPenilaian1 = () => {
+  const { token } = useAuth();
+  const idMitra = localStorage.getItem("idMitra");
+  console.log(idMitra);
+  const [allRating, setAllRating] = useState([]);
+  const getAllRatingByIdMitra = async () => {
+    try {
+      const response = await fetch(
+        `${apiRating}/mitra/diulas/rate/${idMitra}/1`,
+        {
+          method: "GET",
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      const { data } = await response.json();
+      console.log(data);
+      setAllRating(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllRatingByIdMitra();
+  }, []);
   return (
-    <div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Tanggal</th>
-            <th scope="col">Kode Pemesanan</th>
-            <th scope="col">Rating</th>
-            <th scope="col">Ulasan</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: 5 }, (v, i) => (
+    <div className="d-flex flex-column h-100">
+      <div className="overflow-y-auto">
+        <table className="table">
+          <thead>
             <tr>
-              <th scope="row" className="fw-medium text-secondary">
-                25 Desember 2023
-              </th>
-              <td className="fw-medium text-secondary">AJH98YG</td>
-              <td>
-                {Array.from({ length: 5 }, (v, i) => (
-                  <FaStar className="text-warning" />
-                ))}
-              </td>
-              <td className="text-truncate" style={{ maxWidth: "200px" }}>
-                Bagus dan cepat, kerjanya bener tapi ngerokoknya banyak
-              </td>
+              <th scope="col">Tanggal</th>
+              <th scope="col">Kode Pemesanan</th>
+              <th scope="col">Rating</th>
+              <th scope="col">Ulasan</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {allRating.map((rating, i) => (
+              <tr>
+                <th scope="row" className="text-secondary fw-medium">
+                  {format(new Date(rating.created_at), "dd MMMM yyyy")}
+                </th>
+                <td className="text-secondary fw-medium">
+                  {limitOrderNumber(rating.kode_pemesanan)}
+                </td>
+                <td>
+                  <StarRating stars={rating.rate} />
+                </td>
+                <td className="text-truncate" style={{ maxWidth: "200px" }}>
+                  {rating.deskripsi}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

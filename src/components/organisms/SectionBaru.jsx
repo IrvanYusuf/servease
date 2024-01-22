@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
+import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
 import CardHistoryBooking from "../molecules/CardHistoryBooking";
 import { apiTransaction } from "../../api/apiTransaction";
-import { useAuth } from "../../context/authContext";
 import { jwtDecode } from "jwt-decode";
-const SectionSelesai = () => {
+import { useAuth } from "../../context/authContext";
+const SectionBaru = () => {
   const { token } = useAuth();
   const [allTransactionOnGoing, setAllTransactionOnGoing] = useState([]);
   const decoded = token ? jwtDecode(token) : null;
 
   const getAllTransaction = async () => {
     try {
-      const response = await fetch(`${apiTransaction}/${decoded.id}/Selesai`, {
+      const response = await fetch(`${apiTransaction}/${decoded.id}/Baru`, {
         method: "GET",
         headers: {
           authorization: token,
@@ -29,15 +30,14 @@ const SectionSelesai = () => {
       getAllTransaction();
     }
   }, [decoded.id]);
-
   return (
     <div className="h-100">
       <div className="d-flex flex-column justify-content-center align-items-center h-100">
         {allTransactionOnGoing &&
           allTransactionOnGoing.map((transaction) => (
             <CardHistoryBooking
-              backgroundColor={"rgba(80, 141, 105, 0.23)"}
-              color={"#508D69"}
+              backgroundColor={"rgba(239,61,1,0.2)"}
+              color={"#EF3D01"}
               textStatus={transaction.status}
               kodePemesanan={transaction.kode_pemesanan}
               namaMitra={transaction.nama_servis}
@@ -51,4 +51,4 @@ const SectionSelesai = () => {
   );
 };
 
-export default SectionSelesai;
+export default SectionBaru;

@@ -147,18 +147,22 @@ const PengaturanAkunMitra = () => {
       <ModalEditUsernameMitra
         show={showModalEditUsernameMitra}
         onHide={() => setShowModalEditUsernameMitra(false)}
+        getSingleUser={getSingleUser}
       />
       <ModalEditNoTelpMitra
         show={showModalEditNoTelpMitra}
         onHide={() => setShowModalEditNoTelpMitra(false)}
+        getSingleUser={getSingleUser}
       />
       <ModalEditEmailMitra
         show={showModalEditEmailMitra}
         onHide={() => setShowModalEditEmailMitra(false)}
+        getSingleUser={getSingleUser}
       />
       <ModalEditPasswordMitra
         show={showModalEditPasswordMitra}
         onHide={() => setShowModalEditPasswordMitra(false)}
+        getSingleUser={getSingleUser}
       />
     </div>
   );

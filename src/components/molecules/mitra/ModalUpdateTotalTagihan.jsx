@@ -1,69 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import LabelInput from "../../atoms/LabelInput";
-import { swal } from "../../../utils/sweetAlert";
-import ActionButtonOutline from "../../atoms/ActionButtonOutline";
 import ActionButton from "../../atoms/ActionButton";
+import ActionButtonOutline from "../../atoms/ActionButtonOutline";
+import { swal } from "../../../utils/sweetAlert";
+import { apiTransaction } from "../../../api/apiTransaction";
 import { useAuth } from "../../../context/authContext";
-import { jwtDecode } from "jwt-decode";
-import { apiUser } from "../../../api/apiUser";
 
-const ModalEditUsernameMitra = (props) => {
+const ModalUpdateTotalTagihan = (props) => {
+  const [totalTagihan, setTotalTagihan] = useState("");
   const { token } = useAuth();
-  const decoded = token ? jwtDecode(token) : null;
-  const [username, setUsername] = useState("");
 
-  const getSingleUser = async () => {
+  const getInvoiceDetail = async () => {
     try {
-      const response = await fetch(`${apiUser}/detail/${decoded.id}`, {
-        method: "GET",
-        headers: {
-          authorization: token,
-        },
-      });
-      const data = await response.json();
-      const [result] = data.data;
-      setUsername(result.username);
+      const response = await fetch(
+        `${apiTransaction}/invoice/detail/${props.idTransaksi}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      const { data } = await response.json();
+      const [result] = data;
+      setTotalTagihan(result.total_tagihan);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleSubmit = async () => {
-    try {
-      const response = await fetch(`${apiUser}/username/${decoded.id}`, {
+    const newObj = { total_tagihan: totalTagihan };
+    const response = await fetch(
+      `${apiTransaction}/invoice/nominal/${props.idTransaksi}`,
+      {
         method: "PATCH",
         headers: {
           authorization: token,
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ username: username }),
-      });
-      const { data } = await response.json();
-      if (data.affectedRows > 0) {
-        swal({
-          title: "Success",
-          text: "Data Berhasil Diubah",
-          icon: "success",
-          iconColor: "#EF3D01",
-          confirmButtonText: "Tutup",
-          //   timer: 1000,
-        });
-
-        props.getSingleUser();
+        body: JSON.stringify(newObj),
       }
-    } catch (error) {
-      console.log(error);
-    }
+    );
+    const data = await response.json();
+    console.log(data);
+    console.log(response);
+    swal({
+      title: "Success",
+      text: "Data Berhasil Diubah",
+      icon: "success",
+      iconColor: "#EF3D01",
+      confirmButtonText: "Tutup",
+      //   timer: 1000,
+    });
+    props.getInvoiceDetail();
   };
 
   const handleCancel = () => {
-    setUsername("");
+    setTotalTagihan("");
     props.onHide();
   };
 
   useEffect(() => {
-    getSingleUser();
+    getInvoiceDetail();
   }, [props.show]);
   return (
     <Modal
@@ -73,18 +73,19 @@ const ModalEditUsernameMitra = (props) => {
       {...props}
     >
       <Modal.Body>
-        <h3>Edit Username</h3>
+        <h3>Edit Nominal Tagihan</h3>
         <hr />
         <form noValidate>
           <div className="col mb-3">
-            <LabelInput labelText={"Username"} />
+            <LabelInput labelText={"Total Tagihan"} />
             <span className="text-danger"> *</span>
             <input
-              type="text"
+              type="number"
               className="form-control"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Input seluruh total tagihan...."
+              name="total_tagihan"
+              value={totalTagihan}
+              onChange={(e) => setTotalTagihan(e.target.value)}
               required
             />
           </div>
@@ -111,4 +112,4 @@ const ModalEditUsernameMitra = (props) => {
   );
 };
 
-export default ModalEditUsernameMitra;
+export default ModalUpdateTotalTagihan;

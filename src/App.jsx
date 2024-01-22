@@ -19,24 +19,29 @@ import ProfilLayanan from "./components/pages/mitra/ProfilLayanan";
 import GaleriMedia from "./components/pages/mitra/GaleriMedia";
 import AlamatSayaMitra from "./components/pages/mitra/AlamatSayaMitra";
 import TransaksiSayaMitra from "./components/pages/mitra/TransaksiSayaMitra";
-import PembatalanMitra from "./components/pages/mitra/PembatalanMitra";
 import PengaturanAkunMitra from "./components/pages/mitra/PengaturanAkunMitra";
 import DetailOrderMitra from "./components/pages/mitra/DetailOrderMitra";
 import { AuthProvider } from "./context/authContext";
 import RegisterPageMitra from "./components/pages/mitra/RegisterPageMitra";
+import Tes from "./Tes";
+import CreateInvoice from "./components/pages/mitra/CreateInvoice";
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
           <Route path="login" element={<LoginPage />} />
+          <Route path="/tesaja" element={<Tes />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="/mitra/register" element={<RegisterPageMitra />} />
           <Route path="tes" element={<RatingProgressBar2 />} />
           <Route path="/" element={<LayoutPage />}>
             <Route index element={<LandingPage />} />
-            <Route path="daftar-service" element={<DaftarService />} />
-            <Route path="detail/:idService" element={<DetailService />} />
+            <Route
+              path="daftar-service/:idCategory"
+              element={<DaftarService />}
+            />
+            <Route path="detail/:idMitra" element={<DetailService />} />
             <Route path="mitra-beranda/:idMitra" element={<MitraBeranda />} />
             <Route path="/profile/" element={<LayoutProfile />}>
               <Route index element={<BiodataDiri />} />
@@ -55,7 +60,10 @@ const App = () => {
                 path="transaksi-detail/:idTransaksi"
                 element={<DetailOrderMitra />}
               />
-              <Route path="pembatalan" element={<PembatalanMitra />} />
+              <Route
+                path="transaksi-invoice/:idTransaksi"
+                element={<CreateInvoice />}
+              />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Route>

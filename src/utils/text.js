@@ -1,6 +1,9 @@
 export const limitAddress = (address) => {
   return [...address.slice(0, 40), "..."];
 };
+export const limitOrderNumber = (number) => {
+  return [...number.slice(0, 10), "..."];
+};
 
 export const hidePhoneNumber = (phoneNumber) => {
   const visibleDigits = 3;

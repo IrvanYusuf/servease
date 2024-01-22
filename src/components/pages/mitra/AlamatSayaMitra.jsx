@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ActionButton from "../../atoms/ActionButton";
 import "../../../styles/organisms/sectionPenilaianSemua.css";
 import ModalFormTambahAlamat from "../../molecules/ModalFormTambahAlamat";
 import ModalEditAlamatMitra from "../../molecules/mitra/ModalEditAlamatMitra";
+import { useAuth } from "../../../context/authContext";
+import { jwtDecode } from "jwt-decode";
+import { apiAddress } from "../../../api/apiAddress";
 
 const AlamatSayaMitra = () => {
   const [showTambahAlamat, setShowTambahAlamat] = useState(false);
   const [showEditAlamat, setShowEditAlamat] = useState(false);
-  const [idx, setIdx] = useState(0);
+  const { token } = useAuth();
+  const decoded = token ? jwtDecode(token) : null;
+  const [address, setAddress] = useState([]);
+  const [idAlamat, setIdAlamat] = useState(0);
 
   const handleShow = () => {
     setShowTambahAlamat(true);
@@ -15,8 +21,27 @@ const AlamatSayaMitra = () => {
 
   const handleShowEdit = (i) => {
     setShowEditAlamat(true);
-    setIdx(i);
   };
+
+  const getAllAddress = async () => {
+    try {
+      const response = await fetch(`${apiAddress}/${decoded.id}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const data = await response.json();
+      setAddress(data.data);
+      setIdAlamat(data.data[0].id_alamat);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllAddress();
+  }, []);
   return (
     <div className="w-100 h-100 d-flex flex-column">
       <div className="mt-2 d-flex justify-content-between">
@@ -40,7 +65,7 @@ const AlamatSayaMitra = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 4 }, (v, i) => (
+            {address.map((data, i) => (
               <tr>
                 <td className="fw-medium text-secondary">
                   Agus Cleaning Jr Medan
@@ -74,11 +99,13 @@ const AlamatSayaMitra = () => {
       <ModalFormTambahAlamat
         show={showTambahAlamat}
         onHide={() => setShowTambahAlamat(false)}
+        getAllAddress={getAllAddress}
       />
       <ModalEditAlamatMitra
         show={showEditAlamat}
         onHide={() => setShowEditAlamat(false)}
-        idx={idx}
+        getAllAddress={getAllAddress}
+        idAddress={idAlamat}
       />
     </div>
   );

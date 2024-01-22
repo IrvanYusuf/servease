@@ -1,30 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import StatusTransaksi from "../../atoms/StatusTransaksi";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../context/authContext";
+import { jwtDecode } from "jwt-decode";
+import { apiTransaction } from "../../../api/apiTransaction";
 
 const SectionSemuaTransaksiMitra = () => {
-  const datas = [
-    {
-      id: 1,
-      status: "Baru",
-    },
-    {
-      id: 2,
-      status: "Berlangsung",
-    },
-    {
-      id: 3,
-      status: "Selesai",
-    },
-    {
-      id: 4,
-      status: "Dibatalkan",
-    },
-    {
-      id: 5,
-      status: "Baru",
-    },
-  ];
+  const { token, idMitra } = useAuth();
+  const decoded = token ? jwtDecode(token) : null;
+  const [allTransaction, setAllTransaction] = useState([]);
+  const [waktuImageDiubah, setWaktuImageDiubah] = useState([]);
+
+  const getAllTransactionMitra = async () => {
+    try {
+      const response = await fetch(`${apiTransaction}/mitra/all/${idMitra}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      const formatDates = [];
+      for (let index = 0; index < data.length; index++) {
+        const originalDate = data[index].tanggal_layanan;
+        const dateObject = new Date(originalDate);
+
+        // Format the date as YYYY-MM-DD
+        const formattedDate = dateObject.toISOString().split("T")[0];
+        // Combine date and time
+        const formattedDateWithTime = `${formattedDate}`;
+
+        formatDates.push(formattedDateWithTime);
+      }
+      setWaktuImageDiubah(formatDates);
+      setAllTransaction(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(waktuImageDiubah);
+
+  useEffect(() => {
+    getAllTransactionMitra();
+  }, []);
   return (
     <div className="d-flex flex-column h-100">
       <div className="overflow-y-auto">
@@ -38,11 +56,11 @@ const SectionSemuaTransaksiMitra = () => {
             </tr>
           </thead>
           <tbody>
-            {datas.map((data, i) => (
+            {allTransaction.map((data, i) => (
               <tr>
                 <td>
                   <Link
-                    to={"/mitra/transaksi-detail/1"}
+                    to={`/mitra/transaksi-detail/${data.id_transaksi}`}
                     className="text-decoration-none"
                   >
                     {data.status === "Berlangsung" ? (
@@ -74,29 +92,28 @@ const SectionSemuaTransaksiMitra = () => {
                     )}
                   </Link>
                 </td>
-                <td className="fw-medium text-secondary">
+                <td className="fw-medium text-secondary" width={"130px"}>
                   <Link
-                    to={"/mitra/transaksi-detail/1"}
+                    to={`/mitra/transaksi-detail/${data.id_transaksi}`}
                     className="text-decoration-none text-secondary"
                   >
-                    25/12/2023
+                    {waktuImageDiubah[i]}
                   </Link>
                 </td>
                 <td className="fw-medium text-secondary">
                   <Link
-                    to={"/mitra/transaksi-detail/1"}
+                    to={`/mitra/transaksi-detail/${data.id_transaksi}`}
                     className="text-decoration-none text-secondary"
                   >
-                    Jalan Jangka No.25, Sei Putih Barat Kec, Medan Petisah
+                    {data.nama_jalan}, {data.kabupaten}, {data.kecamatan}
                   </Link>
                 </td>
                 <td className="text-secondary">
                   <Link
-                    to={"/mitra/transaksi-detail/1"}
+                    to={`/mitra/transaksi-detail/${data.id_transaksi}`}
                     className="text-decoration-none text-secondary"
                   >
-                    ac berisik keluar suara gitar sama suling prindapan kadang
-                    kadang kaya suara rx king ....
+                    {data.deskripsi}
                   </Link>
                 </td>
               </tr>

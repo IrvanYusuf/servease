@@ -1,14 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
 import CardUlasanSaya from "../molecules/CardUlasanSaya";
+import { useAuth } from "../../context/authContext";
+import { jwtDecode } from "jwt-decode";
+import { apiRating } from "../../api/apiRating";
+import { subDays, formatDistance } from "date-fns";
 
 const SectionUlasanSaya = () => {
+  const { token } = useAuth();
+  const decoded = token ? jwtDecode(token) : null;
+  const [allRating, setAllRating] = useState([]);
+  const [tanggalRating, setTanggalRating] = useState("");
+  const getAllRatingDiUlasByIdUser = async () => {
+    try {
+      const response = await fetch(`${apiRating}/user/diulas/${decoded.id}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      const oneDayAgoData = data.map((item) => ({
+        ...item,
+        tanggal: formatDistance(
+          subDays(new Date(item.created_at), 1),
+          new Date(),
+          { addSuffix: true }
+        ),
+      }));
+      console.log(oneDayAgoData[0].rate);
+
+      setAllRating(oneDayAgoData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllRatingDiUlasByIdUser();
+  }, []);
   return (
     // <div className="h-100 border">
     <div className="d-flex flex-column align-items-center">
-      {Array.from({ length: 10 }, (v, i) => (
-        <CardUlasanSaya status={"Selesai"} />
-      ))}
+      {allRating.length > 0 ? (
+        allRating.map((rating, i) => (
+          <CardUlasanSaya
+            key={i}
+            deskripsi={rating.deskripsi}
+            image={rating.image}
+            kategori={rating.nama_kategori}
+            kodePemesanan={rating.kode_pemesanan}
+            namaServis={rating.nama_servis}
+            tanggal={rating.tanggal}
+            rate={rating.rate}
+          />
+        ))
+      ) : (
+        <div
+          className="w-100 d-flex justify-content-center"
+          style={{ marginTop: "30px" }}
+        >
+          <div className="d-flex flex-column align-items-center row-gap-3">
+            <img src={iconRiwayatPemesananNotFound} alt="" />
+            <h5>Kamu belum pernah melakukan pesanan</h5>
+          </div>
+        </div>
+      )}
     </div>
     // </div>
   );

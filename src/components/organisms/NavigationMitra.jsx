@@ -128,14 +128,6 @@ const NavigationMitra = () => {
             >
               Transaksi Saya
             </Nav.Link>
-            <Nav.Link
-              as={NavLink}
-              to={"/mitra/pembatalan"}
-              className={`tes ${({ isActive }) =>
-                isActive ? "active2" : "none"}`}
-            >
-              Pembatalan
-            </Nav.Link>
           </ul>
         </Nav.Item>
         <Nav.Item>

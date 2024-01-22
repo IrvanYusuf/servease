@@ -4,6 +4,7 @@ import "../../../styles/pages/mitraBeranda.css";
 import SectionBaruTransaksiMitra from "../../organisms/mitra/SectionBaruTransaksiMitra";
 import SectionSelesaiTransaksiMitra from "../../organisms/mitra/SectionSelesaiTransaksiMitra";
 import SectionDibatalkanTransaksiMitra from "../../organisms/mitra/SectionDibatalkanTransaksiMitra";
+import SectionBerlangsungTransaksiMitra from "../../organisms/mitra/SectionBerlangsungTransaksiMitra";
 
 const TransaksiSayaMitra = () => {
   const [active, setActive] = useState("");
@@ -17,18 +18,24 @@ const TransaksiSayaMitra = () => {
     },
     {
       id: 2,
-      dataBsTarget: "#riwayat-berlangsung",
-      ariaControl: "riwayat-berlangsung",
+      dataBsTarget: "#riwayat-baru",
+      ariaControl: "riwayat-baru",
       text: "Baru",
     },
     {
       id: 3,
+      dataBsTarget: "#riwayat-berlangsung",
+      ariaControl: "riwayat-berlangsung",
+      text: "Berlangsung",
+    },
+    {
+      id: 4,
       dataBsTarget: "#riwayat-selesai",
       ariaControl: "riwayat-selesai",
       text: "Selesai",
     },
     {
-      id: 4,
+      id: 5,
       dataBsTarget: "#riwayat-dibatalkan",
       ariaControl: "riwayat-dibatalkan",
       text: "Dibatalkan",
@@ -43,16 +50,21 @@ const TransaksiSayaMitra = () => {
     },
     {
       id: 2,
-      targetId: "riwayat-berlangsung",
+      targetId: "riwayat-baru",
       component: <SectionBaruTransaksiMitra />,
     },
     {
       id: 3,
+      targetId: "riwayat-berlangsung",
+      component: <SectionBerlangsungTransaksiMitra />,
+    },
+    {
+      id: 4,
       targetId: "riwayat-selesai",
       component: <SectionSelesaiTransaksiMitra />,
     },
     {
-      id: 4,
+      id: 5,
       targetId: "riwayat-dibatalkan",
       component: <SectionDibatalkanTransaksiMitra />,
     },

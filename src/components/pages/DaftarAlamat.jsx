@@ -13,10 +13,10 @@ import Swal from "sweetalert2";
 const DaftarAlamat = () => {
   const [showModalAlamat, setShowModalAlamat] = useState(false);
   const [showModalEditAlamat, setShowModalEditAlamat] = useState(false);
-  const [showModalDeleteAlamat, setShowModalDeleteAlamat] = useState(false);
   const [alamat, setAlamat] = useState([]);
   const [idUser, setIdUser] = useState(0);
-  const [idAlamat, setIdAlamat] = useState(0);
+  const [idAlamat, setIdAlamat] = useState("");
+  const idAlamatLocalStorage = localStorage.getItem("alamat");
   const { token } = useAuth();
   const decoded = token ? jwtDecode(token) : null;
   const [isPrimary, setIsPrimary] = useState("");
@@ -33,13 +33,6 @@ const DaftarAlamat = () => {
     setShowModalEditAlamat(true);
   };
   const handleCloseModalEditAlamat = () => setShowModalEditAlamat(false);
-
-  const handleShowModalDeleteAlamat = (id) => {
-    setIdUser(id);
-    setShowModalDeleteAlamat(true);
-  };
-
-  const handleCloseModalDeleteAlamat = () => setShowModalDeleteAlamat(false);
 
   const handleDeleteAddress = async (idAlamat) => {
     setIdAlamat(idAlamat);
@@ -118,7 +111,9 @@ const DaftarAlamat = () => {
               key={i}
               style={{
                 border: `1px solid ${
-                  isPrimary === data.id_alamat ? "#EF3D01" : "#D0D4CA"
+                  parseInt(idAlamatLocalStorage) === data.id_alamat
+                    ? "#EF3D01"
+                    : "#D0D4CA"
                 }`,
               }}
             >

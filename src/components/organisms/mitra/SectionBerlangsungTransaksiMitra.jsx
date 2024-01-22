@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import StatusTransaksi from "../../atoms/StatusTransaksi";
-import { jwtDecode } from "jwt-decode";
-import { useAuth } from "../../../context/authContext";
 import { apiTransaction } from "../../../api/apiTransaction";
+import { useAuth } from "../../../context/authContext";
+import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 
-const SectionDibatalkanTransaksiMitra = () => {
+const SectionBerlangsungTransaksiMitra = () => {
   const { token, idMitra } = useAuth();
   const decoded = token ? jwtDecode(token) : null;
   const [allTransaction, setAllTransaction] = useState([]);
@@ -14,7 +14,7 @@ const SectionDibatalkanTransaksiMitra = () => {
   const getAllTransactionMitra = async () => {
     try {
       const response = await fetch(
-        `${apiTransaction}/mitra/all/${idMitra}/Dibatalkan`,
+        `${apiTransaction}/mitra/all/${idMitra}/Berlangsung`,
         {
           method: "GET",
           headers: {
@@ -67,11 +67,11 @@ const SectionDibatalkanTransaksiMitra = () => {
                     to={`/mitra/transaksi-detail/${data.id_transaksi}`}
                     className="text-decoration-none text-secondary"
                   >
-                    {data.status === "Dibatalkan" ? (
+                    {data.status === "Berlangsung" ? (
                       <StatusTransaksi
                         textStatus={data.status}
-                        backgroundColor={"rgba(179,19,18,0.23"}
-                        color={"#B31312"}
+                        backgroundColor={"rgba(79, 80, 233, 0.23)"}
+                        color={"#4f50e9"}
                       />
                     ) : (
                       ""
@@ -111,4 +111,4 @@ const SectionDibatalkanTransaksiMitra = () => {
   );
 };
 
-export default SectionDibatalkanTransaksiMitra;
+export default SectionBerlangsungTransaksiMitra;

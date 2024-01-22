@@ -10,65 +10,104 @@ import ActionButton from "../atoms/ActionButton";
 import ButtonLinkOutline from "../atoms/ButtonLinkOutline";
 import ModalAlbumImg from "../molecules/ModalAlbumImg";
 import ModalFormBooking from "../organisms/ModalFormBooking";
+import { apiMitra } from "../../api/apiMitra";
+import { useAuth } from "../../context/authContext";
+import { apiAddress } from "../../api/apiAddress";
 
-const DetailService = () => {
-  const { idService } = useParams();
-  const [idUser, setIdUser] = useState("");
+const DetailService = (props) => {
+  const { idMitra } = useParams();
   const [service, setServices] = useState([]);
+  const [album, setAlbum] = useState([]);
+  const [address, setAddress] = useState([]);
   const [show, setShow] = useState(false);
   const [showAlbumImg, setShowAlbumImg] = useState(false);
   const [selectedAlbumUrl, setSelectedAlbumUrl] = useState("");
-  const { album } = service;
+  const { token } = useAuth();
+  console.log(props.idCategory);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  console.log(idMitra);
 
   const handleCloseAlbumImg = () => setShowAlbumImg(false);
   const handleShowAlbumImg = (imgUrl) => {
     setSelectedAlbumUrl(imgUrl);
     setShowAlbumImg(true);
   };
-
-  const getIdUserLocalStorage = () => {
-    const id_user = localStorage.getItem("id");
-    if (id_user) {
-      setIdUser(id_user);
-    }
-  };
-
-  const getService = async () => {
+  const getServiceDetail = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3003/services/${idService}`,
+        `${apiMitra}/profil/detail/${parseInt(idMitra)}`,
         {
           method: "GET",
-          mode: "cors",
           headers: {
             "Content-Type": "application/json",
+            authorization: token,
           },
         }
       );
-      const dataService = await response.json();
-      setServices(dataService);
+      const { data } = await response.json();
+      const [result] = data;
+      console.log(result);
+      setServices(result);
     } catch (error) {
       console.log(error.message);
     }
   };
+
+  const getAlbumGalleries = async () => {
+    try {
+      const response = await fetch(`${apiMitra}/gallery/${service.id_mitra}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      setAlbum(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAddressMitra = async () => {
+    try {
+      const response = await fetch(`${apiAddress}/${service.id_user}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      const [result] = data;
+      setAddress(result);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    getService();
-    getIdUserLocalStorage();
-  }, []);
+    getServiceDetail();
+  }, [idMitra]);
+
+  useEffect(() => {
+    if (service.id_mitra) {
+      getAlbumGalleries();
+      getAddressMitra();
+    }
+  }, [service.id_mitra]);
 
   const BookingContainer = () => {
     return (
       <div className="border border mt-0 p-4 rounded-2 booking-container">
         <div>
-          <h4 className="fw-bold">{service.name_store}</h4>
+          <h4 className="fw-bold">{service.nama_servis}</h4>
           <div className="d-flex align-items-center column-gap-2">
-            <FaStar className="text-warning" /> {service.rating_star}
+            {/* <FaStar className="text-warning" /> {service.rating_star} */}
           </div>
           <div className="d-flex align-items-center column-gap-2">
-            <FiMapPin /> {service.address && limitAddress(service.address)}
+            <FiMapPin />{" "}
+            {address && `${address.kecamatan} ${address.kabupaten}`}
           </div>
         </div>
         <div className="mt-5 d-flex flex-column row-gap-3">
@@ -82,7 +121,12 @@ const DetailService = () => {
             type={"button"}
             onClick={handleShow}
           />
-          <ModalFormBooking show={show} onHide={handleClose} user_id={idUser} />
+          <ModalFormBooking
+            show={show}
+            onHide={handleClose}
+            idMitra={service.id_mitra}
+            idCategory={service.id_kategori}
+          />
         </div>
       </div>
     );
@@ -94,7 +138,7 @@ const DetailService = () => {
         <div className="col-md-12 col-lg-7">
           <div className="detail-service-img-thumbnail-container">
             <img
-              src={service.thumbnail}
+              src={`http://localhost:3000/images/${service.image}`}
               className="h-100 w-100 rounded-2"
               alt=""
             />
@@ -111,10 +155,10 @@ const DetailService = () => {
                 album.map((img, i) => (
                   <div key={i} className="detail-service-img-album">
                     <img
-                      src={img}
+                      src={`http://localhost:3000/images/gallery/${img.image}`}
                       alt=""
                       className="w-100 rounded-2 h-100"
-                      onClick={() => handleShowAlbumImg(img)}
+                      onClick={() => handleShowAlbumImg(img.image)}
                     />
                   </div>
                 ))}
@@ -128,7 +172,7 @@ const DetailService = () => {
           <div className="deskripsi-container">
             <h2>Deskripsi</h2>
             <div className="border rounded-1 p-2 deskripsi-inner-container">
-              <p>{service.description}</p>
+              <p>{service.deskripsi}</p>
             </div>
           </div>
           <div className="ulasan-container">

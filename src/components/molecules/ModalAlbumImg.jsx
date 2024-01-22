@@ -12,7 +12,11 @@ const ModalAlbumImg = (props) => {
     >
       <Modal.Header closeButton className="border-0" />
       <Modal.Body>
-        <img src={imgUrl} alt="" className="w-100 modal-img" />
+        <img
+          src={`http://localhost:3000/images/gallery/${imgUrl}`}
+          alt=""
+          className="w-100 modal-img"
+        />
       </Modal.Body>
     </Modal>
   );

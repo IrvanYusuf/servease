@@ -5,20 +5,56 @@ import ModalBookingDetail from "./ModalBookingDetail";
 import ButtonLink from "../atoms/ButtonLink";
 import { Link } from "react-router-dom";
 import StatusTransaksi from "../atoms/StatusTransaksi";
+import { limitOrderNumber } from "../../utils/text";
+import { apiTransaction } from "../../api/apiTransaction";
+import { useAuth } from "../../context/authContext";
+import { swal } from "../../utils/sweetAlert";
 
-const CardHistoryBooking = ({ backgroundColor, color, textStatus, nilai }) => {
+const CardHistoryBooking = ({
+  backgroundColor,
+  color,
+  textStatus,
+  kodePemesanan,
+  namaMitra,
+  kategori,
+  idTransaksi,
+  idMitra,
+}) => {
   const [showModalBookingDetail, setShowModalBookingDetail] = useState(false);
-  const [valuebtn, setValueBtn] = useState(`gagal transaksi ${nilai}`);
+  const [idTransaksiModal, setIdTransaksiModal] = useState(0);
+  const { token } = useAuth();
 
   function handleShowModalBookingDetail() {
     setShowModalBookingDetail(true);
+    setIdTransaksiModal(idTransaksi);
   }
   function handleCloseModalBookingDetail() {
     setShowModalBookingDetail(false);
   }
 
-  const handleClick = () => {
-    alert(valuebtn);
+  const handleCancelTransaction = async () => {
+    try {
+      const response = await fetch(`${apiTransaction}/cancel/${idTransaksi}`, {
+        method: "PATCH",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      console.log(data);
+      if (data.affectedRows > 0) {
+        swal({
+          title: "Success",
+          text: "Berhasil Membatalkan Pesanan",
+          icon: "success",
+          iconColor: "#EF3D01",
+          confirmButtonText: "Tutup",
+          //   timer: 1000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   // console.log(valuebtn);
   return (
@@ -28,7 +64,8 @@ const CardHistoryBooking = ({ backgroundColor, color, textStatus, nilai }) => {
           <div>
             <div className="d-flex column-gap-3">
               <span>
-                Kode Pemesanan <b>JJAI98654</b>
+                Kode Pemesanan{" "}
+                <b>{kodePemesanan && limitOrderNumber(kodePemesanan)}</b>
               </span>
               <div>
                 <StatusTransaksi
@@ -46,8 +83,8 @@ const CardHistoryBooking = ({ backgroundColor, color, textStatus, nilai }) => {
                 width={"80px"}
               />
               <div>
-                <b>Agus Cleaning jr</b>
-                <h6>Service Ac</h6>
+                <b>{namaMitra}</b>
+                <h6>{kategori}</h6>
               </div>
             </div>
           </div>
@@ -66,7 +103,13 @@ const CardHistoryBooking = ({ backgroundColor, color, textStatus, nilai }) => {
             </div>
             <div className="d-flex column-gap-3 align-items-center">
               {textStatus === "Selesai" ? (
-                <p>hhh</p>
+                <div>
+                  <ButtonLink
+                    path={`https://wa.me/447471667916`}
+                    text={"Hubungi Penjual"}
+                    target={"_blank"}
+                  />
+                </div>
               ) : (
                 <div>
                   <ButtonLink
@@ -79,14 +122,13 @@ const CardHistoryBooking = ({ backgroundColor, color, textStatus, nilai }) => {
               {textStatus === "Berlangsung" ? (
                 <button
                   className="btn border-secondary rounded-3"
-                  value={valuebtn}
-                  onClick={handleClick}
+                  onClick={handleCancelTransaction}
                 >
                   Batalkan
                 </button>
               ) : (
                 <Link
-                  to={"/detail/1"}
+                  to={`/detail/${idMitra}`}
                   className="btn border-secondary rounded-3"
                 >
                   Booking Lagi
@@ -100,7 +142,7 @@ const CardHistoryBooking = ({ backgroundColor, color, textStatus, nilai }) => {
         show={showModalBookingDetail}
         onHide={handleCloseModalBookingDetail}
         status={textStatus}
-        nilai={nilai}
+        idTransaksi={idTransaksi}
       />
     </div>
   );

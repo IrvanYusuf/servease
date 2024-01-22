@@ -3,10 +3,10 @@ import ActionButtonOutline from "../atoms/ActionButtonOutline";
 import ActionButton from "../atoms/ActionButton";
 import LabelInput from "../atoms/LabelInput";
 import { useEffect, useState } from "react";
-import { apiAddress } from "../../api/apiAddress";
+import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../context/authContext";
 import { swal } from "../../utils/sweetAlert";
-import { jwtDecode } from "jwt-decode";
+import { apiAddress } from "../../api/apiAddress";
 
 const ModalFormEditAlamat = (props) => {
   const { token } = useAuth();

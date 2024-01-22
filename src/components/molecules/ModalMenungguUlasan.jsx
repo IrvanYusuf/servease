@@ -5,14 +5,66 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ActionButtonOutline from "../atoms/ActionButtonOutline";
 import ActionButton from "../atoms/ActionButton";
 import { FaStar } from "react-icons/fa";
+import { apiRating } from "../../api/apiRating";
+import { useAuth } from "../../context/authContext";
+import { swal } from "../../utils/sweetAlert";
+import { apiTransaction } from "../../api/apiTransaction";
 
 const ModalMenungguUlasan = (props) => {
   const [ratingValue, setRatingValue] = useState(0);
+  const [deskripsi, setDeskripsi] = useState("");
+  const { token } = useAuth();
+  console.log(token);
+
   // const [hoverValue, setHoverValue] = useState(0);
   console.log(props);
 
-  const handleUlasan = () => {
-    alert(ratingValue);
+  const handleChangeStatusRating = async () => {
+    try {
+      const response = await fetch(
+        `${apiTransaction}/rating/finish/${props.idTransaksi}`,
+        {
+          method: "PATCH",
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUlasan = async () => {
+    const newObj = {
+      id_user: props.idUser,
+      id_mitra: props.idMitra,
+      rate: ratingValue,
+      deskripsi: deskripsi,
+    };
+    try {
+      const response = await fetch(`${apiRating}/user/${props.idTransaksi}`, {
+        method: "POST",
+        headers: {
+          authorization: token,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(newObj),
+      });
+      const data = await response.json();
+      swal({
+        title: "Success",
+        text: "Data Berhasil Diubah",
+        icon: "success",
+        iconColor: "#EF3D01",
+        confirmButtonText: "Tutup",
+      });
+      handleChangeStatusRating();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Modal
@@ -49,7 +101,9 @@ const ModalMenungguUlasan = (props) => {
             </h5>
             <textarea
               className="form-control mt-3"
-              name=""
+              name="deskripsi"
+              value={deskripsi}
+              onChange={(e) => setDeskripsi(e.target.value)}
               id=""
               cols="30"
               rows="8"

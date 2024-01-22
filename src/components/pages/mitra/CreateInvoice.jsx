@@ -9,17 +9,30 @@ import { useAuth } from "../../../context/authContext";
 import { jwtDecode } from "jwt-decode";
 import { apiTransaction } from "../../../api/apiTransaction";
 import { useParams } from "react-router-dom";
+import ModalInputTotalTagihan from "../../molecules/mitra/ModalInputTotalTagihan";
+import ModalUpdateTotalTagihan from "../../molecules/mitra/ModalUpdateTotalTagihan";
 
-const DetailOrderMitra = () => {
-  const [status, setStatus] = useState("Berlangsung");
+const CreateInvoice = () => {
   const { idTransaksi } = useParams();
   const { token, idMitra } = useAuth();
   const decoded = token ? jwtDecode(token) : null;
   const [allTransaction, setAllTransaction] = useState([]);
   const [waktuImageDiubah, setWaktuImageDiubah] = useState([]);
   const [keluhan, setKeluhan] = useState([]);
+  const [showModalTotalTagihan, setShowModalTotalTagihan] = useState(false);
+  const [showModalEditTotalTagihan, setShowModalEditTotalTagihan] =
+    useState(false);
+  const [invoiceDetail, setInvoiceDetail] = useState({});
 
-  const getAllTransactionMitra = async () => {
+  const handleShowModalTotalTagihan = () => {
+    setShowModalTotalTagihan(true);
+  };
+
+  const handleShowModalEditTotalTagihan = () => {
+    setShowModalEditTotalTagihan(true);
+  };
+
+  const getDetailTransactionMitra = async () => {
     try {
       const response = await fetch(
         `${apiTransaction}/detail/transaction/${idTransaksi}`,
@@ -33,10 +46,7 @@ const DetailOrderMitra = () => {
       const { data } = await response.json();
       const [result] = data;
       const keluhan = JSON.parse(result.keluhan);
-      // const keluhan = result.keluhan;
-      console.log(typeof keluhan);
       const keluhanStr = keluhan.join(",");
-      console.log(keluhanStr);
       setKeluhan(keluhanStr);
       console.log(result);
       const originalDate = result.tanggal_layanan;
@@ -77,47 +87,42 @@ const DetailOrderMitra = () => {
     }
   };
 
+  const getInvoiceDetail = async () => {
+    try {
+      const response = await fetch(
+        `${apiTransaction}/invoice/detail/${idTransaksi}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      const { data } = await response.json();
+      const [result] = data;
+      setInvoiceDetail(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getAllTransactionMitra();
+    getDetailTransactionMitra();
+    getInvoiceDetail();
   }, []);
 
-  console.log(status);
   return (
     <div className="w-100 h-100 d-flex flex-column">
       <div>
-        <h4>Detail Order</h4>
+        <h4>Buat Invoice</h4>
       </div>
       <hr />
       <table className="table table-borderless">
         <tbody>
           <tr className="d-flex justify-content-between">
-            <td className="text-secondary p-2">Status</td>
+            <td className="text-secondary p-2">No. Invoice</td>
             <td className="p-2">
-              {allTransaction.status === "Baru" ? (
-                <StatusTransaksi
-                  textStatus={"Baru"}
-                  backgroundColor={"rgba(239,61,1,0.2)"}
-                  color={"#EF3D01"}
-                />
-              ) : allTransaction.status === "Berlangsung" ? (
-                <StatusTransaksi
-                  textStatus={"Berlangsung"}
-                  backgroundColor={"rgba(79, 80, 233, 0.23)"}
-                  color={"#4f50e9"}
-                />
-              ) : allTransaction.status === "Selesai" ? (
-                <StatusTransaksi
-                  textStatus={"Selesai"}
-                  backgroundColor={"rgba(80, 141, 105, 0.23)"}
-                  color={"#508D69"}
-                />
-              ) : (
-                <StatusTransaksi
-                  textStatus={"Dibatalkan"}
-                  backgroundColor={"rgba(179,19,18,0.23"}
-                  color={"#B31312"}
-                />
-              )}
+              {invoiceDetail.kode_invoice ? invoiceDetail.kode_invoice : "-"}
             </td>
           </tr>
           <tr className="d-flex justify-content-between">
@@ -131,6 +136,9 @@ const DetailOrderMitra = () => {
         </tbody>
       </table>
       <hr />
+      <div>
+        <h4>Detail Order</h4>
+      </div>
       <table className="table table-borderless">
         <tbody>
           <tr className="d-flex justify-content-between">
@@ -169,6 +177,41 @@ const DetailOrderMitra = () => {
         </tbody>
       </table>
       <hr />
+      <div className="d-flex justify-content-between">
+        <div>
+          <h4>Detail Tagihan</h4>
+        </div>
+        {invoiceDetail.kode_invoice ? (
+          <div>
+            <ActionButton
+              text={"Ubah Nominal"}
+              onClick={handleShowModalEditTotalTagihan}
+            />
+          </div>
+        ) : (
+          <div>
+            <ActionButton
+              text={"Input Nominal"}
+              onClick={handleShowModalTotalTagihan}
+            />
+          </div>
+        )}
+      </div>
+      <table className="table table-borderless">
+        <tbody>
+          <tr className="d-flex justify-content-between">
+            <td className="text-secondary p-2">Total Tagihan</td>
+            <td className="p-2">
+              {invoiceDetail.total_tagihan ? (
+                <h5>Rp{invoiceDetail.total_tagihan}</h5>
+              ) : (
+                "-"
+              )}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
       {allTransaction.status === "Baru" ? (
         <div className="d-flex justify-content-end column-gap-3">
           <div>
@@ -178,20 +221,27 @@ const DetailOrderMitra = () => {
             <ActionButtonOutline text={"Tolak"} />
           </div>
         </div>
-      ) : allTransaction.status === "Berlangsung" ? (
+      ) : (
         <div className="d-flex justify-content-end">
           <div>
-            <ButtonLink
-              path={`/mitra/transaksi-invoice/${allTransaction.id_transaksi}`}
-              text={"Buat Invoice"}
-            />
+            <ButtonLink path={""} text={"Buat Invoice"} />
           </div>
         </div>
-      ) : (
-        ""
       )}
+      <ModalInputTotalTagihan
+        show={showModalTotalTagihan}
+        onHide={() => setShowModalTotalTagihan(false)}
+        getDetailTransactionMitra={getDetailTransactionMitra}
+        idTransaksi={idTransaksi}
+      />
+      <ModalUpdateTotalTagihan
+        show={showModalEditTotalTagihan}
+        onHide={() => setShowModalEditTotalTagihan(false)}
+        idTransaksi={idTransaksi}
+        getInvoiceDetail={getInvoiceDetail}
+      />
     </div>
   );
 };
 
-export default DetailOrderMitra;
+export default CreateInvoice;

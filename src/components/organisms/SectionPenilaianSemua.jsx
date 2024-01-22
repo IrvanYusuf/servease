@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/organisms/sectionPenilaianSemua.css";
 import { FaStar } from "react-icons/fa6";
+import { jwtDecode } from "jwt-decode";
+import { apiRating } from "../../api/apiRating";
+import { useAuth } from "../../context/authContext";
+import StarRating from "../atoms/StarRating";
+import { limitOrderNumber } from "../../utils/text";
+import { format } from "date-fns";
 
 const SectionPenilaianSemua = () => {
+  const { token } = useAuth();
+  const idMitra = localStorage.getItem("idMitra");
+  console.log(idMitra);
+  const [allRating, setAllRating] = useState([]);
+  const getAllRatingByIdMitra = async () => {
+    try {
+      const response = await fetch(`${apiRating}/mitra/diulas/${idMitra}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      console.log(data);
+      setAllRating(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllRatingByIdMitra();
+  }, []);
   return (
     <div className="d-flex flex-column h-100">
       <div className="overflow-y-auto">
@@ -16,19 +45,19 @@ const SectionPenilaianSemua = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 9 }, (v, i) => (
+            {allRating.map((rating, i) => (
               <tr>
                 <th scope="row" className="text-secondary fw-medium">
-                  25 Desember 2023
+                  {format(new Date(rating.created_at), "dd MMMM yyyy")}
                 </th>
-                <td className="text-secondary fw-medium">AJH98YG</td>
+                <td className="text-secondary fw-medium">
+                  {limitOrderNumber(rating.kode_pemesanan)}
+                </td>
                 <td>
-                  {Array.from({ length: 5 }, (v, i) => (
-                    <FaStar className="text-warning" />
-                  ))}
+                  <StarRating stars={rating.rate} />
                 </td>
                 <td className="text-truncate" style={{ maxWidth: "200px" }}>
-                  Bagus dan cepat, kerjanya bener tapi ngerokoknya banyak
+                  {rating.deskripsi}
                 </td>
               </tr>
             ))}

@@ -1,49 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
 import CardHistoryBooking from "../molecules/CardHistoryBooking";
+import { useAuth } from "../../context/authContext";
+import { jwtDecode } from "jwt-decode";
+import { apiTransaction } from "../../api/apiTransaction";
 
 const SectionLihatSemua = () => {
+  const { token } = useAuth();
+  const [allTransaction, setAllTransaction] = useState([]);
+  // const [idTransaksi,setIdTransaksi] = useState(0)
+  const decoded = token ? jwtDecode(token) : null;
+
+  const getAllTransaction = async () => {
+    try {
+      const response = await fetch(`${apiTransaction}/${decoded.id}`, {
+        method: "GET",
+        headers: {
+          authorization: token,
+        },
+      });
+      const { data } = await response.json();
+      setAllTransaction(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (decoded.id) {
+      getAllTransaction();
+    }
+  }, [decoded.id]);
   return (
-    // <div className="h-100 border">
+    // {}
     <div className="d-flex flex-column align-items-center">
-      <CardHistoryBooking
-        backgroundColor={"rgba(79, 80, 233, 0.23)"}
-        color={"#4f50e9"}
-        textStatus={"Berlangsung"}
-        nilai={1}
-      />
-      <CardHistoryBooking
-        backgroundColor={"rgba(80, 141, 105, 0.23)"}
-        color={"#508D69"}
-        textStatus={"Selesai"}
-        nilai={2}
-      />
-      <CardHistoryBooking
-        backgroundColor={"rgba(179,19,18,0.23"}
-        color={"#B31312"}
-        textStatus={"Dibatalkan"}
-        nilai={3}
-      />
-      <CardHistoryBooking
-        backgroundColor={"rgba(179,19,18,0.23"}
-        color={"#B31312"}
-        textStatus={"Dibatalkan"}
-        nilai={3}
-      />
-      <CardHistoryBooking
-        backgroundColor={"rgba(179,19,18,0.23"}
-        color={"#B31312"}
-        textStatus={"Dibatalkan"}
-        nilai={3}
-      />
-      <CardHistoryBooking
-        backgroundColor={"rgba(179,19,18,0.23"}
-        color={"#B31312"}
-        textStatus={"Dibatalkan"}
-        nilai={3}
-      />
+      {allTransaction &&
+        allTransaction.map((transaction) => (
+          <CardHistoryBooking
+            backgroundColor={
+              transaction.status === "Baru"
+                ? "rgba(239,61,1,0.2)"
+                : transaction.status === "Berlangsung"
+                ? "rgba(79, 80, 233, 0.23)"
+                : transaction.status === "Selesai"
+                ? "rgba(80, 141, 105, 0.23)"
+                : "rgba(179,19,18,0.23"
+            }
+            // backgroundColor={"rgba(79, 80, 233, 0.23)"}
+            color={
+              transaction.status === "Baru"
+                ? "#EF3D01"
+                : transaction.status === "Berlangsung"
+                ? "#4f50e9"
+                : transaction.status === "Selesai"
+                ? "#508D69"
+                : "#B31312"
+            }
+            textStatus={transaction.status}
+            kodePemesanan={transaction.kode_pemesanan}
+            namaMitra={transaction.nama_servis}
+            kategori={transaction.nama_kategori}
+            idTransaksi={transaction.id_transaksi}
+            idMitra={transaction.id_mitra}
+          />
+        ))}
     </div>
-    // </div>
   );
 };
 

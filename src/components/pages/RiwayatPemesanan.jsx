@@ -6,6 +6,7 @@ import SectionBerlangsung from "../organisms/SectionBerlangsung";
 import SectionSelesai from "../organisms/SectionSelesai";
 import SectionDibatalkan from "../organisms/SectionDibatalkan";
 import "bootstrap/js/dist/tab.js";
+import SectionBaru from "../organisms/SectionBaru";
 const RiwayatPemesanan = () => {
   const [active, setActive] = useState("");
 
@@ -18,18 +19,24 @@ const RiwayatPemesanan = () => {
     },
     {
       id: 2,
+      dataBsTarget: "#riwayat-baru",
+      ariaControl: "riwayat-baru",
+      text: "Baru",
+    },
+    {
+      id: 3,
       dataBsTarget: "#riwayat-berlangsung",
       ariaControl: "riwayat-berlangsung",
       text: "Berlangsung",
     },
     {
-      id: 3,
+      id: 4,
       dataBsTarget: "#riwayat-selesai",
       ariaControl: "riwayat-selesai",
       text: "Selesai",
     },
     {
-      id: 4,
+      id: 5,
       dataBsTarget: "#riwayat-dibatalkan",
       ariaControl: "riwayat-dibatalkan",
       text: "Dibatalkan",
@@ -44,16 +51,21 @@ const RiwayatPemesanan = () => {
     },
     {
       id: 2,
+      targetId: "riwayat-baru",
+      component: <SectionBaru />,
+    },
+    {
+      id: 3,
       targetId: "riwayat-berlangsung",
       component: <SectionBerlangsung />,
     },
     {
-      id: 3,
+      id: 4,
       targetId: "riwayat-selesai",
       component: <SectionSelesai />,
     },
     {
-      id: 4,
+      id: 5,
       targetId: "riwayat-dibatalkan",
       component: <SectionDibatalkan />,
     },

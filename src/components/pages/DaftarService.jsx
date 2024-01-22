@@ -1,31 +1,27 @@
 // import { useEffect, useState } from "react";
 import ServiceCard from "../molecules/ServiceCard";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import { apiMitra } from "../../api/apiMitra";
 const DaftarService = () => {
   const [services, setServices] = useState([]);
-  const [searchParam, setSearchParam] = useSearchParams();
+  const { idCategory } = useParams();
 
-  const idCategory = searchParam.get("category_id");
-  console.log(idCategory);
   const getServicesById = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3003/services?category_id=${idCategory}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${apiMitra}/list/${idCategory}`, {
+        method: "GET",
+      });
       const dataServices = await response.json();
-      setServices(dataServices);
+      console.log(dataServices.data);
+      setServices(dataServices.data);
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
     getServicesById();
-  }, [searchParam]);
-  console.log(services);
+  }, [idCategory]);
   return <ServiceCard dataServices={services} />;
 };
 
