@@ -25,6 +25,7 @@ const PengaturanAkunMitra = () => {
       });
       const data = await response.json();
       const [result] = data.data;
+      console.log(result);
       setSingleUser(result);
     } catch (error) {
       console.log(error);
@@ -68,7 +69,7 @@ const PengaturanAkunMitra = () => {
                 <img
                   src={
                     singleUser.img
-                      ? `http://localhost:3000/images/gallery/${singleUser.img}`
+                      ? `http://localhost:3000/images/${singleUser.img}`
                       : profileImg
                   }
                   width={"40px"}

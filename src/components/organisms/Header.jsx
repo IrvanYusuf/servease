@@ -24,11 +24,10 @@ const Header = () => {
         credentials: true,
       },
     });
-    const data = await response.json();
-    console.log(data);
+    const { data } = await response.json();
     const newImgUser =
-      data.data[0].img !== null
-        ? `http://localhost:3000/images/${data.data[0].img}`
+      data[0].img !== null
+        ? `http://localhost:3000/images/${data[0].img}`
         : profileImg;
     // console.log(data.data[0].img);
     setImgUser(newImgUser);

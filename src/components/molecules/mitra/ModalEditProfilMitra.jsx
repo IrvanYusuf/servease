@@ -113,7 +113,7 @@ const ModalEditProfilMitra = (props) => {
             <input
               type="text"
               className="form-control"
-              placeholder="Mis. Rumah / Kantor"
+              placeholder="Mis. jhon doe servis"
               value={namaServis}
               name="nama_servis"
               onChange={(e) => setNamaServis(e.target.value)}

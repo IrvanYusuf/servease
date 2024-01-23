@@ -2,20 +2,15 @@ import React, { useEffect, useState } from "react";
 import StatusTransaksi from "../../atoms/StatusTransaksi";
 import ActionButton from "../../atoms/ActionButton";
 import ActionButtonOutline from "../../atoms/ActionButtonOutline";
-// import Swal from "sweetalert2";
 import { swal } from "../../../utils/sweetAlert";
-import ButtonLink from "../../atoms/ButtonLink";
 import { useAuth } from "../../../context/authContext";
-import { jwtDecode } from "jwt-decode";
 import { apiTransaction } from "../../../api/apiTransaction";
 import { useParams } from "react-router-dom";
 import ModalInputTotalTagihan from "../../molecules/mitra/ModalInputTotalTagihan";
-import ModalUpdateTotalTagihan from "../../molecules/mitra/ModalUpdateTotalTagihan";
 
 const CreateInvoice = () => {
   const { idTransaksi } = useParams();
   const { token, idMitra } = useAuth();
-  const decoded = token ? jwtDecode(token) : null;
   const [allTransaction, setAllTransaction] = useState([]);
   const [waktuImageDiubah, setWaktuImageDiubah] = useState([]);
   const [keluhan, setKeluhan] = useState([]);
@@ -23,13 +18,11 @@ const CreateInvoice = () => {
   const [showModalEditTotalTagihan, setShowModalEditTotalTagihan] =
     useState(false);
   const [invoiceDetail, setInvoiceDetail] = useState({});
+  const [totalTagihan, setTotalTagihan] = useState("");
+  const [isInvoiceSuccess, setIsInvoiceSuccess] = useState(false);
 
   const handleShowModalTotalTagihan = () => {
     setShowModalTotalTagihan(true);
-  };
-
-  const handleShowModalEditTotalTagihan = () => {
-    setShowModalEditTotalTagihan(true);
   };
 
   const getDetailTransactionMitra = async () => {
@@ -48,7 +41,6 @@ const CreateInvoice = () => {
       const keluhan = JSON.parse(result.keluhan);
       const keluhanStr = keluhan.join(",");
       setKeluhan(keluhanStr);
-      console.log(result);
       const originalDate = result.tanggal_layanan;
       const dateObject = new Date(originalDate);
 
@@ -99,12 +91,55 @@ const CreateInvoice = () => {
         }
       );
       const { data } = await response.json();
-      const [result] = data;
-      setInvoiceDetail(result);
+      console.log(data);
+      setInvoiceDetail(data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const changeStatusFinish = async () => {
+    try {
+      const response = await fetch(`${apiTransaction}/finish/${idTransaksi}`, {
+        method: "PATCH",
+        headers: {
+          authorization: token,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createInvoice = async () => {
+    const newObj = { total_tagihan: totalTagihan };
+    const response = await fetch(`${apiTransaction}/mitra/${idTransaksi}`, {
+      method: "POST",
+      headers: {
+        authorization: token,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newObj),
+    });
+    const data = await response.json();
+    swal({
+      title: "Success",
+      text: "Data Berhasil Diubah",
+      icon: "success",
+      iconColor: "#EF3D01",
+      confirmButtonText: "Tutup",
+    });
+    setIsInvoiceSuccess(true);
+    changeStatusFinish();
+    console.log(totalTagihan);
+  };
+
+  useEffect(() => {
+    if (isInvoiceSuccess) {
+      getInvoiceDetail();
+      console.log("update");
+    }
+  }, [isInvoiceSuccess]);
 
   useEffect(() => {
     getDetailTransactionMitra();
@@ -122,7 +157,7 @@ const CreateInvoice = () => {
           <tr className="d-flex justify-content-between">
             <td className="text-secondary p-2">No. Invoice</td>
             <td className="p-2">
-              {invoiceDetail.kode_invoice ? invoiceDetail.kode_invoice : "-"}
+              {invoiceDetail.length > 0 ? invoiceDetail[0].kode_invoice : "-"}
             </td>
           </tr>
           <tr className="d-flex justify-content-between">
@@ -181,14 +216,7 @@ const CreateInvoice = () => {
         <div>
           <h4>Detail Tagihan</h4>
         </div>
-        {invoiceDetail.kode_invoice ? (
-          <div>
-            <ActionButton
-              text={"Ubah Nominal"}
-              onClick={handleShowModalEditTotalTagihan}
-            />
-          </div>
-        ) : (
+        {invoiceDetail.length === 0 && (
           <div>
             <ActionButton
               text={"Input Nominal"}
@@ -202,8 +230,14 @@ const CreateInvoice = () => {
           <tr className="d-flex justify-content-between">
             <td className="text-secondary p-2">Total Tagihan</td>
             <td className="p-2">
-              {invoiceDetail.total_tagihan ? (
-                <h5>Rp{invoiceDetail.total_tagihan}</h5>
+              {invoiceDetail.length > 0 ? (
+                invoiceDetail[0].total_tagihan ? (
+                  <h5>Rp{invoiceDetail[0].total_tagihan}</h5>
+                ) : (
+                  "-"
+                )
+              ) : totalTagihan ? (
+                <h5>Rp{totalTagihan}</h5>
               ) : (
                 "-"
               )}
@@ -224,21 +258,15 @@ const CreateInvoice = () => {
       ) : (
         <div className="d-flex justify-content-end">
           <div>
-            <ButtonLink path={""} text={"Buat Invoice"} />
+            <ActionButton text={"Buat Invoice"} onClick={createInvoice} />
           </div>
         </div>
       )}
       <ModalInputTotalTagihan
         show={showModalTotalTagihan}
         onHide={() => setShowModalTotalTagihan(false)}
-        getDetailTransactionMitra={getDetailTransactionMitra}
-        idTransaksi={idTransaksi}
-      />
-      <ModalUpdateTotalTagihan
-        show={showModalEditTotalTagihan}
-        onHide={() => setShowModalEditTotalTagihan(false)}
-        idTransaksi={idTransaksi}
-        getInvoiceDetail={getInvoiceDetail}
+        totalTagihan={totalTagihan} // Kirim state totalTagihan ke ModalInputTotalTagihan
+        setTotalTagihan={setTotalTagihan}
       />
     </div>
   );

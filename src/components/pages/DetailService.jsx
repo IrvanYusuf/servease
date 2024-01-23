@@ -27,7 +27,6 @@ const DetailService = (props) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log(idMitra);
 
   const handleCloseAlbumImg = () => setShowAlbumImg(false);
   const handleShowAlbumImg = (imgUrl) => {
@@ -48,54 +47,18 @@ const DetailService = (props) => {
       );
       const { data } = await response.json();
       const [result] = data;
-      console.log(result);
       setServices(result);
+      setAlbum(data);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const getAlbumGalleries = async () => {
-    try {
-      const response = await fetch(`${apiMitra}/gallery/${service.id_mitra}`, {
-        method: "GET",
-        headers: {
-          authorization: token,
-        },
-      });
-      const { data } = await response.json();
-      setAlbum(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getAddressMitra = async () => {
-    try {
-      const response = await fetch(`${apiAddress}/${service.id_user}`, {
-        method: "GET",
-        headers: {
-          authorization: token,
-        },
-      });
-      const { data } = await response.json();
-      const [result] = data;
-      setAddress(result);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
     getServiceDetail();
   }, [idMitra]);
 
-  useEffect(() => {
-    if (service.id_mitra) {
-      getAlbumGalleries();
-      getAddressMitra();
-    }
-  }, [service.id_mitra]);
+  console.log(album);
 
   const BookingContainer = () => {
     return (
@@ -107,7 +70,7 @@ const DetailService = (props) => {
           </div>
           <div className="d-flex align-items-center column-gap-2">
             <FiMapPin />{" "}
-            {address && `${address.kecamatan} ${address.kabupaten}`}
+            {service && `${service.kecamatan}, ${service.kabupaten}`}
           </div>
         </div>
         <div className="mt-5 d-flex flex-column row-gap-3">
@@ -155,10 +118,10 @@ const DetailService = (props) => {
                 album.map((img, i) => (
                   <div key={i} className="detail-service-img-album">
                     <img
-                      src={`http://localhost:3000/images/gallery/${img.image}`}
+                      src={`http://localhost:3000/images/gallery/${img.galeri_img}`}
                       alt=""
                       className="w-100 rounded-2 h-100"
-                      onClick={() => handleShowAlbumImg(img.image)}
+                      onClick={() => handleShowAlbumImg(img.galeri_img)}
                     />
                   </div>
                 ))}
@@ -176,7 +139,7 @@ const DetailService = (props) => {
             </div>
           </div>
           <div className="ulasan-container">
-            <SectionCardUlasan service_id={service.id} />
+            <SectionCardUlasan idMitra={idMitra} />
           </div>
         </div>
         <div className="col-md-12 col-lg-5">

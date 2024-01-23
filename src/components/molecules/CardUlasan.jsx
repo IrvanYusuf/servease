@@ -3,13 +3,7 @@ import { FaStar, FaStarHalfStroke } from "react-icons/fa6";
 import "../../styles/molecules/cardUlasan.css";
 import StarRating from "../atoms/StarRating";
 
-const CardUlasan = ({
-  reviewText,
-  reviewImgUser,
-  nama_depan = "Anonymus",
-  nama_belakang,
-  star,
-}) => {
+const CardUlasan = ({ reviewText, reviewImgUser, nama = "Anonymus", star }) => {
   return (
     <div className="w-75 border-bottom mb-5">
       <div className="vstack gap-3">
@@ -20,14 +14,12 @@ const CardUlasan = ({
         <div className="d-flex align-items-center column-gap-3">
           <div className="img-user-review-container">
             <img
-              src={reviewImgUser}
+              src={`http://localhost:3000/images/${reviewImgUser}`}
               className="w-100 h-100 rounded-circle"
               alt=""
             />
           </div>
-          <h5 className="name-user-review-container">
-            {nama_depan} {nama_belakang}
-          </h5>
+          <h5 className="name-user-review-container">{nama}</h5>
         </div>
         <div>
           <p>{reviewText}</p>

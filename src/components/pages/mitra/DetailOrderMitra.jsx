@@ -11,13 +11,12 @@ import { apiTransaction } from "../../../api/apiTransaction";
 import { useParams } from "react-router-dom";
 
 const DetailOrderMitra = () => {
-  const [status, setStatus] = useState("Berlangsung");
   const { idTransaksi } = useParams();
   const { token, idMitra } = useAuth();
-  const decoded = token ? jwtDecode(token) : null;
   const [allTransaction, setAllTransaction] = useState([]);
   const [waktuImageDiubah, setWaktuImageDiubah] = useState([]);
   const [keluhan, setKeluhan] = useState([]);
+  const [invoiceDetail, setInvoiceDetail] = useState({});
 
   const getAllTransactionMitra = async () => {
     try {
@@ -33,10 +32,7 @@ const DetailOrderMitra = () => {
       const { data } = await response.json();
       const [result] = data;
       const keluhan = JSON.parse(result.keluhan);
-      // const keluhan = result.keluhan;
-      console.log(typeof keluhan);
       const keluhanStr = keluhan.join(",");
-      console.log(keluhanStr);
       setKeluhan(keluhanStr);
       console.log(result);
       const originalDate = result.tanggal_layanan;
@@ -53,6 +49,27 @@ const DetailOrderMitra = () => {
       console.log(error);
     }
   };
+
+  const getInvoiceDetail = async () => {
+    try {
+      const response = await fetch(
+        `${apiTransaction}/invoice/detail/${idTransaksi}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      const { data } = await response.json();
+      console.log(data);
+      setInvoiceDetail(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(invoiceDetail);
 
   const handleConfirmTransaction = async () => {
     try {
@@ -79,9 +96,9 @@ const DetailOrderMitra = () => {
 
   useEffect(() => {
     getAllTransactionMitra();
+    getInvoiceDetail();
   }, []);
 
-  console.log(status);
   return (
     <div className="w-100 h-100 d-flex flex-column">
       <div>
@@ -163,7 +180,20 @@ const DetailOrderMitra = () => {
           <tr className="d-flex justify-content-between">
             <td className="text-secondary p-2">Deskripsi Masalah</td>
             <td className="p-2 text-end" width={"40%"}>
-              {allTransaction.deskripsi}
+              {allTransaction.deskripsi_masalah
+                ? allTransaction.deskripsi_masalah
+                : "-"}
+            </td>
+          </tr>
+          <tr className="d-flex justify-content-between">
+            <td className="text-secondary p-2">Total Harga</td>
+            <td className="p-2 text-end" width={"40%"}>
+              Rp
+              {allTransaction.status === "Selesai"
+                ? invoiceDetail[0].total_tagihan
+                  ? invoiceDetail[0].total_tagihan
+                  : "-"
+                : "-"}
             </td>
           </tr>
         </tbody>

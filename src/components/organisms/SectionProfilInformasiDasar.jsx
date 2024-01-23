@@ -17,7 +17,6 @@ const SectionProfilInformasiDasar = () => {
   const decoded = token ? jwtDecode(token) : null;
   const [mitraProfil, setMitraProfil] = useState({});
   const [kategori, setKategori] = useState("");
-  console.log(token);
 
   const handleShowEdit = () => {
     setModalEditLayanan(true);
@@ -38,7 +37,6 @@ const SectionProfilInformasiDasar = () => {
       const data = await response.json();
       const [result] = data.data;
       setMitraProfil(result);
-      console.log(response);
       const kategori = getCategory(result.id_kategori);
       setKategori(kategori);
       if (result.status === "Tersedia") {
@@ -175,6 +173,7 @@ const SectionProfilInformasiDasar = () => {
           <ModalTambahProfilMitra
             show={showModalTambahLayanan}
             onHide={() => setModalTambahLayanan(false)}
+            getMitraProfilLayanan={getMitraProfilLayanan}
           />
         </div>
       )}

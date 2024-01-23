@@ -94,7 +94,6 @@ const ModalMenungguUlasan = (props) => {
                   onMouseOver={() => setRatingValue(i + 1)}
                 />
               ))}
-              {ratingValue}
             </div>
             <h5 className="text-secondary mt-4">
               Berikan ulasan untuk layanan ini

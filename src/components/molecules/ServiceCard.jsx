@@ -23,23 +23,26 @@ function ServiceCard({ dataServices }) {
                 />
               </Link>
 
-              <Link to={"/mitra-beranda/1"} className="text-decoration-none">
-                <div className="my-2 d-flex align-items-center column-gap-3">
-                  <div style={{ width: "41px", height: "41px" }}>
-                    <img
-                      src={`http://localhost:3000/images/${data.image}`}
-                      alt=""
-                      className="w-100 h-100 bg-secondary-subtle rounded-pill object-fit-cover"
-                    />
-                  </div>
+              <div className="my-2 d-flex align-items-center column-gap-3">
+                <div style={{ width: "41px", height: "41px" }}>
+                  <img
+                    src={`http://localhost:3000/images/${data.image}`}
+                    alt=""
+                    className="w-100 h-100 bg-secondary-subtle rounded-pill object-fit-cover"
+                  />
+                </div>
+                <Link
+                  to={`/detail/${data.id_mitra}`}
+                  className="text-decoration-none"
+                >
                   <h5 className="text-dark title-card text-decoration-none">
                     {data.nama_servis}
                   </h5>
-                </div>
-              </Link>
-              {/* <div className="d-flex align-items-center column-gap-2">
-                <FiMapPin /> {data.address && limitAddress(data.address)}
-              </div> */}
+                </Link>
+              </div>
+              <div className="d-flex align-items-center column-gap-2">
+                <FiMapPin /> {data.nama_jalan && limitAddress(data.nama_jalan)}
+              </div>
             </div>
           </div>
         ))}

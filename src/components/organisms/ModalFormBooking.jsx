@@ -10,6 +10,7 @@ import { useAuth } from "../../context/authContext";
 import { apiTransaction } from "../../api/apiTransaction";
 import { jwtDecode } from "jwt-decode";
 import { swal } from "../../utils/sweetAlert";
+import { Link, useNavigate } from "react-router-dom";
 
 const ModalFormBooking = (props) => {
   const idAlamat = localStorage.getItem("alamat");
@@ -26,6 +27,9 @@ const ModalFormBooking = (props) => {
   const [deskripsiMasalah, setDeskripsiMasalah] = useState("");
   const { token } = useAuth();
   const decoded = token ? jwtDecode(token) : null;
+  const navigate = useNavigate();
+
+  console.log(idCategory);
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -93,26 +97,29 @@ const ModalFormBooking = (props) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`${apiTransaction}/${decoded.id}`, {
-        method: "POST",
-        headers: {
-          authorization: token,
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(newObjData),
-      });
-      const { data } = await response.json();
-      if (data.affectedRows > 0) {
-        swal({
-          title: "Success",
-          text: "Data Berhasil Diubah",
-          icon: "success",
-          iconColor: "#EF3D01",
-          confirmButtonText: "Tutup",
-          //   timer: 1000,
+      if (token) {
+        const response = await fetch(`${apiTransaction}/${decoded.id}`, {
+          method: "POST",
+          headers: {
+            authorization: token,
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(newObjData),
         });
+        const { data } = await response.json();
+        if (data.affectedRows > 0) {
+          swal({
+            title: "Success",
+            text: "Data Berhasil Diubah",
+            icon: "success",
+            iconColor: "#EF3D01",
+            confirmButtonText: "Tutup",
+            //   timer: 1000,
+          });
+        }
+      } else {
+        navigate("/login");
       }
-      console.log(keluhan);
     } catch (error) {
       console.log(error);
     }
@@ -135,52 +142,279 @@ const ModalFormBooking = (props) => {
         <form action="" noValidate>
           <div className="row mb-3">
             <div className="col">
-              <LabelInput labelText={"Keluhan/Masalah AC"} />
+              <LabelInput labelText={"Keluhan/Masalah"} />
               <span className="text-danger"> *</span>
-              <div className="d-grid row-gap-1">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value={"Ac rusak"}
-                    id="flexCheckDefault"
-                    onChange={handleCheckboxChange}
-                    checked={keluhan.includes("Ac rusak")}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Ac Rusak
-                  </label>
+              {idCategory == 1 ? (
+                <div className="d-grid row-gap-1">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={"Ac rusak"}
+                      id="flexCheckDefault"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Ac rusak")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Ac Rusak
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Pembersihan Ac"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Pembersihan Ac")}
+                      id="flexCheck2"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck2">
+                      Pembersihan Ac
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Perawatan"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Perawatan")}
+                      id="flexCheck3"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck3">
+                      Perawatan
+                    </label>
+                  </div>
                 </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value="Pembersihan Ac"
-                    onChange={handleCheckboxChange}
-                    checked={keluhan.includes("Pembersihan Ac")}
-                    id="flexCheck2"
-                  />
-                  <label className="form-check-label" htmlFor="flexCheck2">
-                    Pembersihan Ac
-                  </label>
+              ) : idCategory == 2 ? (
+                <div className="d-grid row-gap-1">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={"Pc rusak"}
+                      id="flexCheckDefault"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Pc rusak")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Pc Rusak
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Pembersihan Pc"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Pembersihan Pc")}
+                      id="flexCheck2"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck2">
+                      Pembersihan Pc
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Perawatan"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Perawatan")}
+                      id="flexCheck3"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck3">
+                      Perawatan
+                    </label>
+                  </div>
                 </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value="Perawatan"
-                    onChange={handleCheckboxChange}
-                    checked={keluhan.includes("Perawatan")}
-                    id="flexCheck3"
-                  />
-                  <label className="form-check-label" htmlFor="flexCheck3">
-                    Perawatan
-                  </label>
+              ) : idCategory == 3 ? (
+                <div className="d-grid row-gap-1">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={"Lampu rusak"}
+                      id="flexCheckDefault"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Lampu rusak")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Lampu Rusak
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Lampu Mati"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Lampu Mati")}
+                      id="flexCheck2"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck2">
+                      Lampu Mati
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Perawatan Lampu"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Perawatan Lampu")}
+                      id="flexCheck3"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck3">
+                      Perawatan Lampu
+                    </label>
+                  </div>
                 </div>
-              </div>
+              ) : idCategory == 4 ? (
+                <div className="d-grid row-gap-1">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={"Mesin Cuci rusak"}
+                      id="flexCheckDefault"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Mesin Cuci rusak")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Mesin Cuci Rusak
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Pembersihan Mesin Cuci"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Pembersihan Mesin Cuci")}
+                      id="flexCheck2"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck2">
+                      Pembersihan Mesin Cuci
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Perawatan Mesin Cuci"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Perawatan Mesin Cuci")}
+                      id="flexCheck3"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck3">
+                      Perawatan Mesin Cuci
+                    </label>
+                  </div>
+                </div>
+              ) : idCategory == 5 ? (
+                <div className="d-grid row-gap-1">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={"Tv rusak"}
+                      id="flexCheckDefault"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Tv rusak")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Tv Rusak
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Layar Tv Mati"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Layar Tv Mati")}
+                      id="flexCheck2"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck2">
+                      Layar Tv Mati
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Perawatan Tv"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Perawatan Tv")}
+                      id="flexCheck3"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck3">
+                      Perawatan Tv
+                    </label>
+                  </div>
+                </div>
+              ) : (
+                <div className="d-grid row-gap-1">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={"Desain Interior"}
+                      id="flexCheckDefault"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Desain Interior")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Desain Interior
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Pengecatan Rumah"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Pengecatan Rumah")}
+                      id="flexCheck2"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck2">
+                      Pengecatan Rumah
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Pembangunan Ruangan"
+                      onChange={handleCheckboxChange}
+                      checked={keluhan.includes("Pembangunan Ruangan")}
+                      id="flexCheck3"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheck3">
+                      Pembangunan Ruangan
+                    </label>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="row mb-3">
@@ -338,12 +572,13 @@ const ModalFormBooking = (props) => {
                     <LabelInput labelText={"Alamat"} />
                     <span className="text-danger"> *</span>
                   </div>
-                  <button
-                    className="border-0 bg-transparent fw-semibold"
+                  <Link
+                    className="border-0 bg-transparent fw-semibold text-decoration-none"
                     style={{ color: "#EF3D01" }}
+                    to={"/profile/daftar-alamat"}
                   >
                     Edit
-                  </button>
+                  </Link>
                 </div>
                 <div className="h-100">
                   <div
