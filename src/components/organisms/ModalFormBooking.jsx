@@ -137,13 +137,11 @@ const ModalFormBooking = (props) => {
   };
 
   const handleSubmit = async () => {
-    if (!validateInputs()) {
-      return;
-    }
-    console.log("halo");
-
     try {
       if (token) {
+        if (!validateInputs()) {
+          return;
+        }
         const response = await fetch(`${apiTransaction}/${decoded.id}`, {
           method: "POST",
           headers: {
