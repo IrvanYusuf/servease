@@ -7,8 +7,6 @@ import Banner1 from "../../assets/img/banners/banner1.png";
 import Banner2 from "../../assets/img/banners/banner2.png";
 const Banner = ({ dataBanners }) => {
   // console.log(dataBanners);
-
-  const dataBanners = [Banner1, Banner2];
   return (
     <div>
       <Carousel
