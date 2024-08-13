@@ -1,1 +1,3 @@
-export const apiTransaction = "http://localhost:3000/web/transaction";
+import { BASE_URL } from "./baseUrl";
+
+export const apiTransaction = `${BASE_URL}/web/transaction`;

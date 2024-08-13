@@ -1,1 +1,3 @@
-export const apiAuth = "http://localhost:3000/web/auth";
+import { BASE_URL } from "./baseUrl";
+
+export const apiAuth = `${BASE_URL}/web/auth`;

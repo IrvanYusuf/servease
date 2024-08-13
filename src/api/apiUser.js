@@ -1,1 +1,3 @@
-export const apiUser = "http://localhost:3000/web/user";
+import { BASE_URL } from "./baseUrl";
+
+export const apiUser = `${BASE_URL}/web/user`;

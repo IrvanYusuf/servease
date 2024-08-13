@@ -1,1 +1,3 @@
-export const apiAddress = "http://localhost:3000/web/address";
+import { BASE_URL } from "./baseUrl";
+
+export const apiAddress = `${BASE_URL}/web/address`;

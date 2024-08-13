@@ -10,6 +10,8 @@ function FormRegisterPersonalInfo({
     // const { name, value } = e.target;
     handleFormData(e);
   };
+  console.log(formData);
+
   return (
     <>
       <div className="mb-3">

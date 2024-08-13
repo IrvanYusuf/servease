@@ -13,7 +13,7 @@ const ModalAlbumImg = (props) => {
       <Modal.Header closeButton className="border-0" />
       <Modal.Body>
         <img
-          src={`http://localhost:3000/images/gallery/${imgUrl}`}
+          src={`https://backend-servease.vercel.app/images/gallery/${imgUrl}`}
           alt=""
           className="w-100 modal-img"
         />

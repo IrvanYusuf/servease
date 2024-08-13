@@ -1,1 +1,3 @@
-export const apiMitra = "http://localhost:3000/web/mitra";
+import { BASE_URL } from "./baseUrl";
+
+export const apiMitra = `${BASE_URL}/web/mitra`;

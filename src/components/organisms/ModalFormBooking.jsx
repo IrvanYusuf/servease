@@ -11,25 +11,66 @@ import { apiTransaction } from "../../api/apiTransaction";
 import { jwtDecode } from "jwt-decode";
 import { swal } from "../../utils/sweetAlert";
 import { Link, useNavigate } from "react-router-dom";
+import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
 
 const ModalFormBooking = (props) => {
   const idAlamat = localStorage.getItem("alamat");
   const { idMitra, idCategory } = props;
-  const [showModalBooking, setShowModalBooking] = useState(0);
-  const [selectedProperti, setSelectedProperti] = useState("");
-  const [selectedTangga, setSelectedTangga] = useState("");
+  const [selectedProperti, setSelectedProperti] = useState(null);
+  const [selectedTangga, setSelectedTangga] = useState(null);
   const [keluhan, setKeluhan] = useState([]);
-  const [nama, setNama] = useState("");
-  const [noTelp, setNoTelp] = useState("");
-  const [tanggal, setTanggal] = useState("");
-  const [waktu, setWaktu] = useState("");
+  const [nama, setNama] = useState(null);
+  const [noTelp, setNoTelp] = useState(null);
+  const [tanggal, setTanggal] = useState(null);
+  const [waktu, setWaktu] = useState(null);
   const [alamat, setAlamat] = useState(null);
-  const [deskripsiMasalah, setDeskripsiMasalah] = useState("");
+  const [deskripsiMasalah, setDeskripsiMasalah] = useState(null);
   const { token } = useAuth();
   const decoded = token ? jwtDecode(token) : null;
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
-  console.log(idCategory);
+  const validateInputs = () => {
+    let errors = {};
+
+    if (keluhan.length === 0) {
+      errors.keluhan = "Keluhan Minimal Satu";
+    }
+
+    if (!nama) {
+      errors.nama = "Nama tidak boleh kosong";
+    }
+
+    if (!noTelp) {
+      errors.no_telp = "Nomor Telepon tidak boleh kosong";
+    } else if (!/^\d+$/.test(noTelp)) {
+      errors.no_telp = "Nomor Telepon harus berupa angka";
+    }
+
+    if (!tanggal) {
+      errors.tanggal = "Tanggal tidak boleh kosong";
+    }
+
+    if (!waktu) {
+      errors.waktu = "Waktu tidak boleh kosong";
+    }
+
+    if (!selectedProperti) {
+      errors.jenis_properti = "Jenis properti harus dipilih";
+    }
+
+    if (!selectedTangga) {
+      errors.tangga = "Pilih apakah teknisi perlu membawa tangga";
+    }
+
+    if (!deskripsiMasalah) {
+      errors.deskripsiMasalah = "Deskripsi Masalah tidak boleh kosong";
+    }
+
+    setErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -96,6 +137,11 @@ const ModalFormBooking = (props) => {
   };
 
   const handleSubmit = async () => {
+    if (!validateInputs()) {
+      return;
+    }
+    console.log("halo");
+
     try {
       if (token) {
         const response = await fetch(`${apiTransaction}/${decoded.id}`, {
@@ -110,7 +156,16 @@ const ModalFormBooking = (props) => {
         if (data.affectedRows > 0) {
           swal({
             title: "Success",
-            text: "Data Berhasil Diubah",
+            text: "Berhasil Booking",
+            icon: "success",
+            iconColor: "#EF3D01",
+            confirmButtonText: "Tutup",
+            //   timer: 1000,
+          });
+        } else if (data.affectedRows == 0) {
+          swal({
+            title: "gagal",
+            text: "Data gagal",
             icon: "success",
             iconColor: "#EF3D01",
             confirmButtonText: "Tutup",
@@ -130,6 +185,9 @@ const ModalFormBooking = (props) => {
       getAddressUser();
     }
   }, [idAlamat]);
+
+  console.log(errors);
+  console.log(keluhan.length);
 
   return (
     <Modal
@@ -416,6 +474,9 @@ const ModalFormBooking = (props) => {
                 </div>
               )}
             </div>
+            {errors.keluhan && (
+              <div className="text-danger">{errors.keluhan}</div>
+            )}
           </div>
           <div className="row mb-3">
             <div className="col">
@@ -466,6 +527,9 @@ const ModalFormBooking = (props) => {
                 </div>
               </div>
             </div>
+            {errors.jenis_properti && (
+              <div className="text-danger">{errors.jenis_properti}</div>
+            )}
           </div>
           <div className="row mb-3">
             <div className="col">
@@ -508,6 +572,9 @@ const ModalFormBooking = (props) => {
                 </div>
               </div>
             </div>
+            {errors.selectedTangga && (
+              <div className="text-danger">{errors.selectedTangga}</div>
+            )}
           </div>
           <hr />
           <div className="row mb-3">
@@ -524,6 +591,7 @@ const ModalFormBooking = (props) => {
                 // required
               />
             </div>
+            {errors.nama && <div className="text-danger">{errors.nama}</div>}
             <div className="col">
               <LabelInput labelText={"No Telepon"} />
               <span className="text-danger"> *</span>
@@ -537,6 +605,9 @@ const ModalFormBooking = (props) => {
                 required
               />
             </div>
+            {errors.noTelp && (
+              <div className="text-danger">{errors.noTelp}</div>
+            )}
           </div>
           <div className="row mb-3">
             <div className="col">
@@ -551,6 +622,9 @@ const ModalFormBooking = (props) => {
                 required
               />
             </div>
+            {errors.tanggal && (
+              <div className="text-danger">{errors.tanggal}</div>
+            )}
             <div className="col">
               <LabelInput labelText={"Waktu"} />
               <span className="text-danger"> *</span>
@@ -564,14 +638,15 @@ const ModalFormBooking = (props) => {
               />
             </div>
           </div>
+          {errors.waktu && <div className="text-danger">{errors.waktu}</div>}
+          <div>
+            <LabelInput labelText={"Alamat"} />
+            <span className="text-danger"> *</span>
+          </div>
           {alamat ? (
             <div>
               <div className="ps-0 mb-3">
                 <div className="d-flex justify-content-between">
-                  <div>
-                    <LabelInput labelText={"Alamat"} />
-                    <span className="text-danger"> *</span>
-                  </div>
                   <Link
                     className="border-0 bg-transparent fw-semibold text-decoration-none"
                     style={{ color: "#EF3D01" }}
@@ -601,24 +676,43 @@ const ModalFormBooking = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="ps-0">
-                <LabelInput labelText={"Deskripsi Masalah"} />
-                <span className="text-danger"> *</span>
-                <textarea
-                  className="form-control"
-                  name="deskripsi_masalah"
-                  value={deskripsiMasalah}
-                  onChange={(e) => setDeskripsiMasalah(e.target.value)}
-                  id=""
-                  cols="30"
-                  rows="10"
-                  placeholder="Masukkan Deskripsi Masalah...."
-                  required
-                ></textarea>
-              </div>
             </div>
           ) : (
-            ""
+            <div className="d-flex flex-column gap-3 justify-content-center align-items-center">
+              <img
+                src={iconRiwayatPemesananNotFound}
+                alt=""
+                width={"100px"}
+                height={"100px"}
+              />
+              <div>
+                <span>Kamu belum memilih alamat</span>
+              </div>
+              <Link
+                to={"/profile/daftar-alamat"}
+                className="text-decoration-none"
+              >
+                Pilih Alamat
+              </Link>
+            </div>
+          )}
+          <div className="ps-0">
+            <LabelInput labelText={"Deskripsi Masalah"} />
+            <span className="text-danger"> *</span>
+            <textarea
+              className="form-control"
+              name="deskripsi_masalah"
+              value={deskripsiMasalah}
+              onChange={(e) => setDeskripsiMasalah(e.target.value)}
+              id=""
+              cols="30"
+              rows="10"
+              placeholder="Masukkan Deskripsi Masalah...."
+              required
+            ></textarea>
+          </div>
+          {errors.deskripsiMasalah && (
+            <div className="text-danger">{errors.deskripsiMasalah}</div>
           )}
         </form>
       </Modal.Body>

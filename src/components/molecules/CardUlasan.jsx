@@ -14,7 +14,7 @@ const CardUlasan = ({ reviewText, reviewImgUser, nama = "Anonymus", star }) => {
         <div className="d-flex align-items-center column-gap-3">
           <div className="img-user-review-container">
             <img
-              src={`http://localhost:3000/images/${reviewImgUser}`}
+              src={`https://backend-servease.vercel.app/images/${reviewImgUser}`}
               className="w-100 h-100 rounded-circle"
               alt=""
             />

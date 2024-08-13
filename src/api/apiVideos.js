@@ -1,1 +1,3 @@
-export const apiVideos = "http://localhost:3000/web/video";
+import { BASE_URL } from "./baseUrl";
+
+export const apiVideos = `${BASE_URL}/web/video`;

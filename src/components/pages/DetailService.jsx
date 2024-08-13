@@ -48,6 +48,8 @@ const DetailService = (props) => {
       const { data } = await response.json();
       const [result] = data;
       setServices(result);
+      console.log(result);
+
       setAlbum(data);
     } catch (error) {
       console.log(error.message);
@@ -101,7 +103,7 @@ const DetailService = (props) => {
         <div className="col-md-12 col-lg-7">
           <div className="detail-service-img-thumbnail-container">
             <img
-              src={`http://localhost:3000/images/${service.image}`}
+              src={`https://backend-servease.vercel.app/images/${service.image}`}
               className="h-100 w-100 rounded-2"
               alt=""
             />
@@ -118,7 +120,7 @@ const DetailService = (props) => {
                 album.map((img, i) => (
                   <div key={i} className="detail-service-img-album">
                     <img
-                      src={`http://localhost:3000/images/gallery/${img.galeri_img}`}
+                      src={`https://backend-servease.vercel.app/images/gallery/${img.galeri_img}`}
                       alt=""
                       className="w-100 rounded-2 h-100"
                       onClick={() => handleShowAlbumImg(img.galeri_img)}

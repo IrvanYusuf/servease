@@ -26,7 +26,7 @@ const FormRegister = () => {
     jenis_kelamin: "",
     tanggal_lahir: "",
     img: null,
-    id_role: 2,
+    id_role: 1,
   });
 
   const handleFormData = (e) => {
@@ -91,6 +91,8 @@ const FormRegister = () => {
       body: JSON.stringify(formData),
     });
     const data = await response.json();
+    console.log(data);
+
     if (data.message === "email sudah terdaftar") {
       swal({
         title: "Error",

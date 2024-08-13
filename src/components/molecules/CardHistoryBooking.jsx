@@ -102,37 +102,20 @@ const CardHistoryBooking = ({
               </button>
             </div>
             <div className="d-flex column-gap-3 align-items-center">
-              {textStatus === "Selesai" ? (
-                <div>
-                  <ButtonLink
-                    path={`https://wa.me/447471667916`}
-                    text={"Hubungi Penjual"}
-                    target={"_blank"}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <ButtonLink
-                    path={`https://wa.me/447471667916`}
-                    text={"Hubungi Penjual"}
-                    target={"_blank"}
-                  />
-                </div>
-              )}
-              {textStatus === "Berlangsung" ? (
+              <div>
+                <ButtonLink
+                  path={`https://wa.me/447471667916`}
+                  text={"Hubungi Penjual"}
+                  target={"_blank"}
+                />
+              </div>
+              {textStatus === "Berlangsung" && (
                 <button
                   className="btn border-secondary rounded-3"
                   onClick={handleCancelTransaction}
                 >
                   Batalkan
                 </button>
-              ) : (
-                <Link
-                  to={`/detail/${idMitra}`}
-                  className="btn border-secondary rounded-3"
-                >
-                  Booking Lagi
-                </Link>
               )}
             </div>
           </div>

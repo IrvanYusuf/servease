@@ -16,7 +16,7 @@ function ServiceCard({ dataServices }) {
                 className="text-decoration-none"
               >
                 <img
-                  src={`http://localhost:3000/images/${data.image}`}
+                  src={`https://backend-servease.vercel.app/images/${data.image}`}
                   className="w-100 rounded-2"
                   height={213}
                   alt=""
@@ -26,7 +26,7 @@ function ServiceCard({ dataServices }) {
               <div className="my-2 d-flex align-items-center column-gap-3">
                 <div style={{ width: "41px", height: "41px" }}>
                   <img
-                    src={`http://localhost:3000/images/${data.image}`}
+                    src={`https://backend-servease.vercel.app/images/${data.image}`}
                     alt=""
                     className="w-100 h-100 bg-secondary-subtle rounded-pill object-fit-cover"
                   />

@@ -9,6 +9,7 @@ import { useAuth } from "../../context/authContext";
 import { jwtDecode } from "jwt-decode";
 import { apiAddress } from "../../api/apiAddress";
 import Swal from "sweetalert2";
+import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
 
 const DaftarAlamat = () => {
   const [showModalAlamat, setShowModalAlamat] = useState(false);
@@ -105,55 +106,67 @@ const DaftarAlamat = () => {
       </div>
       <div className="h-100 mt-2 overflow-y-auto">
         <div className="h-100">
-          {alamat.map((data, i) => (
+          {alamat.length === 0 ? (
             <div
-              className="shadow p-3 rounded-3 mb-4"
-              key={i}
-              style={{
-                border: `1px solid ${
-                  parseInt(idAlamatLocalStorage) === data.id_alamat
-                    ? "#EF3D01"
-                    : "#D0D4CA"
-                }`,
-              }}
+              className="w-100 d-flex justify-content-center"
+              style={{ marginTop: "30px" }}
             >
-              <b className="text-secondary">{data.label_alamat}</b>
-              <h6 className="fw-normal">{data.no_telp}</h6>
-              <div className="d-flex">
-                <h6 className="fw-normal">{data.nama_jalan},</h6>
-                <h6 className="fw-normal">{data.deskripsi}</h6>
-              </div>
-              <div className="d-flex">
-                <h6 className="fw-normal">{data.kabupaten},</h6>
-                <h6 className="fw-normal"> {data.kecamatan},</h6>
-                <h6 className="fw-normal"> {data.provinsi}</h6>
-              </div>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <button
-                    className="border-0 bg-transparent fw-semibold"
-                    style={{ color: "#EF3D01" }}
-                    onClick={() => handleShowModalEditAlamat(data.id_alamat)}
-                  >
-                    Ubah
-                  </button>
-                  <button
-                    className="border-0 bg-transparent fw-semibold"
-                    style={{ color: "#EF3D01" }}
-                    onClick={() => handleDeleteAddress(data.id_alamat)}
-                  >
-                    Hapus
-                  </button>
-                </div>
-                <button
-                  className="border bg-transparent p-1"
-                  onClick={() => handlePrimaryAddress(data.id_alamat)}
-                >
-                  Atur Sebagai Utama
-                </button>
+              <div className="d-flex flex-column align-items-center row-gap-3">
+                <img src={iconRiwayatPemesananNotFound} alt="" />
+                <h5>Kamu belum pernah menambahkan alamat</h5>
               </div>
             </div>
-          ))}
+          ) : (
+            alamat.map((data, i) => (
+              <div
+                className="shadow p-3 rounded-3 mb-4"
+                key={i}
+                style={{
+                  border: `1px solid ${
+                    parseInt(idAlamatLocalStorage) === data.id_alamat
+                      ? "#EF3D01"
+                      : "#D0D4CA"
+                  }`,
+                }}
+              >
+                <b className="text-secondary">{data.label_alamat}</b>
+                <h6 className="fw-normal">{data.no_telp}</h6>
+                <div className="d-flex">
+                  <h6 className="fw-normal">{data.nama_jalan},</h6>
+                  <h6 className="fw-normal">{data.deskripsi}</h6>
+                </div>
+                <div className="d-flex">
+                  <h6 className="fw-normal">{data.kabupaten},</h6>
+                  <h6 className="fw-normal"> {data.kecamatan},</h6>
+                  <h6 className="fw-normal"> {data.provinsi}</h6>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <div>
+                    <button
+                      className="border-0 bg-transparent fw-semibold"
+                      style={{ color: "#EF3D01" }}
+                      onClick={() => handleShowModalEditAlamat(data.id_alamat)}
+                    >
+                      Ubah
+                    </button>
+                    <button
+                      className="border-0 bg-transparent fw-semibold"
+                      style={{ color: "#EF3D01" }}
+                      onClick={() => handleDeleteAddress(data.id_alamat)}
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                  <button
+                    className="border bg-transparent p-1"
+                    onClick={() => handlePrimaryAddress(data.id_alamat)}
+                  >
+                    Atur Sebagai Utama
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         {/* <div className="d-flex flex-column justify-content-center align-items-center h-100">
           <img src={iconLocationNotFound} alt="" height={150} width={150} />

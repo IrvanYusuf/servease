@@ -1,1 +1,3 @@
-export const apiRating = "http://localhost:3000/web/rating/";
+import { BASE_URL } from "./baseUrl";
+
+export const apiRating = `${BASE_URL}/web/rating`;
