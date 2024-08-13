@@ -9,8 +9,23 @@ import { apiCategories } from "../../api/apiCategories";
 import { apiVideos } from "../../api/apiVideos";
 import { useAuth } from "../../context/authContext";
 const LandingPage = () => {
+  const [banners, setBanners] = useState([]);
   const [category, setCategory] = useState([]);
   const [videos, setVideos] = useState([]);
+
+  const getAllBanners = async () => {
+    try {
+      const response = await fetch(apiBanner, {
+        method: "GET",
+      });
+      const dataBanners = await response.json();
+      if (response.status === 200) {
+        setBanners(dataBanners.data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const getAllCategory = async () => {
     try {
@@ -48,7 +63,7 @@ const LandingPage = () => {
 
   return (
     <div className="container">
-      <Banner />
+      <Banner dataBanners={banners} />
       <SectionCategoryService dataCategories={category} />
       {/* <SectionCardAtractiveOffering /> */}
       <SectionOurPartner />

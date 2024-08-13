@@ -5,13 +5,10 @@ import nextIcon from "../../assets/icon/next.png";
 import "../../styles/organisms/banner.css";
 import Banner1 from "../../assets/img/banners/banner1.png";
 import Banner2 from "../../assets/img/banners/banner2.png";
-const Banner = () => {
+const Banner = ({ dataBanners }) => {
   // console.log(dataBanners);
 
-  const dataBanners = [
-    "https://i.ibb.co.com/By9gFtZ/banner1.png",
-    "https://i.ibb.co.com/F46FMh9/banner2.png",
-  ];
+  const dataBanners = [Banner1, Banner2];
   return (
     <div>
       <Carousel
