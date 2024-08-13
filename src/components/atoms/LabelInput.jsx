@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/atoms/labelInput";
+import "../../styles/atoms/labelInput.css";
 
 const LabelInput = ({ target, labelText }) => {
   return (
