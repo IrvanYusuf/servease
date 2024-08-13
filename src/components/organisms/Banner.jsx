@@ -3,8 +3,15 @@ import Carousel from "nuka-carousel";
 import prevIcon from "../../assets/icon/back.png";
 import nextIcon from "../../assets/icon/next.png";
 import "../../styles/organisms/banner.css";
-const Banner = ({ dataBanners }) => {
+import Banner1 from "../../assets/img/banners/banner1.png";
+import Banner2 from "../../assets/img/banners/banner2.png";
+const Banner = () => {
   // console.log(dataBanners);
+
+  const dataBanners = [
+    "https://i.ibb.co.com/By9gFtZ/banner1.png",
+    "https://i.ibb.co.com/F46FMh9/banner2.png",
+  ];
   return (
     <div>
       <Carousel
@@ -32,11 +39,7 @@ const Banner = ({ dataBanners }) => {
       >
         {dataBanners.map((banner, i) => (
           <div key={i}>
-            <img
-              src={`../../../public/img/banners/${banner.image}`}
-              alt=""
-              className="w-100"
-            />
+            <img src={banner} alt="" className="w-100" />
           </div>
         ))}
       </Carousel>
