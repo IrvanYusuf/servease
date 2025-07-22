@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Nav, Tab, Tabs } from "react-bootstrap";
-import "../../styles/pages/riwayatPemesanan.css";
+import { useState } from "react";
+import "@/styles/pages/riwayatPemesanan.css";
 import SectionLihatSemua from "../organisms/SectionLihatSemua";
 import SectionBerlangsung from "../organisms/SectionBerlangsung";
 import SectionSelesai from "../organisms/SectionSelesai";
@@ -76,22 +75,22 @@ const RiwayatPemesanan = () => {
       <div className="d-flex justify-content-between py-3">
         <h4>Riwayat Pemesanan</h4>
       </div>
-      {/* <div className="h-100 d-flex flex-column"> */}
       <ul
-        class="nav nav-pills mb-3 d-flex column-gap-3"
+        className="nav nav-pills mb-3 d-flex w-100 container-tab column-gap-3 flex-nowrap"
         id="pills-tab"
         role="tablist"
       >
         {dataButtonRiwayat.map((data) => (
           <li
-            class="container-btn-filter-riwayat nav-item"
+            className="container-btn-filter-riwayat nav-item flex-shrink-0"
             role="presentation"
             key={data.id}
           >
             <button
-              class={`nav-link  ${
+              className={`nav-link text-center w-100  ${
                 data.dataBsTarget === "#riwayat-semua" ? "active" : ""
               }`}
+              style={{ minWidth: "120px", whiteSpace: "nowrap" }}
               // id="pills-home-tab"
               data-bs-toggle="pill"
               data-bs-target={data.dataBsTarget}
@@ -109,11 +108,11 @@ const RiwayatPemesanan = () => {
         ))}
       </ul>
       <div className="h-100 overflow-y-auto">
-        <div class="tab-content px-0" id="pills-tabContent">
+        <div className="tab-content px-0" id="pills-tabContent">
           {datatabContent.map((dataContent) => (
             <div
               key={dataContent.id}
-              class={`tab-pane fade h-100 ${
+              className={`tab-pane fade h-100 ${
                 dataContent.targetId === activeTab ? "show active" : ""
               }`}
               id={dataContent.targetId}

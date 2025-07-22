@@ -23,32 +23,52 @@ import PengaturanAkunMitra from "./components/pages/mitra/PengaturanAkunMitra";
 import DetailOrderMitra from "./components/pages/mitra/DetailOrderMitra";
 import { AuthProvider } from "./context/authContext";
 import RegisterPageMitra from "./components/pages/mitra/RegisterPageMitra";
-import Tes from "./Tes";
 import CreateInvoice from "./components/pages/mitra/CreateInvoice";
+import LayoutDashboard from "./components/layout/LayoutDashboard";
+import Home from "./components/pages/dashboard/Home";
+import ServicePage from "./components/pages/dashboard/services/ServicePage";
+import AddNewService from "./components/pages/dashboard/services/AddNewService";
+import CompanysPage from "./components/pages/dashboard/companys/CompanysPage";
+import AddNewCompany from "./components/pages/dashboard/companys/AddNewCompany";
+import AuthGuard from "./guards/AuthGuard";
+import RoleGuard from "./guards/RoleGuard";
+import PaymentMethodsPage from "./components/pages/dashboard/paymentMethods/PaymentMethodsPage";
+import AddNewPaymentMethod from "./components/pages/dashboard/paymentMethods/AddNewPaymentMethod";
+import BookingPage from "./components/pages/BookingPage";
+import PaymentPage from "./components/pages/PaymentPage";
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
           <Route path="login" element={<LoginPage />} />
-          <Route path="/tesaja" element={<Tes />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="/mitra/register" element={<RegisterPageMitra />} />
           <Route path="tes" element={<RatingProgressBar2 />} />
           <Route path="/" element={<LayoutPage />}>
             <Route index element={<LandingPage />} />
-            <Route
-              path="daftar-service/:idCategory"
-              element={<DaftarService />}
-            />
+            <Route path="services/:idCategory" element={<DaftarService />} />
             <Route path="detail/:idMitra" element={<DetailService />} />
             <Route path="mitra-beranda/:idMitra" element={<MitraBeranda />} />
-            <Route path="/profile/" element={<LayoutProfile />}>
-              <Route index element={<BiodataDiri />} />
-              <Route path="riwayat-pemesanan" element={<RiwayatPemesanan />} />
-              <Route path="daftar-alamat" element={<DaftarAlamat />} />
-              <Route path="ulasan" element={<Ulasan />} />
+
+            <Route element={<AuthGuard />}>
+              {/* profile */}
+              <Route path="/profile/" element={<LayoutProfile />}>
+                <Route index element={<BiodataDiri />} />
+                <Route
+                  path="riwayat-pemesanan"
+                  element={<RiwayatPemesanan />}
+                />
+                <Route path="daftar-alamat" element={<DaftarAlamat />} />
+                <Route path="ulasan" element={<Ulasan />} />
+              </Route>
+              {/* booking */}
+              <Route path="/booking" element={<BookingPage />} />
+
+              {/* payment */}
+              <Route path="payment" element={<PaymentPage />} />
             </Route>
+
             <Route path="/mitra/" element={<LayoutMitra />}>
               <Route index element={<PenilaianPage />} />
               <Route path="profil-layanan" element={<ProfilLayanan />} />
@@ -66,6 +86,28 @@ const App = () => {
               />
             </Route>
             <Route path="*" element={<NotFound />} />
+          </Route>
+
+          {/* dashboard */}
+          {/* wajib login terlebih dahulu */}
+          <Route element={<AuthGuard />}>
+            <Route element={<RoleGuard allowedRoles={["ADMIN", "PARTNER"]} />}>
+              <Route path="/dashboard" element={<LayoutDashboard />}>
+                <Route index element={<Home />} />
+                <Route path="services" element={<ServicePage />} />
+                <Route path="services/new" element={<AddNewService />} />
+                <Route path="companys" element={<CompanysPage />} />
+                <Route path="companys/new" element={<AddNewCompany />} />
+                <Route
+                  path="payment-methods"
+                  element={<PaymentMethodsPage />}
+                />
+                <Route
+                  path="payment-methods/new"
+                  element={<AddNewPaymentMethod />}
+                />
+              </Route>
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
-import ActionButton from "../atoms/ActionButton";
-import iconLocationNotFound from "../../assets/icon/location-not-found.png";
-import ModalFormTambahAlamat from "../molecules/ModalFormTambahAlamat";
-import ModalFormEditUser from "../molecules/ModalFormEditUser";
-import ModalFormEditAlamat from "../molecules/ModalFormEditAlamat";
-import ModalTes from "../molecules/ModalTes";
-import { useAuth } from "../../context/authContext";
+import { useState } from "react";
+import ModalFormTambahAlamat from "@/components/molecules/ModalFormTambahAlamat";
+import ModalFormEditAlamat from "@/components/molecules/ModalFormEditAlamat";
+import { useAuth } from "@/context/authContext";
 import { jwtDecode } from "jwt-decode";
-import { apiAddress } from "../../api/apiAddress";
+import { apiAddress } from "@/api/apiAddress";
 import Swal from "sweetalert2";
-import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
+import NotFoundSection from "@/components/organisms/NotFoundSection";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import AddressesService from "@/services/address.service";
+import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
+import ActionButton from "@/components/atoms/ActionButton";
+import queryClient from "@/utils/queryClient";
+import { swal } from "@/utils/sweetAlert";
+import CardAlamat from "../molecules/CardAlamat";
 
 const DaftarAlamat = () => {
   const [showModalAlamat, setShowModalAlamat] = useState(false);
   const [showModalEditAlamat, setShowModalEditAlamat] = useState(false);
-  const [alamat, setAlamat] = useState([]);
-  const [idUser, setIdUser] = useState(0);
   const [idAlamat, setIdAlamat] = useState("");
-  const idAlamatLocalStorage = localStorage.getItem("alamat");
   const { token } = useAuth();
   const decoded = token ? jwtDecode(token) : null;
-  const [isPrimary, setIsPrimary] = useState("");
 
   const handleShowModalAlamat = () => {
     setShowModalAlamat(true);
@@ -35,161 +34,127 @@ const DaftarAlamat = () => {
   };
   const handleCloseModalEditAlamat = () => setShowModalEditAlamat(false);
 
-  const handleDeleteAddress = async (idAlamat) => {
-    setIdAlamat(idAlamat);
-    Swal.fire({
-      title: "Apakah kamu yakin?",
-      text: "kamu akan menghapus alamat ini",
+  const handleDeleteAddress = async (id) => {
+    swal({
+      title: "Delete Address?",
+      text: "Are you sure you want to delete this address?",
       icon: "warning",
-      iconColor: "#EF3D01",
+      confirmButtonText: "Delete",
       showCancelButton: true,
-      cancelButtonColor: "#d33",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
+    }).then((result) => {
       if (result.isConfirmed) {
-        const response = await fetch(`${apiAddress}/${idAlamat}`, {
-          headers: {
-            authorization: token,
-            "Content-type": "application/json",
-            credentials: true,
-          },
-          method: "DELETE",
-          body: JSON.stringify({ id_user: decoded.id }),
-        });
-        getAllAddress();
-        Swal.fire({
-          title: "Deleted!",
-          text: "Alamat kamu telah terhapus.",
-          icon: "success",
-          iconColor: "#EF3D01",
-        });
+        mutateDelete(id);
       }
     });
   };
 
-  const getAllAddress = async () => {
-    try {
-      const response = await fetch(`${apiAddress}/${decoded.id}`, {
-        method: "GET",
-        headers: {
-          authorization: token,
-          "Content-type": "application/json",
-          credentials: true,
-        },
+  const { data: addresses, isLoading } = useQuery({
+    queryKey: ["addresses"],
+    queryFn: AddressesService.getAllAddresses,
+  });
+
+  // delete address
+  const { mutate: mutateDelete, isPending: isPendingDelete } = useMutation({
+    mutationFn: AddressesService.deleteAddress,
+    onSuccess: (res) => {
+      queryClient.invalidateQueries(["addresses"]);
+      swal({
+        title: "Success",
+        text: res.message,
+        icon: "success",
+        confirmButtonText: "Tutup",
       });
-      const data = await response.json();
-      setAlamat(data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+    onError: (error) => {
+      console.error(error);
+      swal({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Tutup",
+      });
+    },
+  });
 
-  const handlePrimaryAddress = (id) => {
-    setIsPrimary(id);
-    localStorage.setItem("alamat", id);
-  };
+  // set primary address
+  const { mutate, isPending } = useMutation({
+    mutationFn: AddressesService.setPrimaryAddress,
+    onSuccess: (res) => {
+      queryClient.invalidateQueries(["addresses"]);
+      swal({
+        title: "Success",
+        text: res.message,
+        icon: "success",
+        confirmButtonText: "Tutup",
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      swal({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Tutup",
+      });
+    },
+  });
 
-  useEffect(() => {
-    getAllAddress();
-  }, []);
+  const handlePrimaryAddress = async (id) => {
+    swal({
+      title: "Set as Primary Address?",
+      text: "Are you sure you want to set this as your primary address?",
+      icon: "warning",
+      confirmButtonText: "Set as primary",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutate(id);
+      }
+    });
+  };
   return (
     <div className="w-100 h-100 d-flex flex-column">
-      <div className="d-flex justify-content-between py-3">
-        <h4 style={{ textAlign: "left" }}>Daftar Alamat {isPrimary}</h4>
-        <div>
-          <ActionButton
-            text={"+ Tambah Alamat"}
-            onClick={handleShowModalAlamat}
-          />
-        </div>
+      <div className="d-flex flex-md-row flex-column justify-content-between py-3">
+        <h4 style={{ textAlign: "left" }}>Daftar Alamat (Maks 3)</h4>
+        {addresses?.data?.length < 3 && (
+          <div>
+            <ActionButton
+              text={"+ Tambah Alamat"}
+              onClick={handleShowModalAlamat}
+              className="w-100 mt-3 mt-md-0"
+            />
+          </div>
+        )}
       </div>
       <div className="h-100 mt-2 overflow-y-auto">
         <div className="h-100">
-          {alamat.length === 0 ? (
-            <div
-              className="w-100 d-flex justify-content-center"
-              style={{ marginTop: "30px" }}
-            >
-              <div className="d-flex flex-column align-items-center row-gap-3">
-                <img src={iconRiwayatPemesananNotFound} alt="" />
-                <h5>Kamu belum pernah menambahkan alamat</h5>
-              </div>
-            </div>
+          {isLoading ? (
+            "loading"
+          ) : addresses.data.length === 0 ? (
+            <NotFoundSection />
           ) : (
-            alamat.map((data, i) => (
-              <div
-                className="shadow p-3 rounded-3 mb-4"
+            addresses.data.map((address, i) => (
+              <CardAlamat
                 key={i}
-                style={{
-                  border: `1px solid ${
-                    parseInt(idAlamatLocalStorage) === data.id_alamat
-                      ? "#EF3D01"
-                      : "#D0D4CA"
-                  }`,
-                }}
-              >
-                <b className="text-secondary">{data.label_alamat}</b>
-                <h6 className="fw-normal">{data.no_telp}</h6>
-                <div className="d-flex">
-                  <h6 className="fw-normal">{data.nama_jalan},</h6>
-                  <h6 className="fw-normal">{data.deskripsi}</h6>
-                </div>
-                <div className="d-flex">
-                  <h6 className="fw-normal">{data.kabupaten},</h6>
-                  <h6 className="fw-normal"> {data.kecamatan},</h6>
-                  <h6 className="fw-normal"> {data.provinsi}</h6>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <button
-                      className="border-0 bg-transparent fw-semibold"
-                      style={{ color: "#EF3D01" }}
-                      onClick={() => handleShowModalEditAlamat(data.id_alamat)}
-                    >
-                      Ubah
-                    </button>
-                    <button
-                      className="border-0 bg-transparent fw-semibold"
-                      style={{ color: "#EF3D01" }}
-                      onClick={() => handleDeleteAddress(data.id_alamat)}
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                  <button
-                    className="border bg-transparent p-1"
-                    onClick={() => handlePrimaryAddress(data.id_alamat)}
-                  >
-                    Atur Sebagai Utama
-                  </button>
-                </div>
-              </div>
+                address={address}
+                handleDeleteAddress={handleDeleteAddress}
+                handlePrimaryAddress={handlePrimaryAddress}
+                handleShowModalEditAlamat={handleShowModalEditAlamat}
+              />
             ))
           )}
         </div>
-        {/* <div className="d-flex flex-column justify-content-center align-items-center h-100">
-          <img src={iconLocationNotFound} alt="" height={150} width={150} />
-          <h5 className="text-body-tertiary mt-2">
-            Kamu belum punya alamat tersimpan
-          </h5>
-        </div> */}
       </div>
       <ModalFormTambahAlamat
         show={showModalAlamat}
         onHide={handleCloseModalAlamat}
-        getAllAddress={getAllAddress}
+        getAllAddress={() => {}}
       />
       <ModalFormEditAlamat
         show={showModalEditAlamat}
         onHide={handleCloseModalEditAlamat}
         idAddress={idAlamat}
       />
-      {/* <ModalTes
-        show={showModalDeleteAlamat}
-        onHide={handleCloseModalDeleteAlamat}
-        id={idUser}
-      /> */}
     </div>
   );
 };

@@ -7,10 +7,10 @@ const SectionAboutUs = () => {
       <div className="about-us-container">
         <h2 className="text-center">About Us</h2>
         <div className="row align-items-center">
-          <div className="col-6">
-            <img src={aboutImg} alt="img about" className="about-img" />
+          <div className="col-lg-6 col-12">
+            <img src={aboutImg} alt="img about" className="about-img w-100" />
           </div>
-          <div className="col-6">
+          <div className="col-lg-6 col-12 text-justify">
             <p>
               Kami memiliki visi untuk membuat pencarian dan pemesanan layanan
               servis menjadi lebih mudah dan efisien bagi semua orang. ServEase

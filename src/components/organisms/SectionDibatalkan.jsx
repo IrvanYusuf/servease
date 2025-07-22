@@ -3,6 +3,7 @@ import CardHistoryBooking from "../molecules/CardHistoryBooking";
 import { useAuth } from "../../context/authContext";
 import { jwtDecode } from "jwt-decode";
 import { apiTransaction } from "../../api/apiTransaction";
+import NotFoundSection from "./NotFoundSection";
 const SectionDibatalkan = () => {
   const { token } = useAuth();
   const [allTransactionCancel, setAllTransactionCancel] = useState([]);
@@ -34,7 +35,12 @@ const SectionDibatalkan = () => {
   return (
     <div className="h-100">
       <div className="d-flex flex-column justify-content-center align-items-center h-100">
-        {allTransactionCancel &&
+        {allTransactionCancel.length === 0 ? (
+          <div className="mt-5">
+            <NotFoundSection />
+          </div>
+        ) : (
+          allTransactionCancel &&
           allTransactionCancel.map((transaction) => (
             <CardHistoryBooking
               backgroundColor={"rgba(179,19,18,0.23"}
@@ -46,7 +52,8 @@ const SectionDibatalkan = () => {
               idTransaksi={transaction.id_transaksi}
               idMitra={transaction.id_mitra}
             />
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

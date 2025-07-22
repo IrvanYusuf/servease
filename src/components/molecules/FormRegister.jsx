@@ -1,149 +1,107 @@
-import React, { useState } from "react";
-import ActionButton from "../atoms/ActionButton";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import FormRegisterUserInfo from "@/components/organisms/FormRegisterUserInfo";
+import FormRegisterPersonalInfo from "@/components/organisms/FormRegisterPersonalInfo";
+import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
+import ActionButton from "@/components/atoms/ActionButton";
+import { useForm } from "react-hook-form";
+import { registerSchema } from "@/schema/auth.schema";
 import { useNavigate } from "react-router-dom";
-import "../../styles/molecules/formLogin.css";
-import FormRegisterUserInfo from "../organisms/FormRegisterUserInfo";
-import FormRegisterPersonalInfo from "../organisms/FormRegisterPersonalInfo";
-import ActionButtonOutline from "../atoms/ActionButtonOutline";
-import { apiAuth } from "../../api/apiAuth";
-import { swal } from "../../utils/sweetAlert";
+import "@/styles/molecules/formLogin.css";
+import { useMutation } from "@tanstack/react-query";
+import AuthsServices from "@/services/auth.service";
+import { swal } from "@/utils/sweetAlert";
 
-const FormRegister = () => {
-  //variabel halaman
+const FormRegister = ({ registerAs = "USER" }) => {
   const [halaman, setHalaman] = useState(0);
-  const [msgErrorPasswordNotSame, setMsgErrorPasswordNotSame] = useState("");
-  const [msgErrorEmail, setMsgErrorEmail] = useState("");
-  const [msgEmailSudahTerdaftar, setMsgEmailSudahTerdaftar] = useState("");
 
-  // save input
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    cpassword: "",
-    nama: "",
-    no_telp: "",
-    jenis_kelamin: "",
-    tanggal_lahir: "",
-    img: null,
-    id_role: 1,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    trigger,
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    mode: "onChange",
   });
-
-  const handleFormData = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  //pagedisplay logic
-  const PageDisplay = () => {
-    if (halaman === 0) {
-      return (
-        <FormRegisterUserInfo
-          formData={formData}
-          handleFormData={handleFormData}
-          msgErrorPasswordNotSame={msgErrorPasswordNotSame}
-          msgErrorEmail={msgErrorEmail}
-          setMsgErrorEmail={setMsgErrorEmail}
-        />
-      );
-    } else {
-      return (
-        <FormRegisterPersonalInfo
-          formData={formData}
-          handleFormData={handleFormData}
-          msgEmailSudahTerdaftar={msgEmailSudahTerdaftar}
-        />
-      );
-    }
-  };
 
   const navigate = useNavigate();
 
-  const nextPage = () => {
-    setHalaman(halaman + 1);
-  };
-
-  const prevPage = () => {
-    setHalaman(halaman - 1);
-  };
-
-  const handleNextForm = () => {
-    if (msgErrorEmail !== "" && msgErrorEmail === "email tidak valid") {
-      return;
-    }
-    if (formData.password !== formData.cpassword) {
-      setMsgErrorPasswordNotSame("password dan konfirmasi password tidak sama");
-    } else {
-      setMsgErrorPasswordNotSame("");
-      nextPage();
-      console.log(formData);
-    }
-  };
-
-  const handleRegisterForm = async () => {
-    const response = await fetch(`${apiAuth}/register`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    console.log(data);
-
-    if (data.message === "email sudah terdaftar") {
-      swal({
-        title: "Error",
-        text: "Email Sudah Terdaftar",
-        icon: "error",
-        iconColor: "#EF3D01",
-        confirmButtonText: "Tutup",
-      });
-    } else {
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: AuthsServices.mutationRegister,
+    onSuccess: () => {
       navigate("/login");
+    },
+    onError: (e) => {
+      swal({ title: "Error", text: "Email already registered", icon: "error" });
+      console.log(e);
+    },
+  });
+
+  const onSubmit = async (data) => {
+    const payload = {
+      role: registerAs,
+      ...data,
+    };
+    mutate(payload);
+  };
+
+  const nextPage = async () => {
+    const valid = await trigger(["username", "email", "password", "cpassword"]);
+    if (valid) {
+      setHalaman(halaman + 1);
     }
   };
-  const ButtonDisplay = () => {
+  const prevPage = () => setHalaman(halaman - 1);
+
+  const PageDisplay = () => {
     if (halaman === 0) {
-      return (
-        <>
-          <div className="col-sm-6"></div>
-          <div className="w-100">
-            <ActionButton
-              type={"button"}
-              text={"Selanjutnya"}
-              onClick={handleNextForm}
-            />
-          </div>
-        </>
-      );
+      return <FormRegisterUserInfo register={register} errors={errors} />;
     } else {
-      return (
-        <>
-          <div className="col-sm-6">
-            <ActionButtonOutline
-              type={"button"}
-              text={"Kembali"}
-              onClick={prevPage}
-            />
-          </div>
-          <div className="col-sm-6">
-            <ActionButton text={"Register"} onClick={handleRegisterForm} />
-          </div>
-        </>
-      );
+      return <FormRegisterPersonalInfo register={register} errors={errors} />;
     }
   };
+
+  console.log("error", error);
 
   return (
-    <>
-      <div className="container">{PageDisplay()}</div>
-      <div className="row" style={{ width: "100%" }}>
-        {ButtonDisplay()}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="login-container needs-validation"
+    >
+      {PageDisplay()}
+
+      <div className="row mt-3">
+        {halaman === 0 ? (
+          <div className="col-12 w-100">
+            <ActionButton
+              type="button"
+              text="Selanjutnya"
+              onClick={nextPage}
+              className={"w-100"}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="col-sm-6">
+              <ActionButtonOutline
+                type="button"
+                text="Kembali"
+                onClick={prevPage}
+              />
+            </div>
+            <div className="col-sm-6">
+              <ActionButton
+                text="Register"
+                type="submit"
+                className="w-100"
+                disabled={isPending}
+              />
+            </div>
+          </>
+        )}
       </div>
-    </>
+    </form>
   );
 };
 
