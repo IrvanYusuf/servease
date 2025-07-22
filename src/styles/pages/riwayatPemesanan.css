@@ -1,12 +1,24 @@
-.container-btn-filter-riwayat.nav-item .nav-link {
+.nav-pills .container-btn-filter-riwayat.nav-item .nav-link {
   border: 1px solid #797979;
   background-color: white;
   color: #797979;
   font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
-.container-btn-filter-riwayat.nav-item .nav-link.active {
+.nav-pills .container-btn-filter-riwayat.nav-item .nav-link.active {
   border: 1px solid #ef3d01;
   background-color: white;
   color: #ef3d01;
   font-weight: bold;
+}
+.container-tab {
+  overflow: visible;
+}
+
+@media (max-width: 768px) {
+  .container-tab {
+    overflow: auto;
+  }
 }

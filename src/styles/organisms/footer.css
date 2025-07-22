@@ -1,7 +1,8 @@
-.footer-container{
-    margin-top: 69px;
-    background-color: #1B1C4A;
+.footer-container {
+  margin-top: 69px;
+  background-color: #1b1c4a;
 }
-.footer{
-    padding: 4rem 0;
+.footer {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }

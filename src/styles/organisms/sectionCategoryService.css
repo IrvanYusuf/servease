@@ -4,3 +4,9 @@
 .category-container .row {
   margin-top: 28px;
 }
+
+@media only screen and (max-width: 765px) {
+  .category-container {
+    margin-top: 30px;
+  }
+}
