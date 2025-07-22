@@ -7,13 +7,18 @@ export const swal = ({
   iconColor,
   confirmButtonText,
   timer,
+  showCancelButton = false,
+  cancelButtonText = "Cancel",
 }) => {
-  Swal.fire({
-    title: title,
-    text: text,
-    iconColor: iconColor,
-    icon: icon,
-    confirmButtonText: confirmButtonText,
-    timer: timer,
+  return Swal.fire({
+    title,
+    text,
+    iconColor,
+    icon,
+    confirmButtonText,
+    timer,
+    showCancelButton,
+    cancelButtonText,
+    reverseButtons: true,
   });
 };
