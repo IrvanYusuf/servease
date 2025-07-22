@@ -1,27 +1,19 @@
-import React from "react";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import "../../styles/organisms/navigation.css";
+import "@/styles/organisms/navigation.css";
 import { VscAccount } from "react-icons/vsc";
 import { BsClockHistory } from "react-icons/bs";
 import { FiMapPin } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
 import { FaRegStar } from "react-icons/fa6";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "@/context/authContext";
 
 const Navigation = () => {
-  const { setAuthToken } = useAuth();
-  const handleLogout = () => {
-    setAuthToken("");
-    localStorage.removeItem("token");
-  };
+  const { logOut } = useAuth();
 
   return (
     <>
-      <Nav
-        variant="pills"
-        className="flex-column sidebar-profile-navigation-container row-gap-2"
-      >
+      <Nav variant="pills" className="flex-column row-gap-2">
         <Nav.Item>
           <Nav.Link
             as={NavLink}
@@ -63,7 +55,7 @@ const Navigation = () => {
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={NavLink} to="/login" onClick={handleLogout}>
+          <Nav.Link as={"button"} onClick={logOut}>
             <MdLogout size={24} style={{ rotate: "180deg" }} />
             Logout
           </Nav.Link>

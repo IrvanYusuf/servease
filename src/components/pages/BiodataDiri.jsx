@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
-import "../../styles/pages/BiodataDiri.css";
-import ActionButton from "../atoms/ActionButton";
-import ModalFormEditUser from "../molecules/ModalFormEditUser";
-import ModalFormTambahAlamat from "../molecules/ModalFormTambahAlamat";
-import { useAuth } from "../../context/authContext";
-import { apiUser } from "../../api/apiUser";
-import { jwtDecode } from "jwt-decode";
-import profileImg from "../../assets/icon/profile.png";
-import ModalUpdateFoto from "../molecules/ModalUpdateFoto";
+import { useState } from "react";
+import "@/styles/pages/BiodataDiri.css";
+import ActionButton from "@/components/atoms/ActionButton";
+import ModalFormEditUser from "@/components/molecules/ModalFormEditUser";
+import ModalFormTambahAlamat from "@/components/molecules/ModalFormTambahAlamat";
+import { useAuth } from "@/context/authContext";
+import profileImg from "@/assets/icon/profile.png";
+import ModalUpdateFoto from "@/components/molecules/ModalUpdateFoto";
+import { useQuery } from "@tanstack/react-query";
+import UsersServices from "@/services/user.service";
+import { truncateText } from "@/utils/text";
+import { formatDate } from "@/utils/formattedDate";
 
 const BiodataDiri = () => {
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalImage, setShowModalImage] = useState(false);
-  const [userProfile, setUserProfile] = useState([]);
-  const { token } = useAuth();
-  const decoded = token ? jwtDecode(token) : null;
-  const [tanggalLahir, setTanggalLahir] = useState();
+  const { decodedToken } = useAuth();
 
   const handleShowModalEdit = () => {
     setShowModalEdit(true);
@@ -28,29 +27,16 @@ const BiodataDiri = () => {
     setShowModalImage(true);
   };
 
-  const getSingleUser = async () => {
-    try {
-      const response = await fetch(`${apiUser}/detail/${decoded.id}`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          authorization: token,
-          credentials: true,
-        },
-      });
-      const dataSingleUser = await response.json();
-      setUserProfile(dataSingleUser.data[0]);
-      const originalDate = dataSingleUser.data[0].tanggal_lahir;
-      const formattedDate = new Date(originalDate).toISOString().split("T")[0];
-      setTanggalLahir(formattedDate);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  const { data: dataUser, isLoading } = useQuery({
+    queryKey: ["user", decodedToken.id],
+    queryFn: () => UsersServices.getUser(decodedToken.id),
+  });
 
-  useEffect(() => {
-    getSingleUser();
-  }, []);
+  if (isLoading) {
+    return "loading....";
+  }
+  console.log(dataUser);
+
   return (
     <div className="w-100">
       <div className="d-flex justify-content-between py-3">
@@ -60,17 +46,11 @@ const BiodataDiri = () => {
         </div>
       </div>
       <div className="row w-100">
-        <div className="col-4 d-flex flex-column align-items-center">
+        <div className="col-lg-4 d-flex flex-column align-items-center">
           <img
-            src={
-              userProfile.img !== null
-                ? `http://localhost:3000/images/${userProfile.img}`
-                : profileImg
-            }
+            src={dataUser.profile_url ? dataUser.profile_url : profileImg}
             alt=""
-            width={"100%"}
-            height={"100%"}
-            className="rounded-3"
+            className="rounded-3 profile-image"
           />
           <div className="w-100">
             <button
@@ -81,31 +61,37 @@ const BiodataDiri = () => {
             </button>
           </div>
         </div>
-        <div className="col-8">
+        <div className="col-lg-8 mt-4 mt-lg-0">
           <table>
             <tr>
               <td className="px-4 py-2">Username</td>
-              <td className="ps-2">{userProfile.username}</td>
+              <td className="ps-2">{dataUser.data.username}</td>
             </tr>
             <tr>
               <td className="px-4 py-2">Nama</td>
-              <td className="ps-2">{userProfile.nama}</td>
+              <td className="ps-2">{dataUser.data.name}</td>
             </tr>
             <tr>
               <td className="px-4 py-2">Tanggal Lahir</td>
-              <td className="ps-2">{tanggalLahir}</td>
+              <td className="ps-2">
+                {formatDate({ date: dataUser.data.birthDate })}
+              </td>
             </tr>
             <tr>
               <td className="px-4 py-2">Jenis Kelamin</td>
-              <td className="ps-2">{userProfile.jenis_kelamin}</td>
+              <td className="ps-2">
+                {dataUser.data.gender === "MALE" ? "LAKI-LAKI" : "PEREMPUAN"}
+              </td>
             </tr>
             <tr>
               <td className="px-4 py-2">Email</td>
-              <td className="ps-2">{userProfile.email}</td>
+              <td className="ps-2 d-flex flex-wrap">
+                {truncateText({ text: dataUser.data.email, length: 20 })}
+              </td>
             </tr>
             <tr>
               <td className="px-4 py-2">Nomor Handphone</td>
-              <td className="ps-2">{userProfile.no_telp}</td>
+              <td className="ps-2">{dataUser.data.phone}</td>
             </tr>
           </table>
         </div>
@@ -113,14 +99,11 @@ const BiodataDiri = () => {
       <ModalFormEditUser
         show={showModalEdit}
         onHide={handleCloseModalEdit}
-        dataUser={userProfile}
-        tanggalLahir={tanggalLahir}
-        getSingleUser={getSingleUser}
+        dataUser={dataUser}
       />
       <ModalUpdateFoto
         show={showModalImage}
         onHide={() => setShowModalImage(false)}
-        getSingleUser={getSingleUser}
       />
     </div>
   );

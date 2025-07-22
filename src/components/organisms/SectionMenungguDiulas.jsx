@@ -5,6 +5,7 @@ import CardBookingMenungguUlasan from "../molecules/CardBookingMenungguUlasan";
 import { useAuth } from "../../context/authContext";
 import { jwtDecode } from "jwt-decode";
 import { apiRating } from "../../api/apiRating";
+import NotFoundSection from "./NotFoundSection";
 
 const SectionMenungguDiulas = () => {
   const { token } = useAuth();
@@ -30,7 +31,11 @@ const SectionMenungguDiulas = () => {
   }, []);
   return (
     <div className="d-flex flex-column align-items-center">
-      {allRating.length > 0 ? (
+      {allRating.length === 0 ? (
+        <div className="mt-5">
+          <NotFoundSection />
+        </div>
+      ) : allRating.length > 0 ? (
         allRating.map((rating, i) => (
           <CardBookingMenungguUlasan
             key={i}

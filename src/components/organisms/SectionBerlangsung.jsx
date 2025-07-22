@@ -4,6 +4,7 @@ import CardHistoryBooking from "../molecules/CardHistoryBooking";
 import { apiTransaction } from "../../api/apiTransaction";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../context/authContext";
+import NotFoundSection from "./NotFoundSection";
 const SectionBerlangsung = () => {
   const { token } = useAuth();
   const [allTransactionOnGoing, setAllTransactionOnGoing] = useState([]);
@@ -36,7 +37,12 @@ const SectionBerlangsung = () => {
   return (
     <div className="h-100">
       <div className="d-flex flex-column justify-content-center align-items-center h-100">
-        {allTransactionOnGoing &&
+        {allTransactionOnGoing.length === 0 ? (
+          <div className="mt-5">
+            <NotFoundSection />
+          </div>
+        ) : (
+          allTransactionOnGoing &&
           allTransactionOnGoing.map((transaction) => (
             <CardHistoryBooking
               backgroundColor={"rgba(79, 80, 233, 0.23)"}
@@ -48,7 +54,8 @@ const SectionBerlangsung = () => {
               idTransaksi={transaction.id_transaksi}
               idMitra={transaction.id_mitra}
             />
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

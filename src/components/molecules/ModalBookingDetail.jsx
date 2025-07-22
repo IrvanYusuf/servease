@@ -1,190 +1,271 @@
 import { Modal } from "react-bootstrap";
-import ActionButton from "../atoms/ActionButton";
-import { useEffect, useState } from "react";
-import ModalUlasan from "./ModalMenungguUlasan";
-import { jwtDecode } from "jwt-decode";
-import { apiTransaction } from "../../api/apiTransaction";
-import { useAuth } from "../../context/authContext";
+import ActionButton from "@/components/atoms/ActionButton";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import BookingsServices from "@/services/booking.service";
+import { formatDate } from "@/utils/formattedDate";
+import { NumericFormat } from "react-number-format";
+import StatusTransaksi from "../atoms/StatusTransaksi";
+import { formatPaymentType } from "@/utils/formatPaymentType";
+import ActionButtonOutline from "../atoms/ActionButtonOutline";
+import StatusPembayaran from "../atoms/StatusPembayaran";
+import { swal } from "@/utils/sweetAlert";
+import queryClient from "@/utils/queryClient";
 
 const ModalBookingDetail = (props) => {
-  const { token } = useAuth();
-  const { status, idTransaksi } = props;
-  const [detailTransaction, setDetailTransaction] = useState({});
-  const [TanggalBooking, setTanggalBooking] = useState("");
+  const { idTransaksi } = props;
   const navigate = useNavigate();
-  const [totalTagihan, setTotalTagihan] = useState(null);
 
-  const getDetailInvoice = async () => {
-    try {
-      const response = await fetch(
-        `${apiTransaction}/invoice/detail/${idTransaksi}`,
-        {
-          method: "GET",
-          headers: {
-            authorization: token,
-          },
-        }
-      );
-      const { data } = await response.json();
-      const [result] = data;
-      setTotalTagihan(result.total_tagihan);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleNavigate = ({ path = "" }) => {
+    navigate(path);
   };
 
-  const getDetailTransaction = async () => {
-    try {
-      const response = await fetch(
-        `${apiTransaction}/detail/transaction/${idTransaksi}`,
-        {
-          method: "GET",
-          headers: {
-            authorization: token,
-          },
-        }
-      );
+  const { data: dataBooking, isLoading } = useQuery({
+    queryKey: ["booking", idTransaksi],
+    queryFn: () => BookingsServices.getDetailBooking(idTransaksi),
+  });
 
-      const { data } = await response.json();
-      const [result] = data;
-      const originalDate = result.created_at;
-      const dateObject = new Date(originalDate);
+  const { mutate, isPending } = useMutation({
+    mutationFn: BookingsServices.completeBooking,
+    onSuccess: (res) => {
+      queryClient.invalidateQueries(["booking", idTransaksi]);
+      swal({
+        title: "Success",
+        text: res.message,
+        icon: "success",
+        confirmButtonText: "Tutup",
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      swal({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Tutup",
+      });
+    },
+  });
 
-      // Format the date as YYYY-MM-DD
-      const formattedDate = dateObject.toISOString().split("T")[0];
-
-      // Format the time as HH:MM:SS
-      const formattedTime = `${dateObject.getHours()}:${dateObject.getMinutes()}`;
-
-      // Combine date and time
-      const formattedDateWithTime = `${formattedDate}, ${formattedTime}`;
-      setTanggalBooking(formattedDateWithTime);
-      setDetailTransaction(result);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleCompleteBooking = async (id) => {
+    swal({
+      title: "Complete this booking?",
+      text: "Are you sure the service has been completed?",
+      icon: "warning",
+      confirmButtonText: "Yes, mark as completed",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutate(id);
+      }
+    });
   };
 
-  const handleNavigate = () => {
-    if (status === "Selesai") {
-      navigate("/profile/ulasan");
-    }
-  };
-
-  useEffect(() => {
-    if (idTransaksi) {
-      getDetailTransaction();
-      getDetailInvoice();
-    }
-  }, [idTransaksi]);
   return (
     <Modal
-      size="lg"
+      size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       {...props}
     >
       <Modal.Body>
-        <h3 className="px-5">Detail Transaksi</h3>
+        <h3 className="px-lg-5 px-2">Detail Transaksi</h3>
         <hr />
-        <div className="mt-3 px-5">
-          <div className="d-flex justify-content-between">
-            <h6>No.Invoice</h6>
-            <h6>{status !== "Selesai" ? "-" : "KALJN90"}</h6>
+        <div className="mt-3 px-lg-5 d-flex flex-column row-gap-2 px-2">
+          <div className="d-flex flex-column flex-md-row justify-content-between">
+            <h6>No.Booking</h6>
+            <h6>#{dataBooking?.data?._id}</h6>
           </div>
-          <div className="d-flex justify-content-between">
-            <h6>No.Transaksi</h6>
-            <h6>{detailTransaction.kode_pemesanan}</h6>
-          </div>
-          <div className="d-flex justify-content-between">
+          <div className="d-flex flex-column flex-md-row justify-content-between">
             <h6>Tanggal Booking</h6>
-            <h6>{TanggalBooking} WIB</h6>
+            <h6>
+              {formatDate({ date: dataBooking?.data?.createdAt || "" })} WIB
+            </h6>
           </div>
-        </div>
-        <hr style={{ border: "1px dashed" }} />
-        <h3 className="px-5">Detail Booking</h3>
-        <div className="mt-3 px-5">
-          <div className="row align-items-center">
-            <div className="col-6 d-flex column-gap-3">
-              <img
-                src="https://media.istockphoto.com/id/1215430465/id/foto/perbaikan-ac-oleh-teknisi.jpg?s=612x612&w=0&k=20&c=bqgxv3mqZbLTuKhzIBCU1bOtWO-FuY3gmokmkStrUVk="
-                alt=""
-                className="rounded-3"
-                width={"80px"}
+          <div className="d-flex justify-content-between">
+            <h6>Status Booking</h6>
+            <div>
+              <StatusTransaksi
+                textStatus={dataBooking?.data?.status.toUpperCase() || ""}
+                className="w-auto d-inline-block"
               />
-              <div>
-                <b>{detailTransaction.nama_servis}</b>
-                <h6>{detailTransaction.nama_kategori}</h6>
-              </div>
             </div>
-            <div className="col-6">
-              <div className="d-flex align-items-end flex-column">
-                <h6>Total Harga</h6>
-                <h6>{totalTagihan ? `Rp${totalTagihan}` : "-"}</h6>
-              </div>
-            </div>
-          </div>
-          <div className="mt-3">
-            <table>
-              <thead>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary">
-                    Nama Customer
-                  </td>
-                  <td className="pe-3">:</td>
-                  <td className="fw-bold">{detailTransaction.nama_customer}</td>
-                </tr>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary">Alamat</td>
-                  <td className="pe-3">:</td>
-                  <td className="fw-bold">{detailTransaction.label_alamat}</td>
-                </tr>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary"></td>
-                  <td className="pe-3"></td>
-                  <td className="fw-normal">{detailTransaction.no_telp}</td>
-                </tr>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary"></td>
-                  <td className="pe-3"></td>
-                  <td className="fw-normal">{detailTransaction.nama_jalan}</td>
-                </tr>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary"></td>
-                  <td className="pe-3"></td>
-                  <td className="fw-normal">{detailTransaction.deskripsi}</td>
-                </tr>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary"></td>
-                  <td className="pe-3"></td>
-                  <td className="fw-normal">
-                    {detailTransaction.kabupaten}, {detailTransaction.kecamatan}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="pe-3 fw-semibold text-secondary"></td>
-                  <td className="pe-3"></td>
-                  <td className="fw-normal">{detailTransaction.provinsi}</td>
-                </tr>
-              </thead>
-            </table>
           </div>
         </div>
         <hr style={{ border: "1px dashed" }} />
-        <h3 className="px-5">Rincian Pembayaran</h3>
-        <div className="mt-3 d-flex px-5 justify-content-between">
-          <h6>Total Harga</h6>
-          <h6>{totalTagihan ? `Rp${totalTagihan}` : "-"}</h6>
+        {/* detail booking */}
+        <div>
+          <h3 className="px-lg-5 px-2">Detail Booking</h3>
+          <div className="mt-3 px-lg-5 px-2">
+            <div className="row align-items-center">
+              <div className="col-lg-8 col-12 d-flex flex-lg-row flex-column column-gap-3">
+                <img
+                  src="https://media.istockphoto.com/id/1215430465/id/foto/perbaikan-ac-oleh-teknisi.jpg?s=612x612&w=0&k=20&c=bqgxv3mqZbLTuKhzIBCU1bOtWO-FuY3gmokmkStrUVk="
+                  alt=""
+                  className="rounded-3 d-none d-lg-inline-block"
+                  width={"120px"}
+                />
+                <img
+                  src="https://media.istockphoto.com/id/1215430465/id/foto/perbaikan-ac-oleh-teknisi.jpg?s=612x612&w=0&k=20&c=bqgxv3mqZbLTuKhzIBCU1bOtWO-FuY3gmokmkStrUVk="
+                  alt=""
+                  className="rounded-3 d-inline-block d-lg-none w-100"
+                />
+                <div>
+                  <span
+                    className="text-secondary fw-bold"
+                    style={{ fontSize: "13px" }}
+                  >
+                    {dataBooking?.data?.partner_id.name}
+                  </span>
+                  <h5>{dataBooking?.data?.service_id.name}</h5>
+                  <span
+                    className="text-secondary fw-bold"
+                    style={{ fontSize: "13px" }}
+                  >
+                    {dataBooking?.data?.service_id.category_id.name}
+                  </span>
+                </div>
+              </div>
+              <div className="col-lg-4 col-12 d-none d-lg-grid">
+                <div className="d-flex mb-3 align-items-end flex-column">
+                  <h6>Total Harga</h6>
+                  <h6>
+                    {
+                      <NumericFormat
+                        value={dataBooking?.data?.total_price || 0}
+                        displayType="text"
+                        prefix="Rp "
+                        thousandSeparator={"."}
+                        decimalSeparator=","
+                      />
+                    }
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3">
+              <table>
+                <thead>
+                  <tr>
+                    <td className="pe-3 fw-semibold text-secondary">
+                      Nama Customer
+                    </td>
+                    <td className="pe-3">:</td>
+                    <td className="fw-bold">
+                      {dataBooking?.data?.user_id.name}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="pe-3 fw-semibold text-secondary">Alamat</td>
+                    <td className="pe-3">:</td>
+                    <td className="fw-bold">
+                      {dataBooking?.data?.address_id.street_name}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="pe-3 fw-semibold text-secondary">No Telp</td>
+                    <td className="pe-3">:</td>
+                    <td className="fw-bold">
+                      {dataBooking?.data?.user_id.phone}
+                    </td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
         </div>
-        <div className="my-3 px-5">
-          <ActionButton
-            text={"Beri Ulasan"}
-            onClick={handleNavigate}
-            disabledClass={status === "Selesai" ? "" : "disabled"}
-            disabled={status === "Selesai" ? false : true}
-          />
+        <hr style={{ border: "1px dashed" }} />
+        {/* rincian pembayaran */}
+        <div>
+          <h3 className="px-lg-5 px-2">Rincian Pembayaran</h3>
+          <div className="mt-3 d-flex px-lg-5 px-2 justify-content-between">
+            <h6>Status Pembayaran</h6>
+            <h6>
+              {
+                <StatusPembayaran
+                  textStatus={dataBooking?.data?.payment_status.toUpperCase()}
+                />
+              }
+            </h6>
+          </div>
+          <div className="mt-3 d-flex px-lg-5 px-2 justify-content-between">
+            <h6>Sub Total</h6>
+            <h6>
+              {
+                <NumericFormat
+                  value={dataBooking?.data?.sub_total || 0}
+                  displayType="text"
+                  prefix="Rp "
+                  thousandSeparator={"."}
+                  decimalSeparator=","
+                />
+              }
+            </h6>
+          </div>
+          <div className="mt-3 d-flex px-lg-5 px-2 justify-content-between">
+            <h6>Biaya Aplikasi</h6>
+            <h6>
+              {
+                <NumericFormat
+                  value={dataBooking?.data?.app_cost || 0}
+                  displayType="text"
+                  prefix="Rp "
+                  thousandSeparator={"."}
+                  decimalSeparator=","
+                />
+              }
+            </h6>
+          </div>
+          <div className="mt-3 d-flex px-lg-5 px-2 justify-content-between">
+            <h6>Jenis Pembayaran</h6>
+            <h6>
+              {formatPaymentType({
+                type: dataBooking?.data?.payment_method_id.type || "-",
+              })}
+            </h6>
+          </div>
+          <div className="mt-3 d-flex px-lg-5 px-2 justify-content-between">
+            <h6>Nama Bank</h6>
+            <h6>{dataBooking?.data?.payment_method_id.name || "-"}</h6>
+          </div>
+          <div className="mt-3 d-flex px-lg-5 px-2 justify-content-between">
+            <h5>Total Harga</h5>
+            <NumericFormat
+              value={dataBooking?.data?.total_price || 0}
+              displayType="text"
+              prefix="Rp "
+              thousandSeparator={"."}
+              decimalSeparator=","
+              className="fs-5 fw-bold"
+            />
+          </div>
+        </div>
+        <hr style={{ border: "1px dashed" }} />
+        <div className="my-4 px-lg-5 px-2 column-gap-3 d-flex justify-content-end">
+          <ActionButtonOutline text={"Tutup"} onClick={props.onHide} />
+          {dataBooking?.data?.payment_status === "unpaid" ? (
+            <ActionButton
+              text={"Bayar Sekarang"}
+              onClick={() =>
+                handleNavigate({
+                  path: `/payment?booking_id=${dataBooking?.data._id}`,
+                })
+              }
+            />
+          ) : dataBooking?.data?.status === "confirmed" &&
+            dataBooking?.data?.status !== "cancelled" ? (
+            <ActionButton
+              text={"Selesaikan"}
+              type={"button"}
+              onClick={() => handleCompleteBooking(dataBooking?.data?._id)}
+            />
+          ) : (
+            <ActionButton
+              text={"Beri Ulasan"}
+              type={"button"}
+              onClick={() => handleNavigate({ path: "/" })}
+            />
+          )}
         </div>
       </Modal.Body>
     </Modal>

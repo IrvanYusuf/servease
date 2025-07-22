@@ -1,73 +1,43 @@
-import React, { useEffect, useState } from "react";
-import SectionCategoryService from "../organisms/SectionCategoryService";
-import SectionOurPartner from "../organisms/SectionOurPartner";
-import SectionCardTutorial from "../organisms/SectionCardTutorial";
-import Banner from "../organisms/Banner";
-import SectionAboutUs from "../organisms/SectionAboutUs";
-import { apiBanner } from "../../api/apiBanner";
-import { apiCategories } from "../../api/apiCategories";
-import { apiVideos } from "../../api/apiVideos";
-import { useAuth } from "../../context/authContext";
+import SectionCategoryService from "@/components/organisms/SectionCategoryService";
+import SectionOurPartner from "@/components/organisms/SectionOurPartner";
+import SectionCardTutorial from "@/components/organisms/SectionCardTutorial";
+import Banner from "@/components/organisms/Banner";
+import SectionAboutUs from "@/components/organisms/SectionAboutUs";
+import { useQuery } from "@tanstack/react-query";
+import CategoriesService from "@/services/category.service";
+import BannersService from "@/services/banner.service";
+import VideosServices from "@/services/video.service";
 const LandingPage = () => {
-  const [banners, setBanners] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [videos, setVideos] = useState([]);
+  // banners
+  const { data: bannersData, isLoading: isLoadingBanners } = useQuery({
+    queryKey: ["banners"],
+    queryFn: BannersService.getAllBanners,
+  });
 
-  const getAllBanners = async () => {
-    try {
-      const response = await fetch(apiBanner, {
-        method: "GET",
-      });
-      const dataBanners = await response.json();
-      if (response.status === 200) {
-        setBanners(dataBanners.data);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  // categories
+  const { data: categoriesData, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: CategoriesService.getAllCategories,
+  });
 
-  const getAllCategory = async () => {
-    try {
-      const response = await fetch(apiCategories, {
-        method: "GET",
-      });
-      const dataCategories = await response.json();
-      if (response.status === 200) {
-        setCategory(dataCategories.data);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const getAllVideos = async () => {
-    try {
-      const response = await fetch(apiVideos, {
-        method: "GET",
-      });
-      const dataAllVideos = await response.json();
-      if (response.status === 200) {
-        setVideos(dataAllVideos.data);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  useEffect(() => {
-    getAllBanners();
-    getAllCategory();
-    getAllVideos();
-  }, []);
-
+  // videos
+  const { data: videosData, isLoading: isLoadingVideos } = useQuery({
+    queryKey: ["videos"],
+    queryFn: VideosServices.getAllVideos,
+  });
   return (
     <div className="container">
-      <Banner dataBanners={banners} />
-      <SectionCategoryService dataCategories={category} />
+      <Banner dataBanners={bannersData} isLoading={isLoadingBanners} />
+      <SectionCategoryService
+        dataCategories={categoriesData}
+        isLoading={isLoading}
+      />
       {/* <SectionCardAtractiveOffering /> */}
       <SectionOurPartner />
-      <SectionCardTutorial videosData={videos} />
+      <SectionCardTutorial
+        videosData={videosData}
+        isLoading={isLoadingVideos}
+      />
       <SectionAboutUs />
     </div>
   );

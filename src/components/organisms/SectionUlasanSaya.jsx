@@ -5,6 +5,7 @@ import { useAuth } from "../../context/authContext";
 import { jwtDecode } from "jwt-decode";
 import { apiRating } from "../../api/apiRating";
 import { subDays, formatDistance } from "date-fns";
+import NotFoundSection from "./NotFoundSection";
 
 const SectionUlasanSaya = () => {
   const { token } = useAuth();
@@ -56,14 +57,8 @@ const SectionUlasanSaya = () => {
           />
         ))
       ) : (
-        <div
-          className="w-100 d-flex justify-content-center"
-          style={{ marginTop: "30px" }}
-        >
-          <div className="d-flex flex-column align-items-center row-gap-3">
-            <img src={iconRiwayatPemesananNotFound} alt="" />
-            <h5>Kamu belum pernah melakukan pesanan</h5>
-          </div>
+        <div className="mt-5">
+          <NotFoundSection />
         </div>
       )}
     </div>

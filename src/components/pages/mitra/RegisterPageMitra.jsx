@@ -19,7 +19,7 @@ const RegisterPageMitra = () => {
             <h2 className="fw-bold" style={{ color: "#1B1C4A" }}>
               Register
             </h2>
-            <FormRegister />
+            <FormRegister registerAs="PARTNER" />
             <p className="fw-semibold mt-3" style={{ color: "#949494" }}>
               Sudah Punya Akun Mitra?
               <RegistrationLink

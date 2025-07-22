@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import profileImg from "../../assets/icon/profile.png";
+import profileImg from "@/assets/icon/profile.png";
 import ActionButton from "../atoms/ActionButton";
 import ActionButtonOutline from "../atoms/ActionButtonOutline";
-import { apiUser } from "../../api/apiUser";
-import { useAuth } from "../../context/authContext";
+import { apiUser } from "@/api/apiUser";
+import { useAuth } from "@/context/authContext";
 import { jwtDecode } from "jwt-decode";
-import { swal } from "../../utils/sweetAlert";
+import { swal } from "@/utils/sweetAlert";
 
 const ModalUpdateFoto = (props) => {
   const [file, setFile] = useState(null);
@@ -67,6 +67,8 @@ const ModalUpdateFoto = (props) => {
                   src={fileUrl === null ? profileImg : fileUrl}
                   alt=""
                   width={"180px"}
+                  height={"180px"}
+                  className="rounded-pill object-fit-cover"
                 />
               </div>
               <div className="mt-3">
@@ -86,6 +88,7 @@ const ModalUpdateFoto = (props) => {
                     text={"Cancel"}
                     onClick={handleClose}
                     type={"button"}
+                    className="h-100"
                   />
                 </div>
                 <div>

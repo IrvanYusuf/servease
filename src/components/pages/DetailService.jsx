@@ -1,96 +1,66 @@
 import Carousel from "nuka-carousel";
-import React, { useEffect, useState } from "react";
-import "../../styles/pages/detailService.css";
+import { useState } from "react";
+import "@/styles/pages/detailService.css";
 import SectionCardUlasan from "../organisms/SectionCardUlasan";
-import { useParams } from "react-router";
-import { FaStar } from "react-icons/fa6";
+import { useNavigate, useParams } from "react-router";
 import { FiMapPin } from "react-icons/fi";
-import { limitAddress } from "../../utils/text";
 import ActionButton from "../atoms/ActionButton";
-import ButtonLinkOutline from "../atoms/ButtonLinkOutline";
 import ModalAlbumImg from "../molecules/ModalAlbumImg";
-import ModalFormBooking from "../organisms/ModalFormBooking";
-import { apiMitra } from "../../api/apiMitra";
-import { useAuth } from "../../context/authContext";
-import { apiAddress } from "../../api/apiAddress";
+import { useQuery } from "@tanstack/react-query";
+import ServicesServices from "@/services/service.service";
+import ActionButtonOutline from "../atoms/ActionButtonOutline";
+import { Link } from "react-router-dom";
 
 const DetailService = (props) => {
   const { idMitra } = useParams();
-  const [service, setServices] = useState([]);
-  const [album, setAlbum] = useState([]);
-  const [address, setAddress] = useState([]);
-  const [show, setShow] = useState(false);
   const [showAlbumImg, setShowAlbumImg] = useState(false);
   const [selectedAlbumUrl, setSelectedAlbumUrl] = useState("");
-  const { token } = useAuth();
-  console.log(props.idCategory);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  const navigate = useNavigate();
   const handleCloseAlbumImg = () => setShowAlbumImg(false);
   const handleShowAlbumImg = (imgUrl) => {
     setSelectedAlbumUrl(imgUrl);
     setShowAlbumImg(true);
   };
-  const getServiceDetail = async () => {
-    try {
-      const response = await fetch(
-        `${apiMitra}/profil/detail/${parseInt(idMitra)}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: token,
-          },
-        }
-      );
-      const { data } = await response.json();
-      const [result] = data;
-      setServices(result);
-      console.log(result);
 
-      setAlbum(data);
-    } catch (error) {
-      console.log(error.message);
-    }
+  const handleNavigateBooking = () => {
+    localStorage.setItem("idMitra", idMitra);
+    navigate("/booking");
   };
 
-  useEffect(() => {
-    getServiceDetail();
-  }, [idMitra]);
+  const { data: service, isLoading } = useQuery({
+    queryKey: ["detail-service", idMitra],
+    queryFn: () => ServicesServices.getServiceDetail(idMitra),
+  });
 
-  console.log(album);
+  if (isLoading) {
+    return "loading....";
+  }
 
   const BookingContainer = () => {
     return (
       <div className="border border mt-0 p-4 rounded-2 booking-container">
         <div>
-          <h4 className="fw-bold">{service.nama_servis}</h4>
+          <h4 className="fw-bold">{service.data.name}</h4>
           <div className="d-flex align-items-center column-gap-2">
             {/* <FaStar className="text-warning" /> {service.rating_star} */}
           </div>
           <div className="d-flex align-items-center column-gap-2">
-            <FiMapPin />{" "}
-            {service && `${service.kecamatan}, ${service.kabupaten}`}
+            <FiMapPin /> Jl. {service.data.partner_id.district}{" "}
+            {service.data.partner_id.city}, {service.data.partner_id.province}
           </div>
         </div>
         <div className="mt-5 d-flex flex-column row-gap-3">
-          <ButtonLinkOutline
-            text={"Hubungi Teknisi"}
-            path={`https://wa.me/${service.no_telp}`}
+          <Link
+            to={`https://wa.me/${service.data.user_id.phone}`}
             target={"_blank"}
-          />
+            style={{ textDecoration: "none" }}
+          >
+            <ActionButtonOutline text={"Hubungi Teknisi"} className="w-100" />
+          </Link>
           <ActionButton
             text={"Ajukan Pemesanan"}
-            type={"button"}
-            onClick={handleShow}
-          />
-          <ModalFormBooking
-            show={show}
-            onHide={handleClose}
-            idMitra={service.id_mitra}
-            idCategory={service.id_kategori}
+            className="w-100"
+            onClick={handleNavigateBooking}
           />
         </div>
       </div>
@@ -103,8 +73,8 @@ const DetailService = (props) => {
         <div className="col-md-12 col-lg-7">
           <div className="detail-service-img-thumbnail-container">
             <img
-              src={`https://backend-servease.vercel.app/images/${service.image}`}
-              className="h-100 w-100 rounded-2"
+              src={service.data.thumbnail}
+              className="h-100 w-100 rounded-2 object-fit-cover"
               alt=""
             />
           </div>
@@ -116,14 +86,14 @@ const DetailService = (props) => {
               renderCenterRightControls={false}
               renderBottomCenterControls={false}
             >
-              {album &&
-                album.map((img, i) => (
+              {service.data &&
+                service.data.gallery_images.map((img, i) => (
                   <div key={i} className="detail-service-img-album">
                     <img
-                      src={`https://backend-servease.vercel.app/images/gallery/${img.galeri_img}`}
+                      src={img}
                       alt=""
-                      className="w-100 rounded-2 h-100"
-                      onClick={() => handleShowAlbumImg(img.galeri_img)}
+                      className="w-100 rounded-2 h-100 object-fit-cover"
+                      onClick={() => handleShowAlbumImg(img)}
                     />
                   </div>
                 ))}
@@ -134,17 +104,19 @@ const DetailService = (props) => {
               albumUrl={selectedAlbumUrl}
             />
           </div>
-          <div className="deskripsi-container">
+          <div className="deskripsi-container mt-4">
             <h2>Deskripsi</h2>
-            <div className="border rounded-1 p-2 deskripsi-inner-container">
-              <p>{service.deskripsi}</p>
+            <div className="border rounded-1 p-2">
+              <p
+                dangerouslySetInnerHTML={{ __html: service.data.description }}
+              />
             </div>
           </div>
-          <div className="ulasan-container">
+          <div className="mt-4">
             <SectionCardUlasan idMitra={idMitra} />
           </div>
         </div>
-        <div className="col-md-12 col-lg-5">
+        <div className="col-md-12 mt-4 mt-lg-0 col-lg-5">
           <BookingContainer />
         </div>
       </div>
