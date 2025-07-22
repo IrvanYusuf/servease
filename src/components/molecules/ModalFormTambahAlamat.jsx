@@ -1,60 +1,51 @@
 import { Modal } from "react-bootstrap";
-import ActionButtonOutline from "../atoms/ActionButtonOutline";
-import ActionButton from "../atoms/ActionButton";
-import LabelInput from "../atoms/LabelInput";
-import { useState } from "react";
-import { apiAddress } from "../../api/apiAddress";
-import { useAuth } from "../../context/authContext";
-import { jwtDecode } from "jwt-decode";
-import { swal } from "../../utils/sweetAlert";
+import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
+import ActionButton from "@/components/atoms/ActionButton";
+import LabelInput from "@/components/atoms/LabelInput";
+import { swal } from "@/utils/sweetAlert";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createAddressSchema } from "@/schema/address.schema";
+import { useMutation } from "@tanstack/react-query";
+import AddressesService from "@/services/address.service";
+import queryClient from "@/utils/queryClient";
 
 const ModalFormTambahAlamat = (props) => {
-  const { token } = useAuth();
-  const { getAllAddress } = props;
-  const decoded = token ? jwtDecode(token) : null;
-  const [labelAlamat, setLabelAlamat] = useState("");
-  const [noTelp, setNoTelp] = useState("");
-  const [namaJalan, setNamaJalan] = useState("");
-  const [provinsi, setProvinsi] = useState("");
-  const [kabupaten, setKabupaten] = useState("");
-  const [kecamatan, setKecamatan] = useState("");
-  const [deskripsi, setDeskripsi] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createAddressSchema),
+  });
 
-  const handleTambahAlamat = async (e) => {
-    e.preventDefault();
-    const newAddress = {
-      id_user: decoded.id,
-      label_alamat: labelAlamat,
-      no_telp: noTelp,
-      nama_jalan: namaJalan,
-      provinsi: provinsi,
-      kabupaten: kabupaten,
-      kecamatan: kecamatan,
-      deskripsi: deskripsi,
-    };
-    const response = await fetch(apiAddress, {
-      headers: {
-        authorization: token,
-        "Content-type": "application/json",
-        credentials: true,
-      },
-      method: "POST",
-      body: JSON.stringify(newAddress),
-    });
-    const data = await response.json();
-    if (data.data.affectedRows > 0) {
-      getAllAddress();
+  const { mutate, isPending } = useMutation({
+    mutationFn: AddressesService.mutationCreateAddress,
+    onSuccess: (res) => {
       swal({
         title: "Success",
-        text: "Data Berhasil Ditambahkan",
+        text: res.message,
         icon: "success",
-        iconColor: "#EF3D01",
         confirmButtonText: "Tutup",
       });
-    }
-  };
+      queryClient.invalidateQueries(["addresses"]);
+      reset();
+    },
+    onError: (error) => {
+      console.log(error);
+      swal({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Tutup",
+      });
+    },
+  });
 
-  
+  const handleTambahAlamat = async (data) => {
+    mutate(data);
+  };
 
   return (
     <Modal
@@ -64,32 +55,38 @@ const ModalFormTambahAlamat = (props) => {
       {...props}
     >
       <Modal.Body>
-        <form onSubmit={handleTambahAlamat} noValidate>
+        <form onSubmit={handleSubmit(handleTambahAlamat)} noValidate>
           <div className="col mb-3">
             <LabelInput labelText={"Label Alamat"} />
             <span className="text-danger"> *</span>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${
+                errors.label_alamat ? "is-invalid" : ""
+              }`}
               name="label_alamat"
               placeholder="Mis. Rumah / Kantor"
-              value={labelAlamat}
-              onChange={(e) => setLabelAlamat(e.target.value)}
-              required
+              {...register("label_alamat")}
             />
+            {errors.label_alamat && (
+              <div className="invalid-feedback">
+                {errors.label_alamat.message}
+              </div>
+            )}
           </div>
           <div className="col mb-3">
             <LabelInput labelText={"No Hp"} />
             <span className="text-danger"> *</span>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${errors.phone ? "is-invalid" : ""}`}
               name="no_telp"
               placeholder="Masukkan Nomor Telepon...."
-              value={noTelp}
-              onChange={(e) => setNoTelp(e.target.value)}
-              required
+              {...register("phone")}
             />
+            {errors.phone && (
+              <div className="invalid-feedback">{errors.phone.message}</div>
+            )}
           </div>
           <div className="col mb-3">
             <LabelInput labelText={"Provinsi"} />
@@ -97,12 +94,13 @@ const ModalFormTambahAlamat = (props) => {
             <input
               type="text"
               name="provinsi"
-              className="form-control"
+              className={`form-control ${errors.province ? "is-invalid" : ""}`}
               placeholder="Masukkan Provinsi...."
-              value={provinsi}
-              onChange={(e) => setProvinsi(e.target.value)}
-              required
+              {...register("province")}
             />
+            {errors.province && (
+              <div className="invalid-feedback">{errors.province.message}</div>
+            )}
           </div>
           <div className="col mb-3">
             <LabelInput labelText={"Kabupaten/Kota"} />
@@ -110,12 +108,13 @@ const ModalFormTambahAlamat = (props) => {
             <input
               type="text"
               name="kabupaten"
-              className="form-control"
+              className={`form-control ${errors.city ? "is-invalid" : ""}`}
               placeholder="Masukkan Kabupaten atau Kota...."
-              value={kabupaten}
-              onChange={(e) => setKabupaten(e.target.value)}
-              required
+              {...register("city")}
             />
+            {errors.city && (
+              <div className="invalid-feedback">{errors.city.message}</div>
+            )}
           </div>
           <div className="col mb-3">
             <LabelInput labelText={"Kecamatan"} />
@@ -123,12 +122,13 @@ const ModalFormTambahAlamat = (props) => {
             <input
               type="text"
               name="kecamatan"
-              className="form-control"
+              className={`form-control ${errors.district ? "is-invalid" : ""}`}
               placeholder="Masukkan Kecamatan...."
-              value={kecamatan}
-              onChange={(e) => setKecamatan(e.target.value)}
-              required
+              {...register("district")}
             />
+            {errors.district && (
+              <div className="invalid-feedback">{errors.district.message}</div>
+            )}
           </div>
           <div className="col mb-3">
             <LabelInput labelText={"Nama Jalan"} />
@@ -136,12 +136,17 @@ const ModalFormTambahAlamat = (props) => {
             <input
               type="text"
               name="nama_jalan"
-              className="form-control"
+              className={`form-control ${
+                errors.street_name ? "is-invalid" : ""
+              }`}
               placeholder="Masukkan Nama Jalan...."
-              value={namaJalan}
-              onChange={(e) => setNamaJalan(e.target.value)}
-              required
+              {...register("street_name")}
             />
+            {errors.street_name && (
+              <div className="invalid-feedback">
+                {errors.street_name.message}
+              </div>
+            )}
           </div>
           <div className="col">
             <LabelInput labelText={"Deskripsi"} />
@@ -150,10 +155,16 @@ const ModalFormTambahAlamat = (props) => {
               id=""
               cols="30"
               rows="6"
-              className="form-control"
-              value={deskripsi}
-              onChange={(e) => setDeskripsi(e.target.value)}
+              className={`form-control ${
+                errors.description ? "is-invalid" : ""
+              }`}
+              {...register("description")}
             ></textarea>
+            {errors.description && (
+              <div className="invalid-feedback">
+                {errors.description.message}
+              </div>
+            )}
           </div>
           <div className="d-flex justify-content-end column-gap-3 mt-4">
             <div>
@@ -161,19 +172,20 @@ const ModalFormTambahAlamat = (props) => {
                 onClick={props.onHide}
                 type={"button"}
                 text={"Batal"}
+                className="h-100"
+                disabled={isPending}
               />
             </div>
             <div>
               <ActionButton
                 text={"Simpan"}
                 type={"submit"}
-                onClick={handleTambahAlamat}
+                disabled={isPending}
               />
             </div>
           </div>
         </form>
       </Modal.Body>
-      <Modal.Footer className="border-0"></Modal.Footer>
     </Modal>
   );
 };
