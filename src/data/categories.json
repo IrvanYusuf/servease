@@ -1,39 +1,39 @@
 {
-    "categories":[
-        {
-            "id":1,
-            "category":"Service Ac",
-            "image":"https://iili.io/JzhnxoX.png"
-        },
-        {
-            "id":2,
-            "category":"Service Pc",
-            "image":"https://iili.io/JzhnaNS.png"
-        },
-        {
-            "id":3,
-            "category":"Service Lampu",
-            "image":"https://iili.io/JzhnWUx.png"
-        },
-        {
-            "id":4,
-            "category":"Service Mesin Cuci",
-            "image":"https://iili.io/JzhnkWF.png"
-        },
-        {
-            "id":5,
-            "category":"Service Smartphone",
-            "image":"https://iili.io/JzhnkWF.png"
-        },
-        {
-            "id":6,
-            "category":"Service Tv",
-            "image":"https://iili.io/JzhnkWF.png"
-        },
-        {
-            "id":7,
-            "category":"Renovasi Rumah",
-            "image":"https://iili.io/JzhnkWF.png"
-        }
-    ]
+  "categories": [
+    {
+      "id": 1,
+      "category": "Ac",
+      "image": "https://iili.io/JzhnxoX.png"
+    },
+    {
+      "id": 2,
+      "category": "Pc",
+      "image": "https://iili.io/JzhnaNS.png"
+    },
+    {
+      "id": 3,
+      "category": "Lampu",
+      "image": "https://iili.io/JzhnWUx.png"
+    },
+    {
+      "id": 4,
+      "category": "Mesin Cuci",
+      "image": "https://iili.io/JzhnkWF.png"
+    },
+    {
+      "id": 5,
+      "category": "Smartphone",
+      "image": "https://iili.io/JzhnkWF.png"
+    },
+    {
+      "id": 6,
+      "category": "Tv",
+      "image": "https://iili.io/JzhnkWF.png"
+    },
+    {
+      "id": 7,
+      "category": "Renovasi Rumah",
+      "image": "https://iili.io/JzhnkWF.png"
+    }
+  ]
 }

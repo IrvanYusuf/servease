@@ -1,9 +1,23 @@
-import { createContext, useContext, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export const AuthContext = createContext();
+/**
+ * @typedef {Object} AuthContextType
+ * @property {string|null} token
+ * @property {function(string): void} setAuthToken
+ * @property {string|null} idMitra
+ * @property {function(string): void} setAuthIdMitra
+ * @property {any|null} decodedToken
+ * @property {function(): void} logOut
+ */
+
+/** @type {import('react').Context<AuthContextType|null>} */
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || undefined
+  );
   const [idMitra, setIdMitra] = useState(() => localStorage.getItem("idMitra"));
 
   const setAuthToken = (newToken) => {
@@ -16,9 +30,24 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("idMitra", newIdMitra);
   };
 
+  const logOut = () => {
+    setToken(null);
+    localStorage.removeItem("token");
+  };
+
+  const isValidToken = token && token.split(".").length === 3;
+  const decodedToken = isValidToken ? jwtDecode(token) : null;
+
   return (
     <AuthContext.Provider
-      value={{ token, setAuthToken, idMitra, setAuthIdMitra }}
+      value={{
+        token,
+        setAuthToken,
+        idMitra,
+        setAuthIdMitra,
+        decodedToken,
+        logOut,
+      }}
     >
       {children}
     </AuthContext.Provider>
