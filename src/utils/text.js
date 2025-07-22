@@ -13,9 +13,17 @@ export const hidePhoneNumber = (phoneNumber) => {
   );
 };
 
+export const truncateText = ({ length = 30, text = "" }) => {
+  return text.length > length ? `${text.slice(0, length)}....` : text;
+};
+
 export const hideEmail = (email) => {
   const [username, domain] = email.split("@");
   const maskedUsername =
     username.substring(0, 2) + "*".repeat(username.length - 2);
   return `${maskedUsername}@${domain}`;
 };
+
+export function copyToClipboard(payload) {
+  return navigator.clipboard.writeText(payload);
+}
