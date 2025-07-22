@@ -1,17 +1,32 @@
 .btn-main-outline {
-  width: 100%;
-  color: #ef3d01;
   padding: 8px 16px;
-  border: 1px solid #ef3d01;
   border-radius: 10px;
   font-weight: bold;
   background-color: white;
   opacity: 70%;
   text-decoration: none;
   text-align: center;
+  display: inline-block;
+  min-width: 120px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-main-outline-orange {
+  color: #ef3d01;
+  border: 1px solid #ef3d01;
+}
+
+.btn-main-outlie-navy {
+  color: #1b1c4a;
+  border: 1px solid #1b1c4a;
+}
+
+.btn-main-outline-green {
+  color: #28a745;
+  border: 1px solid #28a745;
 }
 
 .btn-main-outline:hover {
   opacity: 100%;
 }
-
