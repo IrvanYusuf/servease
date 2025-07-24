@@ -1,21 +1,23 @@
 const StatusTransaksi = ({ textStatus, className }) => {
+  const status = textStatus.toLowerCase();
+
   const color =
-    textStatus.toLowerCase() === "pending"
-      ? "#EF3D01"
-      : textStatus.toLowerCase() === "confirmed"
+    status === "pending"
+      ? "#6c757d"
+      : status === "confirmed"
       ? "#4f50e9"
-      : textStatus.toLowerCase() === "completed"
+      : status === "completed"
       ? "#508D69"
-      : "#B31312";
+      : "#B31312"; // contoh warna ungu untuk cancelled
 
   const backgroundColor =
-    textStatus.toLowerCase() === "pending"
-      ? "rgba(239,61,1,0.2)"
-      : textStatus.toLowerCase() === "confirmed"
+    status === "pending"
+      ? "rgba(108,117,125,0.2)"
+      : status === "confirmed"
       ? "rgba(79, 80, 233, 0.23)"
-      : textStatus.toLowerCase() === "completed"
+      : status === "completed"
       ? "rgba(80, 141, 105, 0.23)"
-      : "rgba(179,19,18,0.23";
+      : "rgba(179,19,18,0.23)";
 
   return (
     <div
@@ -23,7 +25,7 @@ const StatusTransaksi = ({ textStatus, className }) => {
       style={{
         backgroundColor,
         color,
-        padding: "2px 6px",
+        padding: "6px 20px",
         fontSize: "12px",
       }}
     >
