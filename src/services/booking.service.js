@@ -5,11 +5,22 @@ const mutationCreateBooking = async (payload) => {
   return response.data;
 };
 
-const getAllBookings = async (status = "") => {
-  const params = {};
+const getAllBookings = async ({
+  status = "",
+  review_status,
+  page = 1,
+  limit = 6,
+}) => {
+  const params = { page, limit };
+
   if (status && status.trim() !== "" && status !== "all") {
     params.status = status;
   }
+
+  if (review_status && review_status.trim() !== "" && review_status !== "all") {
+    params.review_status = review_status;
+  }
+
   const response = await axiosInstance.get(ENDPOINTS.bookings.root, { params });
   return response.data;
 };

@@ -31,11 +31,20 @@ const getServiceDetail = async (serviceId) => {
   return response.data;
 };
 
+const getServiceReviews = async (serviceId) => {
+  const response = await axiosInstance.get(
+    `${ENDPOINTS.services.reviews(serviceId)}`
+  );
+
+  return response.data;
+};
+
 const ServicesServices = {
   mutationCreateService,
   getAllServices,
   getAllServicesByCategory,
   getServiceDetail,
+  getServiceReviews,
 };
 
 export default ServicesServices;
