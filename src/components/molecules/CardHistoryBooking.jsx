@@ -1,14 +1,10 @@
 import { useState } from "react";
 import ModalBookingDetail from "./ModalBookingDetail";
-import ButtonLink from "../atoms/ButtonLink";
 import { Link } from "react-router-dom";
-import StatusTransaksi from "../atoms/StatusTransaksi";
-import { truncateText } from "../../utils/text";
-import { apiTransaction } from "../../api/apiTransaction";
-import { useAuth } from "../../context/authContext";
-import { swal } from "../../utils/sweetAlert";
-import ActionButton from "../atoms/ActionButton";
-import ActionButtonOutline from "../atoms/ActionButtonOutline";
+import StatusTransaksi from "@/components/atoms/StatusTransaksi";
+import { truncateText } from "@/utils/text";
+import ActionButton from "@/components/atoms/ActionButton";
+import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
 
 const CardHistoryBooking = ({
   textStatus,
@@ -18,7 +14,6 @@ const CardHistoryBooking = ({
   idTransaksi,
 }) => {
   const [showModalBookingDetail, setShowModalBookingDetail] = useState(false);
-  const { token } = useAuth();
 
   function handleShowModalBookingDetail() {
     setShowModalBookingDetail(true);
@@ -27,30 +22,6 @@ const CardHistoryBooking = ({
     setShowModalBookingDetail(false);
   }
 
-  const handleCancelTransaction = async () => {
-    try {
-      const response = await fetch(`${apiTransaction}/cancel/${idTransaksi}`, {
-        method: "PATCH",
-        headers: {
-          authorization: token,
-        },
-      });
-      const { data } = await response.json();
-      console.log(data);
-      if (data.affectedRows > 0) {
-        swal({
-          title: "Success",
-          text: "Berhasil Membatalkan Pesanan",
-          icon: "success",
-          iconColor: "#EF3D01",
-          confirmButtonText: "Tutup",
-          //   timer: 1000,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <div className="border w-100 p-3 rounded-3 shadow-sm mb-4">
       <div className="row">
@@ -69,7 +40,7 @@ const CardHistoryBooking = ({
                   {kodePemesanan &&
                     truncateText({ length: 15, text: kodePemesanan })}
                 </b>
-                <StatusTransaksi textStatus={textStatus} />
+                <StatusTransaksi textStatus={textStatus.toUpperCase()} />
               </div>
             </div>
             <div className="d-flex gap-3 mt-3">
@@ -109,10 +80,7 @@ const CardHistoryBooking = ({
                 </Link>
               </div>
               {textStatus === "Berlangsung" && (
-                <button
-                  className="btn border-secondary rounded-3"
-                  onClick={handleCancelTransaction}
-                >
+                <button className="btn border-secondary rounded-3">
                   Batalkan
                 </button>
               )}

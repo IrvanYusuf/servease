@@ -1,10 +1,5 @@
-import React, { useState } from "react";
-import ActionButton from "../atoms/ActionButton";
-import { Link } from "react-router-dom";
-import ModalMenungguUlasan from "./ModalMenungguUlasan";
-import { FaStar } from "react-icons/fa6";
-import { limitOrderNumber } from "../../utils/text";
-import StarRating from "../atoms/StarRating";
+import { truncateText } from "@/utils/text";
+import StarRating from "@/components/atoms/StarRating";
 
 const CardUlasanSaya = ({
   kodePemesanan,
@@ -15,30 +10,28 @@ const CardUlasanSaya = ({
   kategori,
   rate,
 }) => {
-  const [showModalUlasan, setShowModalUlasan] = useState(false);
-
-  function handleShowModalUlasan() {
-    setShowModalUlasan(true);
-  }
-  function handleCloseModalUlasan() {
-    setShowModalUlasan(false);
-  }
   return (
     <div className="border w-100 p-3 rounded-3 shadow-sm mb-4">
       <div className="row">
-        <div className="col-6">
+        <div className="col-lg-6 col-12">
           <div>
             <div className="d-flex column-gap-3">
               <span>
-                Kode Pemesanan <b>{limitOrderNumber(kodePemesanan)}</b>
+                Kode Pemesanan <b>#{truncateText({ text: kodePemesanan })}</b>
               </span>
             </div>
-            <div className="d-flex gap-3 mt-3">
+            <div className="d-flex flex-md-row flex-column gap-3 mt-3">
               <img
-                src={`http://localhost:3000/images/${image}`}
+                src={image}
                 alt=""
-                className="rounded-3"
+                className="rounded-3 d-none d-md-block"
                 width={"80px"}
+              />
+              <img
+                src={image}
+                alt=""
+                className="rounded-3 d-block d-md-none w-100 object-fit-cover"
+                height={"120px"}
               />
               <div>
                 <b>{namaServis}</b>
@@ -49,18 +42,13 @@ const CardUlasanSaya = ({
         </div>
         <hr className="mt-3" style={{ border: "1px dashed" }} />
         <div className="">
-          <div style={{ width: "80px" }}></div>
-          <div className="d-flex column-gap-1 align-items-center">
+          <div className="d-flex flex-md-row flex-column column-gap-2 align-items-md-center">
             <StarRating stars={rate} />
-            <span className="ms-1">{tanggal}</span>
+            <span className="text-secondary">{tanggal}</span>
           </div>
-          <p>{deskripsi}</p>
+          <p className="h6 mt-md-2">{deskripsi}</p>
         </div>
       </div>
-      <ModalMenungguUlasan
-        show={showModalUlasan}
-        onHide={handleCloseModalUlasan}
-      />
     </div>
   );
 };

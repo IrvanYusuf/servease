@@ -1,11 +1,9 @@
-import React from "react";
-import { FaStar, FaStarHalfStroke } from "react-icons/fa6";
-import "../../styles/molecules/cardUlasan.css";
-import StarRating from "../atoms/StarRating";
-
+import "@/styles/molecules/cardUlasan.css";
+import StarRating from "@/components/atoms/StarRating";
+import profileImg from "@/assets/icon/profile.png";
 const CardUlasan = ({ reviewText, reviewImgUser, nama = "Anonymus", star }) => {
   return (
-    <div className="w-75 border-bottom mb-5">
+    <div className="border-bottom shadow-sm p-3 rounded-3 mb-5">
       <div className="vstack gap-3">
         <div className="d-flex align-items-center column-gap-5">
           <StarRating stars={star} />
@@ -14,7 +12,7 @@ const CardUlasan = ({ reviewText, reviewImgUser, nama = "Anonymus", star }) => {
         <div className="d-flex align-items-center column-gap-3">
           <div className="img-user-review-container">
             <img
-              src={`https://backend-servease.vercel.app/images/${reviewImgUser}`}
+              src={reviewImgUser ? reviewImgUser : profileImg}
               className="w-100 h-100 rounded-circle"
               alt=""
             />
