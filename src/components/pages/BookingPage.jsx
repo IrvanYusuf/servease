@@ -71,16 +71,20 @@ const BookingPage = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: BookingsServices.mutationCreateBooking,
     onSuccess: (res) => {
-      swal({
-        title: "Success",
-        text: res.message,
-        icon: "success",
-        confirmButtonText: "Tutup",
-      });
+      console.log(res);
+
       reset();
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      // Cek apakah pembayaran tunai
+      if (selectedPayment?.name?.toLowerCase() === "tunai") {
+        swal({
+          title: "Booking Berhasil",
+          text: "Silakan membayar langsung secara tunai saat layanan selesai.",
+          icon: "success",
+          confirmButtonText: "Tutup",
+        });
+      } else {
+        navigate(`/payment?booking_id=${res.data._id}`);
+      }
     },
     onError: (error) => {
       console.log(error);
@@ -99,6 +103,7 @@ const BookingPage = () => {
       address_id: dataPrimaryAddress.data._id,
       service_id: idMitra,
       partner_id: service.data.partner_id._id,
+      owner_id: service.data.user_id._id,
       payment_method_id: selectedPaymentMethod,
       total_price: APP_FEE + service.data.price,
       bring_ladder: selectedBringLadder === "true" ? true : false,
@@ -110,6 +115,7 @@ const BookingPage = () => {
   return (
     <div className="container w-100 end-0">
       <h2>Booking Page</h2>
+      {/* <pre>{JSON.stringify(service, null, 2)}</pre> */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate

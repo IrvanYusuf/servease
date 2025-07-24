@@ -1,15 +1,17 @@
 import Carousel from "nuka-carousel";
 import { useState } from "react";
 import "@/styles/pages/detailService.css";
-import SectionCardUlasan from "../organisms/SectionCardUlasan";
+import SectionCardUlasan from "@/components/organisms/SectionCardUlasan";
 import { useNavigate, useParams } from "react-router";
 import { FiMapPin } from "react-icons/fi";
-import ActionButton from "../atoms/ActionButton";
-import ModalAlbumImg from "../molecules/ModalAlbumImg";
+import ActionButton from "@/components/atoms/ActionButton";
+import ModalAlbumImg from "@/components/molecules/ModalAlbumImg";
 import { useQuery } from "@tanstack/react-query";
 import ServicesServices from "@/services/service.service";
-import ActionButtonOutline from "../atoms/ActionButtonOutline";
+import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
 import { Link } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
+import DeskripsiService from "@/components/molecules/DeskripsiService";
 
 const DetailService = (props) => {
   const { idMitra } = useParams();
@@ -44,10 +46,18 @@ const DetailService = (props) => {
           <div className="d-flex align-items-center column-gap-2">
             {/* <FaStar className="text-warning" /> {service.rating_star} */}
           </div>
-          <div className="d-flex align-items-center column-gap-2">
+          <div className="d-flex align-items-center column-gap-2 mb-2">
             <FiMapPin /> Jl. {service.data.partner_id.district}{" "}
             {service.data.partner_id.city}, {service.data.partner_id.province}
           </div>
+          <NumericFormat
+            value={service?.data?.price}
+            displayType="text"
+            prefix="Rp "
+            thousandSeparator={"."}
+            decimalSeparator=","
+            className="text-orange fw-semibold fs-4"
+          />
         </div>
         <div className="mt-5 d-flex flex-column row-gap-3">
           <Link
@@ -106,14 +116,10 @@ const DetailService = (props) => {
           </div>
           <div className="deskripsi-container mt-4">
             <h2>Deskripsi</h2>
-            <div className="border rounded-1 p-2">
-              <p
-                dangerouslySetInnerHTML={{ __html: service.data.description }}
-              />
-            </div>
+            <DeskripsiService htmlContent={service.data.description} />
           </div>
           <div className="mt-4">
-            <SectionCardUlasan idMitra={idMitra} />
+            <SectionCardUlasan idService={idMitra} />
           </div>
         </div>
         <div className="col-md-12 mt-4 mt-lg-0 col-lg-5">

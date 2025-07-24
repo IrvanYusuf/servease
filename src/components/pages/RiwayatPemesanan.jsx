@@ -107,7 +107,7 @@ const RiwayatPemesanan = () => {
           </li>
         ))}
       </ul>
-      <div className="h-100 overflow-y-auto">
+      <div>
         <div className="tab-content px-0" id="pills-tabContent">
           {datatabContent.map((dataContent) => (
             <div

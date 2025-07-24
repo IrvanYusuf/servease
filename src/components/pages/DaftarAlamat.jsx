@@ -3,16 +3,14 @@ import ModalFormTambahAlamat from "@/components/molecules/ModalFormTambahAlamat"
 import ModalFormEditAlamat from "@/components/molecules/ModalFormEditAlamat";
 import { useAuth } from "@/context/authContext";
 import { jwtDecode } from "jwt-decode";
-import { apiAddress } from "@/api/apiAddress";
-import Swal from "sweetalert2";
 import NotFoundSection from "@/components/organisms/NotFoundSection";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import AddressesService from "@/services/address.service";
-import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
 import ActionButton from "@/components/atoms/ActionButton";
 import queryClient from "@/utils/queryClient";
 import { swal } from "@/utils/sweetAlert";
-import CardAlamat from "../molecules/CardAlamat";
+import CardAlamat from "@/components/molecules/CardAlamat";
+import SkeletonDaftarAlamat from "@/components/organisms/SkeletonDaftarAlamat";
 
 const DaftarAlamat = () => {
   const [showModalAlamat, setShowModalAlamat] = useState(false);
@@ -129,7 +127,9 @@ const DaftarAlamat = () => {
       <div className="h-100 mt-2 overflow-y-auto">
         <div className="h-100">
           {isLoading ? (
-            "loading"
+            <div className="d-flex flex-column row-gap-3">
+              <SkeletonDaftarAlamat />
+            </div>
           ) : addresses.data.length === 0 ? (
             <NotFoundSection />
           ) : (

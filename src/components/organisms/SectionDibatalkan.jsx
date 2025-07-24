@@ -1,56 +1,35 @@
-import React, { useEffect, useState } from "react";
-import CardHistoryBooking from "../molecules/CardHistoryBooking";
-import { useAuth } from "../../context/authContext";
-import { jwtDecode } from "jwt-decode";
-import { apiTransaction } from "../../api/apiTransaction";
+import CardHistoryBooking from "@/components/molecules/CardHistoryBooking";
 import NotFoundSection from "./NotFoundSection";
+import SkeletonCardBooking from "./SkeletonCardBooking";
+import { useQuery } from "@tanstack/react-query";
+import BookingsServices from "@/services/booking.service";
 const SectionDibatalkan = () => {
-  const { token } = useAuth();
-  const [allTransactionCancel, setAllTransactionCancel] = useState([]);
-  const decoded = token ? jwtDecode(token) : null;
-
-  const getAllTransaction = async () => {
-    try {
-      const response = await fetch(
-        `${apiTransaction}/${decoded.id}/dibatalkan`,
-        {
-          method: "GET",
-          headers: {
-            authorization: token,
-          },
-        }
-      );
-      const { data } = await response.json();
-      setAllTransactionCancel(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (decoded.id) {
-      getAllTransaction();
-    }
-  }, [decoded.id]);
+  const { data: dataAllConfirmBookings, isLoading } = useQuery({
+    queryKey: ["bookings-cancelled"],
+    queryFn: () => BookingsServices.getAllBookings({ status: "cancelled" }),
+  });
   return (
     <div className="h-100">
-      <div className="d-flex flex-column justify-content-center align-items-center h-100">
-        {allTransactionCancel.length === 0 ? (
+      <div className="d-flex flex-column align-items-center row-gap-3">
+        {isLoading ? (
+          <>
+            <SkeletonCardBooking length={3} />
+          </>
+        ) : dataAllConfirmBookings?.data?.data.length === 0 ? (
           <div className="mt-5">
             <NotFoundSection />
           </div>
         ) : (
-          allTransactionCancel &&
-          allTransactionCancel.map((transaction) => (
+          dataAllConfirmBookings?.data?.data &&
+          dataAllConfirmBookings?.data?.data.map((transaction) => (
             <CardHistoryBooking
-              backgroundColor={"rgba(179,19,18,0.23"}
-              color={"#B31312"}
+              key={transaction._id}
               textStatus={transaction.status}
-              kodePemesanan={transaction.kode_pemesanan}
-              namaMitra={transaction.nama_servis}
-              kategori={transaction.nama_kategori}
-              idTransaksi={transaction.id_transaksi}
-              idMitra={transaction.id_mitra}
+              kodePemesanan={transaction._id}
+              namaMitra={transaction.service_id.name}
+              kategori={transaction.service_id.category_id.name}
+              idTransaksi={transaction._id}
+              idMitra={transaction.partner_id}
             />
           ))
         )}

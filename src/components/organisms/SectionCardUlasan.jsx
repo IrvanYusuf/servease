@@ -1,41 +1,29 @@
-import React, { useState, useEffect } from "react";
-import CardUlasan from "../molecules/CardUlasan";
-import "../../styles/organisms/cardUlasan.css";
-import { apiRating } from "../../api/apiRating";
+import CardUlasan from "@/components/molecules/CardUlasan";
+import "@/styles/organisms/cardUlasan.css";
+import { useQuery } from "@tanstack/react-query";
+import ServicesServices from "@/services/service.service";
 
-const SectionCardUlasan = ({ idMitra }) => {
-  const [serviceRatings, setServiceRatings] = useState([]);
-  const [userRatings, setUserRatings] = useState([]);
-  const getServiceRatings = async () => {
-    try {
-      const response = await fetch(`${apiRating}/mitra/diulas/${idMitra}`, {
-        method: "GET",
-      });
-      const dataServiceRatings = await response.json();
-      console.log(dataServiceRatings.data);
-      setServiceRatings(dataServiceRatings.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  useEffect(() => {
-    getServiceRatings();
-  }, [idMitra]);
+const SectionCardUlasan = ({ idService }) => {
+  const { data: dataServiceReviews, isLoading } = useQuery({
+    queryKey: ["service-reviews", idService],
+    queryFn: () => ServicesServices.getServiceReviews(idService),
+  });
   return (
     <div className="ulasan-container">
       <h2>Ulasan</h2>
       <div className="card-ulasan-container">
-        {serviceRatings.length > 0 ? (
-          serviceRatings.map((dataRatingUlasan, i) => (
-            <CardUlasan
-              key={i}
-              reviewText={dataRatingUlasan.deskripsi}
-              reviewImgUser={dataRatingUlasan.img}
-              nama={dataRatingUlasan.nama}
-              star={dataRatingUlasan.rate}
-            />
-          ))
+        {isLoading ? (
+          "loading...."
+        ) : dataServiceReviews?.data && dataServiceReviews?.data ? (
+          <CardUlasan
+            key={dataServiceReviews.data._id}
+            reviewText={dataServiceReviews?.data?.comment ?? ""}
+            reviewImgUser={
+              dataServiceReviews?.data?.user_id.profile_url || null
+            }
+            nama={dataServiceReviews?.data?.user_id.name || ""}
+            star={dataServiceReviews?.data?.rating || 0}
+          />
         ) : (
           <h6>Belum Ada Review</h6>
         )}

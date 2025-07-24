@@ -3,6 +3,7 @@ import "@/styles/molecules/ServiceCard.css";
 import { FiMapPin } from "react-icons/fi";
 import { Placeholder } from "react-bootstrap";
 import NotFoundSection from "@/components/organisms/NotFoundSection";
+import { NumericFormat } from "react-number-format";
 
 function ServiceCard({ dataServices, isLoading }) {
   return (
@@ -37,14 +38,25 @@ function ServiceCard({ dataServices, isLoading }) {
                       className="w-100 h-100 bg-secondary-subtle rounded-pill object-fit-cover"
                     />
                   </div>
-                  <Link
-                    to={`/detail/${data._id}`}
-                    className="text-decoration-none"
-                  >
-                    <h5 className="text-dark title-card text-decoration-none">
-                      {data.name}
-                    </h5>
-                  </Link>
+                  <div>
+                    <Link
+                      to={`/detail/${data._id}`}
+                      className="text-decoration-none mb-0"
+                    >
+                      <h5 className="text-dark title-card mb-0 text-decoration-none">
+                        {data.name}
+                      </h5>
+                    </Link>
+                    <span className="text-orange fw-semibold">
+                      <NumericFormat
+                        value={data.price}
+                        displayType="text"
+                        prefix="Rp "
+                        thousandSeparator={"."}
+                        decimalSeparator=","
+                      />
+                    </span>
+                  </div>
                 </div>
                 <div className="d-flex align-items-center column-gap-2">
                   <FiMapPin /> Jl. {data?.partner_id?.district}{" "}

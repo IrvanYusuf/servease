@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { Nav, Tab, Tabs } from "react-bootstrap";
-import "../../styles/pages/riwayatPemesanan.css";
-import SectionBerlangsung from "../organisms/SectionBerlangsung";
+import { useState } from "react";
+import "@/styles/pages/riwayatPemesanan.css";
 import "bootstrap/js/dist/tab.js";
-import SectionMenungguDiulas from "../organisms/SectionMenungguDiulas";
-import SectionUlasanSaya from "../organisms/SectionUlasanSaya";
+import SectionMenungguDiulas from "@/components/organisms/SectionMenungguDiulas";
+import SectionUlasanSaya from "@/components/organisms/SectionUlasanSaya";
 const Ulasan = () => {
   const [active, setActive] = useState("");
 

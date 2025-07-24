@@ -117,7 +117,7 @@ const Sidebar = ({ setIsCollapse, isCollapse }) => {
           "Bookings"
         )}
         {renderWithTooltip(
-          "/reviews",
+          "/dashboard/reviews",
           "Reviews",
           <RiStarFill size={24} />,
           "Reviews"

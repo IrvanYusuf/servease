@@ -5,12 +5,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import BookingsServices from "@/services/booking.service";
 import { formatDate } from "@/utils/formattedDate";
 import { NumericFormat } from "react-number-format";
-import StatusTransaksi from "../atoms/StatusTransaksi";
+import StatusTransaksi from "@/components/atoms/StatusTransaksi";
 import { formatPaymentType } from "@/utils/formatPaymentType";
-import ActionButtonOutline from "../atoms/ActionButtonOutline";
-import StatusPembayaran from "../atoms/StatusPembayaran";
+import ActionButtonOutline from "@/components/atoms/ActionButtonOutline";
+import StatusPembayaran from "@/components/atoms/StatusPembayaran";
 import { swal } from "@/utils/sweetAlert";
 import queryClient from "@/utils/queryClient";
+import { useState } from "react";
+import ActionButtonGray from "../atoms/ActionButtonGray";
 
 const ModalBookingDetail = (props) => {
   const { idTransaksi } = props;
@@ -183,7 +185,9 @@ const ModalBookingDetail = (props) => {
             <h6>
               {
                 <StatusPembayaran
-                  textStatus={dataBooking?.data?.payment_status.toUpperCase()}
+                  textStatus={
+                    dataBooking?.data?.payment_status.toUpperCase() || ""
+                  }
                 />
               }
             </h6>
@@ -242,8 +246,18 @@ const ModalBookingDetail = (props) => {
         </div>
         <hr style={{ border: "1px dashed" }} />
         <div className="my-4 px-lg-5 px-2 column-gap-3 d-flex justify-content-end">
-          <ActionButtonOutline text={"Tutup"} onClick={props.onHide} />
-          {dataBooking?.data?.payment_status === "unpaid" ? (
+          <ActionButtonGray text={"Tutup"} onClick={props.onHide} />
+
+          {dataBooking?.data?.status === "pending" && (
+            <ActionButtonOutline
+              text={"Batalkan Booking"}
+              type={"button"}
+              onClick={() => {}}
+            />
+          )}
+
+          {dataBooking?.data?.payment_status === "unpaid" &&
+          dataBooking?.data?.payment_method_id.type !== "cash" ? (
             <ActionButton
               text={"Bayar Sekarang"}
               onClick={() =>
@@ -260,11 +274,18 @@ const ModalBookingDetail = (props) => {
               onClick={() => handleCompleteBooking(dataBooking?.data?._id)}
             />
           ) : (
-            <ActionButton
-              text={"Beri Ulasan"}
-              type={"button"}
-              onClick={() => handleNavigate({ path: "/" })}
-            />
+            dataBooking?.data?.review_status !== "reviewed" &&
+            dataBooking?.data?.status === "completed" && (
+              <ActionButton
+                text={"Beri Ulasan"}
+                type={"button"}
+                onClick={() =>
+                  handleNavigate({
+                    path: `/review?booking_id=${dataBooking?.data._id}&service_id=${dataBooking?.data.service_id._id}`,
+                  })
+                }
+              />
+            )
           )}
         </div>
       </Modal.Body>

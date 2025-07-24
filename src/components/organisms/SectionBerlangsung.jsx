@@ -1,61 +1,46 @@
-import React, { useEffect, useState } from "react";
-import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
+import { useQuery } from "@tanstack/react-query";
 import CardHistoryBooking from "../molecules/CardHistoryBooking";
-import { apiTransaction } from "../../api/apiTransaction";
-import { jwtDecode } from "jwt-decode";
-import { useAuth } from "../../context/authContext";
 import NotFoundSection from "./NotFoundSection";
+import BookingsServices from "@/services/booking.service";
+import SkeletonCardBooking from "./SkeletonCardBooking";
 const SectionBerlangsung = () => {
-  const { token } = useAuth();
-  const [allTransactionOnGoing, setAllTransactionOnGoing] = useState([]);
-  const decoded = token ? jwtDecode(token) : null;
-
-  const getAllTransaction = async () => {
-    try {
-      const response = await fetch(
-        `${apiTransaction}/${decoded.id}/Berlangsung`,
-        {
-          method: "GET",
-          headers: {
-            authorization: token,
-          },
-        }
-      );
-      const { data } = await response.json();
-      console.log(data);
-      setAllTransactionOnGoing(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (decoded.id) {
-      getAllTransaction();
-    }
-  }, [decoded.id]);
+  const { data: dataAllConfirmBookings, isLoading } = useQuery({
+    queryKey: ["bookings-confirmed"],
+    queryFn: () => BookingsServices.getAllBookings({ status: "confirmed" }),
+  });
   return (
-    <div className="h-100">
-      <div className="d-flex flex-column justify-content-center align-items-center h-100">
-        {allTransactionOnGoing.length === 0 ? (
-          <div className="mt-5">
-            <NotFoundSection />
-          </div>
-        ) : (
-          allTransactionOnGoing &&
-          allTransactionOnGoing.map((transaction) => (
-            <CardHistoryBooking
-              backgroundColor={"rgba(79, 80, 233, 0.23)"}
-              color={"#4f50e9"}
-              textStatus={transaction.status}
-              kodePemesanan={transaction.kode_pemesanan}
-              namaMitra={transaction.nama_servis}
-              kategori={transaction.nama_kategori}
-              idTransaksi={transaction.id_transaksi}
-              idMitra={transaction.id_mitra}
-            />
-          ))
-        )}
+    <div>
+      <div
+        style={{
+          overflowY: "auto",
+          maxHeight: "70vh", // Atur sesuai kebutuhan
+        }}
+        className="flex-grow-1 d-flex flex-column"
+      >
+        <div className="d-flex flex-column align-items-center row-gap-3">
+          {isLoading ? (
+            <>
+              <SkeletonCardBooking length={3} />
+            </>
+          ) : dataAllConfirmBookings?.data?.data.length === 0 ? (
+            <div className="mt-5">
+              <NotFoundSection />
+            </div>
+          ) : (
+            dataAllConfirmBookings?.data?.data &&
+            dataAllConfirmBookings?.data?.data.map((transaction) => (
+              <CardHistoryBooking
+                key={transaction._id}
+                textStatus={transaction.status}
+                kodePemesanan={transaction._id}
+                namaMitra={transaction.service_id.name}
+                kategori={transaction.service_id.category_id.name}
+                idTransaksi={transaction._id}
+                idMitra={transaction.partner_id}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

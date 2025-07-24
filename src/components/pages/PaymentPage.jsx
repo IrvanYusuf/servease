@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { uploadPaymentProof } from "@/schema/booking.schema";
 import { swal } from "@/utils/sweetAlert";
+import queryClient from "@/utils/queryClient";
 
 const PaymentPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,6 +63,7 @@ const PaymentPage = () => {
         icon: "success",
         confirmButtonText: "Tutup",
       });
+      queryClient.invalidateQueries(["booking", booking_id]);
       reset();
     },
     onError: (error) => {

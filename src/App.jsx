@@ -36,6 +36,9 @@ import PaymentMethodsPage from "./components/pages/dashboard/paymentMethods/Paym
 import AddNewPaymentMethod from "./components/pages/dashboard/paymentMethods/AddNewPaymentMethod";
 import BookingPage from "./components/pages/BookingPage";
 import PaymentPage from "./components/pages/PaymentPage";
+import CreateReview from "./components/pages/CreateReview";
+import ReviewPage from "./components/pages/dashboard/reviews/ReviewPage";
+import DashboardBookingPage from "./components/pages/dashboard/bookings/DashboardBookingPage";
 const App = () => {
   return (
     <BrowserRouter>
@@ -67,6 +70,9 @@ const App = () => {
 
               {/* payment */}
               <Route path="payment" element={<PaymentPage />} />
+
+              {/* create review */}
+              <Route path="review" element={<CreateReview />} />
             </Route>
 
             <Route path="/mitra/" element={<LayoutMitra />}>
@@ -106,6 +112,12 @@ const App = () => {
                   path="payment-methods/new"
                   element={<AddNewPaymentMethod />}
                 />
+
+                {/* review */}
+                <Route path="reviews" element={<ReviewPage />} />
+
+                {/* booking */}
+                <Route path="bookings" element={<DashboardBookingPage />} />
               </Route>
             </Route>
           </Route>

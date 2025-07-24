@@ -1,55 +1,35 @@
-import React, { useEffect, useState } from "react";
-import iconRiwayatPemesananNotFound from "../../assets/icon/riwayat-pemesanan-notfound.png";
 import CardHistoryBooking from "../molecules/CardHistoryBooking";
-import { apiTransaction } from "../../api/apiTransaction";
-import { jwtDecode } from "jwt-decode";
-import { useAuth } from "../../context/authContext";
 import NotFoundSection from "./NotFoundSection";
+import { useQuery } from "@tanstack/react-query";
+import BookingsServices from "@/services/booking.service";
+import SkeletonCardBooking from "./SkeletonCardBooking";
 const SectionBaru = () => {
-  const { token } = useAuth();
-  const [allTransactionOnGoing, setAllTransactionOnGoing] = useState([]);
-  const decoded = token ? jwtDecode(token) : null;
-
-  const getAllTransaction = async () => {
-    try {
-      const response = await fetch(`${apiTransaction}/${decoded.id}/Baru`, {
-        method: "GET",
-        headers: {
-          authorization: token,
-        },
-      });
-      const { data } = await response.json();
-      console.log(data);
-      setAllTransactionOnGoing(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (decoded.id) {
-      getAllTransaction();
-    }
-  }, [decoded.id]);
+  const { data: dataAllNewBookings, isLoading } = useQuery({
+    queryKey: ["bookings-new"],
+    queryFn: () => BookingsServices.getAllBookings({ status: "pending" }),
+  });
   return (
     <div className="h-100">
-      <div className="d-flex flex-column justify-content-center align-items-center h-100">
-        {allTransactionOnGoing.length === 0 ? (
+      <div className="d-flex flex-column align-items-center row-gap-3">
+        {isLoading ? (
+          <>
+            <SkeletonCardBooking length={3} />
+          </>
+        ) : dataAllNewBookings?.data?.data.length === 0 ? (
           <div className="mt-5">
             <NotFoundSection />
           </div>
         ) : (
-          allTransactionOnGoing &&
-          allTransactionOnGoing.map((transaction) => (
+          dataAllNewBookings?.data?.data &&
+          dataAllNewBookings?.data?.data.map((transaction) => (
             <CardHistoryBooking
-              backgroundColor={"rgba(239,61,1,0.2)"}
-              color={"#EF3D01"}
+              key={transaction._id}
               textStatus={transaction.status}
-              kodePemesanan={transaction.kode_pemesanan}
-              namaMitra={transaction.nama_servis}
-              kategori={transaction.nama_kategori}
-              idTransaksi={transaction.id_transaksi}
-              idMitra={transaction.id_mitra}
+              kodePemesanan={transaction._id}
+              namaMitra={transaction.service_id.name}
+              kategori={transaction.service_id.category_id.name}
+              idTransaksi={transaction._id}
+              idMitra={transaction.partner_id}
             />
           ))
         )}
